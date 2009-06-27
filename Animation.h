@@ -13,7 +13,12 @@
 	NSMutableArray* frames;
 	int frameNumber;
 	BOOL playing;
+	int rows, cols;
 }
+@property (readonly) int rows;
+@property (readonly) int columns;
+
+- (id)initWithRows:(int)theRows columns:(int)theCols;
 -(int)frameNumber;
 -(int)frameCount;
 -(Frame*)frame;

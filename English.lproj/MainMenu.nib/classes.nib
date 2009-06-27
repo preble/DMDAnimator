@@ -1,25 +1,102 @@
-{
-    IBClasses = (
-        {
-            ACTIONS = {
-                dotClear = id; 
-                dotHigh = id; 
-                dotLow = id; 
-                dotMedium = id; 
-                dotOff = id; 
-                frameNew = id; 
-                frameNext = id; 
-                framePrevious = id; 
-                frameShifftLeft = id; 
-                frameShiftDown = id; 
-                frameShiftLeft = id; 
-                frameShiftRight = id; 
-                frameShiftUp = id; 
-            }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>DMDAnimatorAppDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>Animation</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSDocument</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>dotClear</key>
+				<string>id</string>
+				<key>dotHigh</key>
+				<string>id</string>
+				<key>dotLow</key>
+				<string>id</string>
+				<key>dotMedium</key>
+				<string>id</string>
+				<key>dotOff</key>
+				<string>id</string>
+				<key>frameNew</key>
+				<string>id</string>
+				<key>frameNext</key>
+				<string>id</string>
+				<key>framePrevious</key>
+				<string>id</string>
+				<key>frameShifftLeft</key>
+				<string>id</string>
+				<key>frameShiftDown</key>
+				<string>id</string>
+				<key>frameShiftLeft</key>
+				<string>id</string>
+				<key>frameShiftRight</key>
+				<string>id</string>
+				<key>frameShiftUp</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>dotClear</key>
+				<string>id</string>
+				<key>dotHigh</key>
+				<string>id</string>
+				<key>dotLow</key>
+				<string>id</string>
+				<key>dotMedium</key>
+				<string>id</string>
+				<key>dotOff</key>
+				<string>id</string>
+				<key>frameNext</key>
+				<string>id</string>
+				<key>framePrevious</key>
+				<string>id</string>
+				<key>frameShiftDown</key>
+				<string>id</string>
+				<key>frameShiftLeft</key>
+				<string>id</string>
+				<key>frameShiftRight</key>
+				<string>id</string>
+				<key>frameShiftUp</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>DMDView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>animation</key>
+				<string>Animation</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSView</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

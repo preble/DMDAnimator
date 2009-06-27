@@ -8,16 +8,23 @@
 #import "Animation.h"
 
 @implementation Animation
+@synthesize rows, columns=cols;
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
-    
+	return [self initWithRows:32 columns:128];
+}
+
+- (id)initWithRows:(int)theRows columns:(int)theCols
+{
+    if (self = [super init]) 
+	{
+		rows = theRows;
+		cols = theCols;
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
 		frames = [[NSMutableArray arrayWithCapacity:1] retain];
-		[frames addObject: [[Frame alloc] init]];
+		[frames addObject:[[Frame alloc] initWithRows:rows columns:cols dots:NULL]];
 		frameNumber = 0;
 		playing = NO;
     }
@@ -60,7 +67,7 @@
 
 - (NSData *)dataOfType:(NSString *)aType error:(NSError**)error
 {
-	NSMutableData* data = [NSMutableData dataWithCapacity:1 + SIZEOF_DOTS * [frames count]];
+	NSMutableData* data = [NSMutableData dataWithCapacity:1 + (rows * cols) * [frames count]];
 	char frameCount = (char)[frames count];
 	[data appendBytes:&frameCount length:1];
 	
@@ -77,15 +84,15 @@
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {
 	[frames removeAllObjects];
-	char* buffer = malloc([data length]);
-	[data getBytes:buffer];
+	char* buffer = (char*)[data bytes];
 	int frameCount = buffer[0];
-	while([frames count] < frameCount) {
-		[frames addObject: [[Frame alloc] initWithData:
-			[NSData dataWithBytes:buffer + 1 + ([frames count] * SIZEOF_DOTS) length:SIZEOF_DOTS]]];
+	while([frames count] < frameCount) 
+	{
+		[frames addObject:[[Frame alloc] initWithRows:rows 
+											  columns:cols 
+												 dots:buffer + 1 + ([frames count] * (rows * cols))]];
 	}
 	frameNumber = 0;
-	//free(buffer);
 	buffer = NULL;
     
     return YES;

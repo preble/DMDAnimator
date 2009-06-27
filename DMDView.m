@@ -1,8 +1,6 @@
 // DMDAnimator Copyright (c) 2007 Adam Preble.  All Rights Reserved.
 #import "DMDView.h"
-
-static char clipboardDots[ROWS*COLUMNS];
-static NSSize clipboardSize;
+#import "DMDAnimatorAppDelegate.h"
 
 @implementation DMDView
 
@@ -46,17 +44,17 @@ static NSSize clipboardSize;
 		rectSelecting = NO;
 	}
 	if(row != cursorRow || col != cursorCol) {
-		cursorRow = row % ROWS;
-		cursorCol = col % COLUMNS;
+		cursorRow = row % [animation rows];
+		cursorCol = col % [animation columns];
 		doDisplay = YES;
 		if(cursorRow < 0) {
-			cursorRow = ROWS-1;
+			cursorRow = [animation rows]-1;
 		}
 		if(cursorCol < 0) {
-			cursorCol = COLUMNS-1;
+			cursorCol = [animation columns]-1;
 		}
 	}
-	//if(row < 0 || row >= ROWS || col < 0 || col >= COLUMNS) {
+	//if(row < 0 || row >= [animation rows] || col < 0 || col >= [animation columns]) {
 	//	cursorShown = NO;
 	//}
 	[self setNeedsDisplay: doDisplay];
@@ -93,7 +91,7 @@ static NSSize clipboardSize;
 					}
 					break;
 				case NSDownArrowFunctionKey: 
-					if(rectSelection.size.height < ROWS-1) {
+					if(rectSelection.size.height < [animation rows]-1) {
 						rectSelection.size.height++; 
 					}
 					break;
@@ -104,7 +102,7 @@ static NSSize clipboardSize;
 					}
 					break;
 				case NSRightArrowFunctionKey: 
-					if(rectSelection.size.width < COLUMNS-1) {
+					if(rectSelection.size.width < [animation columns]-1) {
 						rectSelection.size.width++; 
 					}
 					break;
@@ -239,15 +237,21 @@ static NSSize clipboardSize;
 - (void)copy:(id)sender
 {
 	if(rectSelected) {
-		clipboardSize = rectSelection.size;
+		int clipboardLength = rectSelection.size.width * rectSelection.size.height;
+		char *clipboardDots = (char*)malloc(clipboardLength);
 		int row, col;
-		for(row = 0; row < clipboardSize.height; row++) {
-			for(col = 0; col < clipboardSize.width; col++) {
-				clipboardDots[row * (int)clipboardSize.width + col] = 
+		for(row = 0; row < rectSelection.size.height; row++) {
+			for(col = 0; col < rectSelection.size.width; col++) {
+				clipboardDots[row * (int)rectSelection.size.width + col] = 
 					[[animation frame] dotAtRow:rectSelection.origin.y + row 
 					column:rectSelection.origin.x + col];
 			}
 		}
+		NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+							  [NSValue valueWithSize:rectSelection.size], @"size",
+							  [NSData dataWithBytes:clipboardDots length:clipboardLength], @"dots",
+							  nil];
+		[[NSPasteboard generalPasteboard] setData:[NSArchiver archivedDataWithRootObject:data] forType:DMDDotsPboardType];
 		NSLog(@"%s after copy", _cmd);
 	} else {
 		NSLog(@"copy: when no rectSelected");
@@ -255,18 +259,28 @@ static NSSize clipboardSize;
 }
 - (void)paste:(id)sender
 {
-	if(clipboardSize.width > 0) {
-		int row, col;
-		for(row = 0; row < clipboardSize.height; row++) {
-			for(col = 0; col < clipboardSize.width; col++) {
-				[[animation frame] setDotAtRow:cursorRow + row column:cursorCol + col 
-					toState:clipboardDots[row * (int)clipboardSize.width + col]];
-			}
-		}
-		[self setNeedsDisplay:YES];
-	} else {
-		NSLog(@"copy: when no clipboardDots");
+	NSString *bestType = [[NSPasteboard generalPasteboard] availableTypeFromArray:[NSArray arrayWithObjects:DMDDotsPboardType, nil]];
+	if (bestType == nil)
+	{
+		NSLog(@"Type not found on pasteboard");
+		return;
 	}
+	NSDictionary *data = (NSDictionary*)[NSUnarchiver unarchiveObjectWithData:[[NSPasteboard generalPasteboard] dataForType:DMDDotsPboardType]];
+	if (data == nil)
+	{
+		NSLog(@"Paste but no data!");
+		return;
+	}
+	NSSize clipboardSize = [[data objectForKey:@"size"] sizeValue];
+	char *dotData = (char*)[[data objectForKey:@"dots"] bytes];
+	int row, col;
+	for(row = 0; row < clipboardSize.height; row++) {
+		for(col = 0; col < clipboardSize.width; col++) {
+			[[animation frame] setDotAtRow:cursorRow + row column:cursorCol + col 
+				toState:dotData[row * (int)clipboardSize.width + col]];
+		}
+	}
+	[self setNeedsDisplay:YES];
 }
 
 - (void)updateWindowTitle
@@ -339,8 +353,8 @@ void PointToDot(NSPoint point, int *row, int *col)
 
 	DotState lastState = Dot_Off;
 	int row, col;
-	for(row = 0; row < ROWS; row++) {
-		for(col = 0; col < COLUMNS; col++) {
+	for(row = 0; row < [animation rows]; row++) {
+		for(col = 0; col < [animation columns]; col++) {
 			//NSLog(@"%d, %d", row, col);
 			DotState state = [frame dotAtRow:row column:col];
 			if(state != Dot_Off) {
@@ -353,7 +367,7 @@ void PointToDot(NSPoint point, int *row, int *col)
 			}
 		}
 	}
-	//[frame setDotAtRow:rand()%5 column:rand()%COLUMNS toState:rand()%4];
+	//[frame setDotAtRow:rand()%5 column:rand()%[animation columns] toState:rand()%4];
 	[frame release];
 	if(cursorShown) {
 		[[NSColor grayColor] setFill];

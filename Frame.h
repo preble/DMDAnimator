@@ -5,10 +5,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define ROWS 32
-#define COLUMNS 128
-#define SIZEOF_DOTS (ROWS * COLUMNS)
-
 typedef enum DotState
 {
 	Dot_Clear = 0,
@@ -21,12 +17,17 @@ typedef enum DotState
 
 @interface Frame : NSObject
 {
-	char dots[SIZEOF_DOTS];
+	char *dots;
 	bool edited;
+	int rows, cols;
+	int frameSize;
 }
+- (id)initWithRows:(int)theRows columns:(int)theCols dots:(char*)dotData;
 // Saving/loading dots
 -(NSData*)data;
-- (id)initWithData:(NSData*)data;
+
+@property (readonly) int rows;
+@property (readonly) int columns;
 
 -(BOOL)isEdited;
 -(void)clearEdited;

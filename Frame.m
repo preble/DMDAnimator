@@ -2,37 +2,55 @@
 #import "Frame.h"
 
 @implementation Frame
-- (id)init
+@synthesize rows, columns=cols;
+
+- (id)initWithRows:(int)theRows columns:(int)theCols dots:(char*)dotData
 {
-	int i;
-	for(i = 0; i < SIZEOF_DOTS; i++) {
-		dots[i] = Dot_Clear;
+	if (self = [super init])
+	{
+		rows = theRows;
+		cols = theCols;
+		frameSize = rows * cols;
+		dots = (char*)malloc(frameSize);
+		if (dotData == NULL)
+		{
+			int i;
+			for(i = 0; i < frameSize; i++) {
+				dots[i] = Dot_Clear;
+			}
+		}
+		else
+		{
+			memcpy(dots, dotData, frameSize);
+		}
+		edited = NO;
 	}
-	edited = NO;
 	return self;
+}
+- (void)dealloc
+{
+	free(dots);
+	dots = NULL;
+	[super dealloc];
 }
 
-- (id)initWithData:(NSData*)data
-{
-	[data getBytes:dots length:SIZEOF_DOTS];
-	edited = NO;
-	return self;
-}
 -(NSData*)data
 {
-	return [NSData dataWithBytes:dots length:SIZEOF_DOTS];
+	return [NSData dataWithBytes:dots length:frameSize];
 }
 - (id)mutableCopyWithZone:(NSZone *)zone
 {
-	return [[[Frame alloc] initWithData:[self data]] retain];
+	return [[[Frame alloc] initWithRows:rows 
+								columns:cols 
+								   dots:dots] retain];
 }
 -(DotState)dotAtRow:(int)row column:(int) col
 {
-	return dots[row * COLUMNS + col];
+	return dots[row * cols + col];
 }
 -(void)setDotAtRow:(int)row column:(int)col toState:(DotState)state
 {
-	dots[row * COLUMNS + col] = state;
+	dots[row * cols + col] = state;
 	edited = YES;
 }
 -(BOOL)isEdited
@@ -45,30 +63,30 @@
 }
 - (void)shiftUp
 {
-	memmove(dots, dots + COLUMNS, COLUMNS*(ROWS-1));
-	memset(dots + (COLUMNS*ROWS-1), Dot_Clear, COLUMNS);
+	memmove(dots, dots + cols, cols*(rows-1));
+	memset(dots + (cols*rows-1), Dot_Clear, cols);
 }
 - (void)shiftDown
 {
-	memmove(dots + COLUMNS, dots, COLUMNS*(ROWS-1));
-	memset(dots, Dot_Clear, COLUMNS);
+	memmove(dots + cols, dots, cols*(rows-1));
+	memset(dots, Dot_Clear, cols);
 }
 - (void)shiftLeft
 {
 	int row;
-	for(row = 0; row < ROWS; row++) {
-		char* rowBase = dots + row * COLUMNS;
-		memmove(rowBase, rowBase + 1, COLUMNS-1);
-		rowBase[COLUMNS-1] = Dot_Clear;
+	for(row = 0; row < rows; row++) {
+		char* rowBase = dots + row * cols;
+		memmove(rowBase, rowBase + 1, cols-1);
+		rowBase[cols-1] = Dot_Clear;
 	}
 }
 - (void)shiftRight
 {
 	int row;
-	for(row = 0; row < ROWS; row++) {
-		char* rowBase = dots + row * COLUMNS;
-		memmove(rowBase + 1, rowBase, COLUMNS-1);
-		rowBase[COLUMNS-1] = Dot_Clear;
+	for(row = 0; row < rows; row++) {
+		char* rowBase = dots + row * cols;
+		memmove(rowBase + 1, rowBase, cols-1);
+		rowBase[cols-1] = Dot_Clear;
 	}
 }
 - (void)shiftRect:(NSRect)rect vertical:(int)direction

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		66208CA70BFEC4560014A154 /* DMDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208CA60BFEC4560014A154 /* DMDView.m */; };
 		66208D770C020EB10014A154 /* Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208D760C020EB10014A154 /* Frame.m */; };
+		66EA5CCD0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */; };
 		66EB0BA20D10496E007F6016 /* DMDAnimator Help in Resources */ = {isa = PBXBuildFile; fileRef = 66EB0B9F0D10496E007F6016 /* DMDAnimator Help */; };
 		66EB0BB10D1070FF007F6016 /* DMD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 66EB0BB00D1070FF007F6016 /* DMD.icns */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
@@ -37,6 +38,8 @@
 		66208CA60BFEC4560014A154 /* DMDView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DMDView.m; sourceTree = "<group>"; };
 		66208D750C020EB10014A154 /* Frame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
 		66208D760C020EB10014A154 /* Frame.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Frame.m; sourceTree = "<group>"; };
+		66EA5CCB0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDAnimatorAppDelegate.h; sourceTree = "<group>"; };
+		66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDAnimatorAppDelegate.m; sourceTree = "<group>"; };
 		66EB0B9F0D10496E007F6016 /* DMDAnimator Help */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "DMDAnimator Help"; sourceTree = "<group>"; };
 		66EB0BB00D1070FF007F6016 /* DMD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DMD.icns; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -102,6 +105,8 @@
 				2A37F4ACFDCFA73011CA2CEA /* Animation.m */,
 				66208CA50BFEC4560014A154 /* DMDView.h */,
 				66208CA60BFEC4560014A154 /* DMDView.m */,
+				66EA5CCB0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.h */,
+				66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -201,6 +206,7 @@
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				66208CA70BFEC4560014A154 /* DMDView.m in Sources */,
 				66208D770C020EB10014A154 /* Frame.m in Sources */,
+				66EA5CCD0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +286,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -290,7 +296,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "";
 			};
 			name = Release;
 		};
