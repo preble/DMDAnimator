@@ -1,0 +1,25 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                dotClear = id; 
+                dotHigh = id; 
+                dotLow = id; 
+                dotMedium = id; 
+                dotOff = id; 
+                frameNew = id; 
+                frameNext = id; 
+                framePrevious = id; 
+                frameShifftLeft = id; 
+                frameShiftDown = id; 
+                frameShiftLeft = id; 
+                frameShiftRight = id; 
+                frameShiftUp = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

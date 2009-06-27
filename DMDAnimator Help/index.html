@@ -1,0 +1,91 @@
+<html>
+<head>
+	<meta name="AppleTitle" content="DMDAnimator Help"></meta>
+	<style>
+	/* Modified from Mail.app's help */
+	body { color: #000; background-color: #fff; margin: 0; font-family: Lucida Grande, Arial, sans-serif;  }
+	a        { color: #00f; font-family: Lucida Grande, Arial, sans-serif; text-decoration: none }
+	h1         { color: #000; font-size: 18pt; font-family: Lucida Grande, Arial, sans-serif; font-weight: 500; letter-spacing: -1pt; padding-top: 12px }
+	h2        { color: #000; font-size: 11pt; font-family: "Lucida Grande", Arial, sans-serif; font-weight: 300; margin-top: 16px }
+	h4      { color: #000; font-size: 8pt; font-family: "Lucida Grande", Arial, sans-serif; font-weight: 300; margin-top: 21px }
+	body, p, table { font-size: 9pt; font-family: Lucida Grande, Arial, sans-serif; margin-top: -10px; margin-left: 0 }
+	a:hover { text-decoration: underline }
+	#contentleft          { margin-top: 38px; width: 235px; float: left }
+
+	#contentcenter      { margin-top: 2px; padding: 0; width: 18px; float: left }
+
+	#contentright             { margin-top: 18px; padding-left: 30px; width: 210px; height: 300px; float: left; border-left: 1px solid #808080 }
+
+	#frame     { text-align: left; margin-top: 12px; margin-right: auto; margin-left: auto; width: 500px }
+	.space17 { padding-top: 17px }
+	.smlapp { height: 275px }
+	.utility { margin-top: 6px; margin-bottom: 24px }
+	.icon { margin-bottom: -2px }
+	</style>
+</head>
+<body>
+<div id="frame">
+	<h1>DMDAnimator Help</h1>
+	
+	<!-- <h2>Contents</h2>
+	<ul>
+		<li><a href="#keyboard">Using the Keyboard</a></li>
+	</ul> -->
+	
+	<hr />
+	
+	<a name="keyboard"></a>
+	<h2>Using the Keyboard</h2>
+	<p>The keyboard is the most efficient way to use DMDAnimator.  Below are the keys recognized:</p>
+	
+	<table border="0" cellpadding="5" cellspacing="1">
+		<tr><th>Key</th><th>Purpose</th></tr>
+		<tr><td><i>Arrow Keys</i></td><td>Move over the DMD.</td></tr>
+		<tr><td>&#8679;-<i>Arrow</i></td><td>Select a rectangular portion of the DMD.</td></tr>
+		<tr><td>&#8984;-<i>Arrow</i></td><td>Shift/offset the contents of the DMD.</td></tr>
+		<!-- <tr><td>~</td><td>Set the current pixel to be transparent.</td></tr> --><!-- Not implemented, same as off. -->
+		<tr><td>`</td><td>Set the current pixel to be off (black).</td></tr>
+		<tr><td>1</td><td>Set the current pixel to intensity level 1 (30%).</td></tr>
+		<tr><td>2</td><td>Set the current pixel to intensity level 2 (60%).</td></tr>
+		<tr><td>3</td><td>Set the current pixel to intensity level 3 (100%).</td></tr>
+		<tr><td>&#8679;&#8984;N</td><td>Create a new frame after the current frame.</td></tr>
+		<tr><td>, <em>or</em> &#8984;[</td><td>Step backward one frame.</td></tr>
+		<tr><td>. <em>or</em> &#8984;]</td><td>Step forward one frame.</td></tr>
+		<tr><td><i>Space</i></td><td>Toggle play/pause.</td></tr>
+	</table>
+	
+	<hr />
+	
+	<a name="keyboard"></a>
+	<h2>File Format</h2>
+	<p>The format of .dmd files recognized by DMDAnimator is constructed as follows:</p>
+	
+	<pre>
+file() {
+  number_of_frames                                1 byte
+  for(i = 0; i &lt; number_of_frames; i++) {
+    frame()                                       4096 bytes
+  }
+}
+frame() {
+  for(row = 0; row &lt; 32; row++) {
+    for(col = 0; col &lt; 128; col++) {
+      pixel()                                     1 byte
+    }
+  }
+}
+pixel() {
+  // 1 byte where value is:
+  //   0 = off, 1 = low, 2 = medium, 3 = high intensity
+  //   Clear state is not implemented.
+}
+</pre>
+
+	<hr />
+	
+	<h2>Copyright</h2>
+	<p>&copy; 2007 <a href="http://incompletelabs.com">Incomplete Labs</a>.</p>
+	
+</div>
+</body>
+</html>

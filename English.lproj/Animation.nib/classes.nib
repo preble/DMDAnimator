@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {CLASS = Animation; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
+        {
+            CLASS = DMDView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {animation = Animation; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
