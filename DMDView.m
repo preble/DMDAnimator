@@ -399,6 +399,16 @@ void PointToDot(NSPoint point, int *row, int *col)
 
 - (IBAction)resize:(id)sender
 {
+	if ([animation isEdited])
+	{
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Cannot resize unsaved animation."
+										 defaultButton:@"OK" 
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:@"This feature is intended to be used with new documents."];
+		[alert runModal];
+		return;
+	}
 	[resizeWindowController show];
 }
 
