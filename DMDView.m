@@ -343,18 +343,23 @@ void PointToDot(NSPoint point, int *row, int *col)
 - (void)drawRect:(NSRect)rect
 {
 	[[NSColor blackColor] set];
-	NSRectFill([self bounds]);
+	NSRectFill(rect);
 
 	Frame* frame = [[animation frame] retain];
 	if(frame == nil) {
 		return;
 	}
 	[frame retain];
+	
+	int row0 = ((int)rect.origin.y)/dotSize;
+	int col0 = ((int)rect.origin.x)/dotSize;
+	int rowCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame rows]);
+	int colCount = MIN(1 + ((int)rect.size.width)/dotSize, [frame columns]);
 
 	DotState lastState = Dot_Off;
 	int row, col;
-	for(row = 0; row < [animation rows]; row++) {
-		for(col = 0; col < [animation columns]; col++) {
+	for(row = row0; row < rowCount; row++) {
+		for(col = col0; col < colCount; col++) {
 			//NSLog(@"%d, %d", row, col);
 			DotState state = [frame dotAtRow:row column:col];
 			if(state != Dot_Off) {
