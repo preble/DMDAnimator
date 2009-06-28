@@ -17,8 +17,6 @@
 	NSNumber *width;
 	NSNumber *height;
 	IBOutlet Animation *animation;
-	IBOutlet NSTextField *widthField;
-	IBOutlet NSTextField *heightField;
 }
 @property (nonatomic, copy) NSNumber *width;
 @property (nonatomic, copy) NSNumber *height;

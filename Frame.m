@@ -139,7 +139,7 @@
 
 	int i;
 	for(i = 0; i < frameSize; i++) {
-		dots[i] = rand() % (Dot_High + 1);
+		dots[i] = Dot_Off;
 	}
 }
 

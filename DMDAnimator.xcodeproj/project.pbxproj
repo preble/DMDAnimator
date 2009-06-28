@@ -13,6 +13,8 @@
 		66EA5D1D0FF6C61E000CDEC0 /* DMDResizeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */; };
 		66EA5D2A0FF6C75A000CDEC0 /* DMDResizeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EA5D290FF6C75A000CDEC0 /* DMDResizeWindow.xib */; };
 		66EA5E780FF7D9CC000CDEC0 /* Animation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EA5E760FF7D9CC000CDEC0 /* Animation.xib */; };
+		66EA5F5A0FF80254000CDEC0 /* DMDViewSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EA5F590FF80254000CDEC0 /* DMDViewSettings.xib */; };
+		66EA5F5E0FF80442000CDEC0 /* DMDViewSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5F5D0FF80442000CDEC0 /* DMDViewSettingsController.m */; };
 		66EB0BA20D10496E007F6016 /* DMDAnimator Help in Resources */ = {isa = PBXBuildFile; fileRef = 66EB0B9F0D10496E007F6016 /* DMDAnimator Help */; };
 		66EB0BB10D1070FF007F6016 /* DMD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 66EB0BB00D1070FF007F6016 /* DMD.icns */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
@@ -45,6 +47,9 @@
 		66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDResizeWindowController.m; sourceTree = "<group>"; };
 		66EA5D290FF6C75A000CDEC0 /* DMDResizeWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DMDResizeWindow.xib; sourceTree = "<group>"; };
 		66EA5E770FF7D9CC000CDEC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Animation.xib; sourceTree = "<group>"; };
+		66EA5F590FF80254000CDEC0 /* DMDViewSettings.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DMDViewSettings.xib; sourceTree = "<group>"; };
+		66EA5F5C0FF80442000CDEC0 /* DMDViewSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDViewSettingsController.h; sourceTree = "<group>"; };
+		66EA5F5D0FF80442000CDEC0 /* DMDViewSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDViewSettingsController.m; sourceTree = "<group>"; };
 		66EB0B9F0D10496E007F6016 /* DMDAnimator Help */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "DMDAnimator Help"; sourceTree = "<group>"; };
 		66EB0BB00D1070FF007F6016 /* DMD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DMD.icns; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -104,16 +109,10 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				66208D750C020EB10014A154 /* Frame.h */,
-				66208D760C020EB10014A154 /* Frame.m */,
-				2A37F4AEFDCFA73011CA2CEA /* Animation.h */,
-				2A37F4ACFDCFA73011CA2CEA /* Animation.m */,
+				66EA5F5F0FF80455000CDEC0 /* Model */,
 				66208CA50BFEC4560014A154 /* DMDView.h */,
 				66208CA60BFEC4560014A154 /* DMDView.m */,
-				66EA5D1B0FF6C61E000CDEC0 /* DMDResizeWindowController.h */,
-				66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */,
-				66EA5CCB0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.h */,
-				66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */,
+				66EA5F600FF80462000CDEC0 /* Controller */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -138,6 +137,7 @@
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+				66EA5F590FF80254000CDEC0 /* DMDViewSettings.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -149,6 +149,30 @@
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		66EA5F5F0FF80455000CDEC0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				66208D750C020EB10014A154 /* Frame.h */,
+				66208D760C020EB10014A154 /* Frame.m */,
+				2A37F4AEFDCFA73011CA2CEA /* Animation.h */,
+				2A37F4ACFDCFA73011CA2CEA /* Animation.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		66EA5F600FF80462000CDEC0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				66EA5CCB0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.h */,
+				66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */,
+				66EA5D1B0FF6C61E000CDEC0 /* DMDResizeWindowController.h */,
+				66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */,
+				66EA5F5C0FF80442000CDEC0 /* DMDViewSettingsController.h */,
+				66EA5F5D0FF80442000CDEC0 /* DMDViewSettingsController.m */,
+			);
+			name = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,6 +225,7 @@
 				66EB0BB10D1070FF007F6016 /* DMD.icns in Resources */,
 				66EA5D2A0FF6C75A000CDEC0 /* DMDResizeWindow.xib in Resources */,
 				66EA5E780FF7D9CC000CDEC0 /* Animation.xib in Resources */,
+				66EA5F5A0FF80254000CDEC0 /* DMDViewSettings.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +242,7 @@
 				66208D770C020EB10014A154 /* Frame.m in Sources */,
 				66EA5CCD0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m in Sources */,
 				66EA5D1D0FF6C61E000CDEC0 /* DMDResizeWindowController.m in Sources */,
+				66EA5F5E0FF80442000CDEC0 /* DMDViewSettingsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
