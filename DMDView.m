@@ -300,7 +300,7 @@ void PointToDot(NSPoint point, int *row, int *col)
 - (void)mouseMoved:(NSEvent*)event
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
-	if(NSPointInRect(localPoint, [self bounds])) {
+	if(NSPointInRect(localPoint, NSIntersectionRect([self bounds], [[self superview] bounds]))) {
 		int row, col;
 		PointToDot(localPoint, &row, &col);
 		//NSLog(@"mouseMoved %f, %f => %d, %d", localPoint.x, localPoint.y, col, row);
