@@ -358,8 +358,8 @@ void PointToDot(NSPoint point, int *row, int *col)
 
 	DotState lastState = Dot_Off;
 	int row, col;
-	for(row = row0; row < rowCount; row++) {
-		for(col = col0; col < colCount; col++) {
+	for(row = row0; row < row0 + rowCount; row++) {
+		for(col = col0; col < col0 + colCount; col++) {
 			//NSLog(@"%d, %d", row, col);
 			DotState state = [frame dotAtRow:row column:col];
 			if(state != Dot_Off) {
