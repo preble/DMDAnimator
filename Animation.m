@@ -140,5 +140,13 @@
 	return playing;
 }
 
+- (void)resize:(NSSize)newSize
+{
+	rows = newSize.height;
+	cols = newSize.width;
+	for (Frame *frame in frames)
+		[frame resize:newSize];
+}
+
 @end // Animation
 

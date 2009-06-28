@@ -8,10 +8,8 @@
 {
 	if (self = [super init])
 	{
-		rows = theRows;
-		cols = theCols;
-		frameSize = rows * cols;
-		dots = (char*)malloc(frameSize);
+		dots = NULL;
+		[self resize:NSMakeSize(theCols, theRows)];
 		if (dotData == NULL)
 		{
 			int i;
@@ -129,5 +127,21 @@
 		}
 	}
 }
+
+- (void)resize:(NSSize)newSize
+{
+	if (dots)
+		free(dots);
+	rows = newSize.height;
+	cols = newSize.width;
+	frameSize = rows * cols;
+	dots = (char*)malloc(frameSize);
+
+	int i;
+	for(i = 0; i < frameSize; i++) {
+		dots[i] = rand() % (Dot_High + 1);
+	}
+}
+
 @end
 

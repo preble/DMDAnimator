@@ -42,4 +42,6 @@ typedef enum DotState
 -(void)shiftLeft;
 -(void)shiftRect:(NSRect)rect vertical:(int)direction;
 -(void)shiftRect:(NSRect)rect horizontal:(int)direction;
+
+- (void)resize:(NSSize)newSize;
 @end

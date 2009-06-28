@@ -294,8 +294,8 @@
 }
 void PointToDot(NSPoint point, int *row, int *col)
 {
-	*row = (int)floor((point.y) / DOT_DIAMETER);
-	*col = (int)floor(point.x / DOT_DIAMETER);
+	*row = (int)floor((point.y) / dotSize);
+	*col = (int)floor(point.x / dotSize);
 }
 - (void)mouseMoved:(NSEvent*)event
 {
@@ -363,7 +363,7 @@ void PointToDot(NSPoint point, int *row, int *col)
 					[[self dotStateToColor:state] set];
 					lastState = state;
 				}
-				NSRectFill(NSMakeRect(col * DOT_DIAMETER + 1, (row) * DOT_DIAMETER + 1, DOT_DIAMETER-2, DOT_DIAMETER-2));
+				NSRectFill(NSMakeRect(col * dotSize + 1, (row) * dotSize + 1, dotSize-2, dotSize-2));
 			}
 		}
 	}
@@ -371,12 +371,12 @@ void PointToDot(NSPoint point, int *row, int *col)
 	[frame release];
 	if(cursorShown) {
 		[[NSColor grayColor] setFill];
-		NSFrameRect(NSMakeRect(cursorCol * DOT_DIAMETER, (cursorRow) * DOT_DIAMETER, DOT_DIAMETER, DOT_DIAMETER));
+		NSFrameRect(NSMakeRect(cursorCol * dotSize, (cursorRow) * dotSize, dotSize, dotSize));
 	}
 	if(rectSelecting || rectSelected) {
 		[[NSColor grayColor] setFill];
-		NSFrameRect(NSMakeRect(rectSelection.origin.x * DOT_DIAMETER, (rectSelection.origin.y) * DOT_DIAMETER, 
-			rectSelection.size.width * DOT_DIAMETER, rectSelection.size.height * DOT_DIAMETER));
+		NSFrameRect(NSMakeRect(rectSelection.origin.x * dotSize, (rectSelection.origin.y) * dotSize, 
+			rectSelection.size.width * dotSize, rectSelection.size.height * dotSize));
 	} 
 	
 }
@@ -390,4 +390,11 @@ void PointToDot(NSPoint point, int *row, int *col)
 {
 	[self setNeedsDisplay:YES];
 }
+
+
+- (IBAction)resize:(id)sender
+{
+	[resizeWindowController show];
+}
+
 @end

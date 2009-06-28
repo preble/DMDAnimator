@@ -3,12 +3,14 @@
 
 #import <Cocoa/Cocoa.h>
 #include "Animation.h"
+#include "DMDResizeWindowController.h"
 
-#define DOT_DIAMETER 8
+#define dotSize 8
 
 @interface DMDView : NSView
 {
     IBOutlet Animation *animation;
+	IBOutlet DMDResizeWindowController *resizeWindowController;
 
 	NSColor* colorOff;
 	NSColor* colorLow;
@@ -39,4 +41,6 @@
 - (IBAction)dotLow:(id)sender;
 - (IBAction)dotMedium:(id)sender;
 - (IBAction)dotHigh:(id)sender;
+- (IBAction)resize:(id)sender;
+
 @end

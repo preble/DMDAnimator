@@ -29,4 +29,5 @@
 -(void)play;
 -(void)pause;
 -(BOOL)togglePlay;
+- (void)resize:(NSSize)newSize;
 @end
