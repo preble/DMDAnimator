@@ -67,15 +67,37 @@
 
 - (NSData *)dataOfType:(NSString *)aType error:(NSError**)error
 {
-	NSMutableData* data = [NSMutableData dataWithCapacity:1 + (rows * cols) * [frames count]];
-	char frameCount = (char)[frames count];
-	[data appendBytes:&frameCount length:1];
+	NSMutableData* data = nil;
 	
-	int frame;
-	for(frame = 0; frame < frameCount; frame++) {
-		Frame* frameObj = [frames objectAtIndex:frame];
-		[data appendData:[frameObj data]];
-		[frameObj clearEdited];
+	if (YES)
+	{
+		// New file format:
+		int32_t format = 0x00646D64;
+		int32_t frameCount = [frames count];
+		data = [NSMutableData dataWithCapacity:4 * 4 + rows * cols * frameCount];
+		[data appendBytes:&format length:4];
+		[data appendBytes:&frameCount length:4];
+		[data appendBytes:&cols length:4];
+		[data appendBytes:&rows length:4];
+		for (Frame *frame in frames)
+		{
+			[data appendData:[frame data]];
+			[frame clearEdited];
+		}
+	}
+	else
+	{
+		 // Legacy file format:
+		data = [NSMutableData dataWithCapacity:1 + (rows * cols) * [frames count]];
+		char frameCount = (char)[frames count];
+		[data appendBytes:&frameCount length:1];
+		
+		int frame;
+		for(frame = 0; frame < frameCount; frame++) {
+			Frame* frameObj = [frames objectAtIndex:frame];
+			[data appendData:[frameObj data]];
+			[frameObj clearEdited];
+		}
 	}
 	
     return data;
@@ -84,13 +106,40 @@
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {
 	[frames removeAllObjects];
+	
 	char* buffer = (char*)[data bytes];
-	int frameCount = buffer[0];
-	while([frames count] < frameCount) 
+	int32_t *wordPtr = (int32_t*)[data bytes];
+	
+	if ([data length] == (128 * 32 * buffer[0] + 1))
 	{
-		[frames addObject:[[Frame alloc] initWithRows:rows 
-											  columns:cols 
-												 dots:buffer + 1 + ([frames count] * (rows * cols))]];
+		// This is a legacy format file: one byte (frame count) followed by frameCount 128x32 frames:
+		int frameCount = buffer[0];
+		while([frames count] < frameCount) 
+		{
+			[frames addObject:[[Frame alloc] initWithRows:rows 
+												  columns:cols 
+													 dots:buffer + 1 + ([frames count] * (rows * cols))]];
+		}
+	}
+	else if(wordPtr[0] == 0x00646D64) // DMD0 format
+	{
+		int frameCount = wordPtr[1];
+		cols = wordPtr[2];
+		rows = wordPtr[3];
+		buffer = ((char*)[data bytes]) + 4 * 4;
+		int expectedLength = 4 * 4 + rows * cols * frameCount;
+		if ([data length] != expectedLength)
+		{
+			NSLog(@"Actual file length %d != %d (expected).", (int)[data length], expectedLength);
+			return NO;
+		}
+		while ([frames count] < frameCount)
+		{
+			[frames addObject:[[Frame alloc] initWithRows:rows 
+												  columns:cols 
+													 dots:buffer]];
+			buffer += rows * cols;
+		}
 	}
 	frameNumber = 0;
 	buffer = NULL;
