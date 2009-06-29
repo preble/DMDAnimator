@@ -1,6 +1,8 @@
 // DMDAnimator Copyright (c) 2007 Adam Preble.  All Rights Reserved.
 #import "DMDView.h"
 #import "DMDAnimatorAppDelegate.h"
+#import "DMDResizeWindowController.h"
+#import "DMDViewSettingsController.h" 
 
 @implementation DMDView
 
@@ -383,7 +385,28 @@ void PointToDot(NSPoint point, int *row, int *col)
 		NSFrameRect(NSMakeRect(rectSelection.origin.x * dotSize, (rectSelection.origin.y) * dotSize, 
 			rectSelection.size.width * dotSize, rectSelection.size.height * dotSize));
 	} 
-	
+    if (guidesEnabled)
+    {
+		[[NSColor grayColor] setStroke];
+        NSBezierPath* thePath = [NSBezierPath bezierPath];
+        if (guidesY > 0)
+        {
+            for(row = (guidesY * (1 + row0/guidesY)); row < row0 + rowCount; row += guidesY) 
+            {
+                [thePath moveToPoint:NSMakePoint(0, 0.5+dotSize * row)];
+                [thePath lineToPoint:NSMakePoint([self bounds].size.width, 0.5+dotSize * row)];
+            }
+        }
+        if (guidesX > 0)
+        {
+            for(col = (guidesX * (1 + col0/guidesY)); col < col0 + colCount; col += guidesX) 
+            {
+                [thePath moveToPoint:NSMakePoint(0.5 + dotSize * col, 0)];
+                [thePath lineToPoint:NSMakePoint(0.5 + dotSize * col, [self bounds].size.height)];
+            }
+        }
+        [thePath stroke];
+    }
 }
 
 - (BOOL)isFlipped
@@ -410,6 +433,21 @@ void PointToDot(NSPoint point, int *row, int *col)
 		return;
 	}
 	[resizeWindowController show];
+}
+- (IBAction)showViewSettings:(id)sender
+{
+    [viewSettingsController setGuidelinesEnabled:[NSNumber numberWithBool:guidesEnabled]];
+    [viewSettingsController setGuidelineSpacingX:[NSNumber numberWithInt:guidesX]];
+    [viewSettingsController setGuidelineSpacingY:[NSNumber numberWithInt:guidesY]];
+    [viewSettingsController showViewSettings:sender];
+}
+
+- (void)setGuidelinesEnabled:(BOOL)enable horizontal:(int)x vertical:(int)y
+{
+    guidesEnabled = enable;
+    guidesX = x;
+    guidesY = y;
+    [self setNeedsDisplay:YES];
 }
 
 @end

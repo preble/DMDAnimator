@@ -13,12 +13,62 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>cancelButton</key>
+				<string>id</string>
+				<key>okButton</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>DMDResizeWindowController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>animation</key>
+				<string>Animation</string>
+				<key>documentView</key>
+				<string>NSView</string>
+				<key>mainWindow</key>
+				<string>NSWindow</string>
+				<key>resizeSheet</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
+		</dict>
+		<dict>
 			<key>CLASS</key>
 			<string>Animation</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSDocument</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>okButton</key>
+				<string>id</string>
+				<key>showViewSettings</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>DMDViewSettingsController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>documentView</key>
+				<string>DMDView</string>
+				<key>mainWindow</key>
+				<string>NSWindow</string>
+				<key>sheet</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -93,6 +143,8 @@
 			<dict>
 				<key>animation</key>
 				<string>Animation</string>
+				<key>resizeWindowController</key>
+				<string>DMDResizeWindowController</string>
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSView</string>

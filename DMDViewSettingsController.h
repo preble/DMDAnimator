@@ -8,8 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class DMDView;
 
 @interface DMDViewSettingsController : NSWindowController {
+	IBOutlet NSWindow *mainWindow;
+	IBOutlet DMDView *documentView;
 	IBOutlet NSWindow *sheet;
 	NSNumber *guidelineSpacingX;
 	NSNumber *guidelineSpacingY;
@@ -18,4 +21,6 @@
 @property (nonatomic, retain) NSNumber *guidelineSpacingX;
 @property (nonatomic, retain) NSNumber *guidelineSpacingY;
 @property (nonatomic, retain) NSNumber *guidelinesEnabled;
+- (IBAction)showViewSettings:(id)sender;
+- (IBAction)okButton:(id)sender;
 @end

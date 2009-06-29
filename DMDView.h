@@ -3,14 +3,16 @@
 
 #import <Cocoa/Cocoa.h>
 #include "Animation.h"
-#include "DMDResizeWindowController.h"
 
 #define dotSize 8
+
+@class DMDViewSettingsController, DMDResizeWindowController;
 
 @interface DMDView : NSView
 {
     IBOutlet Animation *animation;
 	IBOutlet DMDResizeWindowController *resizeWindowController;
+    IBOutlet DMDViewSettingsController *viewSettingsController;
 
 	NSColor* colorOff;
 	NSColor* colorLow;
@@ -25,11 +27,15 @@
 	bool rectSelected; // YES if a selection has been completed.
 	bool rectSelecting; // YES if a selection is in progress.
 	NSRect rectSelection; // Rectangle representing what's selected.
-	
+    
+    BOOL guidesEnabled;
+    int guidesX;
+    int guidesY;
 }
 -(NSColor*)dotStateToColor:(DotState)ds;
 -(void)tick:(NSTimer*)timer;
 - (void)updateWindowTitle;
+- (void)setGuidelinesEnabled:(BOOL)enable horizontal:(int)x vertical:(int)y;
 - (IBAction)frameNext:(id)sender;
 - (IBAction)framePrevious:(id)sender;
 - (IBAction)frameShiftRight:(id)sender;
@@ -42,5 +48,5 @@
 - (IBAction)dotMedium:(id)sender;
 - (IBAction)dotHigh:(id)sender;
 - (IBAction)resize:(id)sender;
-
+- (IBAction)showViewSettings:(id)sender;
 @end

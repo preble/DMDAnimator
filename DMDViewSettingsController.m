@@ -7,7 +7,9 @@
 //
 
 #import "DMDViewSettingsController.h"
+#import "DMDView.h"
 
+void CommitWindowChanges(NSWindow *oMainDocumentWindow);
 
 @implementation DMDViewSettingsController
 
@@ -29,6 +31,25 @@
 	self.guidelineSpacingY = nil;
 	self.guidelinesEnabled = nil;
 	[super dealloc];
+}
+
+
+- (IBAction)showViewSettings:(id)sender
+{
+	if (sheet == nil)
+		[NSBundle loadNibNamed:@"DMDViewSettings" owner:self];
+	
+	[NSApp beginSheet:sheet modalForWindow:mainWindow modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:NULL];
+}
+- (IBAction)okButton:(id)sender
+{
+	CommitWindowChanges(sheet);
+    [documentView setGuidelinesEnabled:[[self guidelinesEnabled] boolValue] horizontal:[[self guidelineSpacingX] intValue] vertical:[[self guidelineSpacingY] intValue]];
+	[NSApp endSheet:sheet returnCode:NSRunStoppedResponse];
+}
+- (void)didEndSheet:(NSWindow *)theSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    [theSheet orderOut:nil];
 }
 
 @end

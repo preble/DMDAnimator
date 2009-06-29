@@ -41,7 +41,7 @@
 	[NSApp beginSheet:resizeSheet modalForWindow:mainWindow modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:NULL];
 }
 
-- (void)commitChanges:(NSWindow *)oMainDocumentWindow
+void CommitWindowChanges(NSWindow *oMainDocumentWindow)
 {
 	// This is intended to be used when we want to:
 	// 1) Commit editing changes (for controls that use bindings -- they only commit their changes when the focus leaves)
@@ -90,7 +90,7 @@
 
 - (IBAction)okButton:(id)sender
 {
-	[self commitChanges:resizeSheet];
+	CommitWindowChanges(resizeSheet);
 	[animation resize:NSMakeSize([width intValue], [height intValue])];
 	//[mainWindow setContentMaxSize:NSMakeSize([width intValue] * 8, [height intValue] * 8)];
 	[documentView setFrame:NSMakeRect(0, 0, [width intValue] * 8, [height intValue] * 8)];
