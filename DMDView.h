@@ -6,13 +6,14 @@
 
 #define dotSize 8
 
-@class DMDViewSettingsController, DMDResizeWindowController;
+@class DMDViewSettingsController, DMDResizeWindowController, DMDFontmapperController;
 
 @interface DMDView : NSView
 {
     IBOutlet Animation *animation;
 	IBOutlet DMDResizeWindowController *resizeWindowController;
     IBOutlet DMDViewSettingsController *viewSettingsController;
+    IBOutlet DMDFontmapperController *fontmapperController;
 
 	NSColor* colorOff;
 	NSColor* colorLow;
@@ -49,4 +50,5 @@
 - (IBAction)dotHigh:(id)sender;
 - (IBAction)resize:(id)sender;
 - (IBAction)showViewSettings:(id)sender;
+- (IBAction)fontize:(id)sender;
 @end

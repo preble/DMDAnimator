@@ -44,4 +44,5 @@ typedef enum DotState
 -(void)shiftRect:(NSRect)rect horizontal:(int)direction;
 
 - (void)resize:(NSSize)newSize;
+- (void)fillWithFont;
 @end

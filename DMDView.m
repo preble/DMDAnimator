@@ -24,6 +24,10 @@
 {
 	[[self window] makeFirstResponder:self];
 	[[self window] setAcceptsMouseMovedEvents: YES];
+    [self setFrame:NSMakeRect(0, 0, [animation columns] * 8, [animation rows] * 8)];
+    [[NSFontManager sharedFontManager] setDelegate:self];
+    [[NSFontManager sharedFontManager] setSelectedFont:[NSFont fontWithName:@"Helvetica" size:24.0f] isMultiple:NO];
+    [[NSFontPanel sharedFontPanel] setAccessoryView:[[[NSViewController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]] view]];
 }
 - (bool)acceptsFirstResponder
 {
@@ -448,6 +452,22 @@ void PointToDot(NSPoint point, int *row, int *col)
     guidesX = x;
     guidesY = y;
     [self setNeedsDisplay:YES];
+}
+
+- (IBAction)fontize:(id)sender
+{
+    [fontmapperController show];
+//    [[animation frame] fillWithFont];
+//    [self setNeedsDisplay:YES];
+}
+
+- (void)changeFont:(id)sender
+{
+    //NSFont *oldFont = [self font];
+    NSFont *newFont = [sender convertFont:[sender selectedFont]];
+    NSLog(@"%@", newFont);
+    //[self setFont:newFont];
+    return;
 }
 
 @end

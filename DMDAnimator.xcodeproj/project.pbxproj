@@ -17,6 +17,8 @@
 		66EA5F5E0FF80442000CDEC0 /* DMDViewSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5F5D0FF80442000CDEC0 /* DMDViewSettingsController.m */; };
 		66EB0BA20D10496E007F6016 /* DMDAnimator Help in Resources */ = {isa = PBXBuildFile; fileRef = 66EB0B9F0D10496E007F6016 /* DMDAnimator Help */; };
 		66EB0BB10D1070FF007F6016 /* DMD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 66EB0BB00D1070FF007F6016 /* DMD.icns */; };
+		66FBEADA0FF8635200E6EED2 /* DMDFontmapperController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FBEAD90FF8635200E6EED2 /* DMDFontmapperController.m */; };
+		66FBEB2B0FF86E9600E6EED2 /* FontmapperView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66FBEB2A0FF86E9600E6EED2 /* FontmapperView.xib */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -52,6 +54,9 @@
 		66EA5F5D0FF80442000CDEC0 /* DMDViewSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDViewSettingsController.m; sourceTree = "<group>"; };
 		66EB0B9F0D10496E007F6016 /* DMDAnimator Help */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "DMDAnimator Help"; sourceTree = "<group>"; };
 		66EB0BB00D1070FF007F6016 /* DMD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DMD.icns; sourceTree = "<group>"; };
+		66FBEAD80FF8635200E6EED2 /* DMDFontmapperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDFontmapperController.h; sourceTree = "<group>"; };
+		66FBEAD90FF8635200E6EED2 /* DMDFontmapperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDFontmapperController.m; sourceTree = "<group>"; };
+		66FBEB2A0FF86E9600E6EED2 /* FontmapperView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FontmapperView.xib; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* DMDAnimator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMDAnimator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -138,6 +143,7 @@
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				66EA5F590FF80254000CDEC0 /* DMDViewSettings.xib */,
+				66FBEB2A0FF86E9600E6EED2 /* FontmapperView.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -171,6 +177,8 @@
 				66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */,
 				66EA5F5C0FF80442000CDEC0 /* DMDViewSettingsController.h */,
 				66EA5F5D0FF80442000CDEC0 /* DMDViewSettingsController.m */,
+				66FBEAD80FF8635200E6EED2 /* DMDFontmapperController.h */,
+				66FBEAD90FF8635200E6EED2 /* DMDFontmapperController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -226,6 +234,7 @@
 				66EA5D2A0FF6C75A000CDEC0 /* DMDResizeWindow.xib in Resources */,
 				66EA5E780FF7D9CC000CDEC0 /* Animation.xib in Resources */,
 				66EA5F5A0FF80254000CDEC0 /* DMDViewSettings.xib in Resources */,
+				66FBEB2B0FF86E9600E6EED2 /* FontmapperView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +252,7 @@
 				66EA5CCD0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m in Sources */,
 				66EA5D1D0FF6C61E000CDEC0 /* DMDResizeWindowController.m in Sources */,
 				66EA5F5E0FF80442000CDEC0 /* DMDViewSettingsController.m in Sources */,
+				66FBEADA0FF8635200E6EED2 /* DMDFontmapperController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
