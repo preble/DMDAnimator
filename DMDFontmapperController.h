@@ -10,10 +10,8 @@
 
 
 @interface DMDFontmapperController : NSViewController {
-    NSNumber *tileSizeNumber;
-    NSNumber *scaleNumber;
+    IBOutlet NSTextField *verticalOffsetField;
 }
-@property (nonatomic, retain) NSNumber *tileSizeNumber;
-@property (nonatomic, retain) NSNumber *scaleNumber;
+@property (readonly) NSTextField *verticalOffsetField;
 - (IBAction)apply:(id)sender;
 @end

@@ -11,24 +11,21 @@
 
 @implementation DMDFontmapperController
 
-@synthesize tileSizeNumber, scaleNumber;
+@synthesize verticalOffsetField;;
 
 - (id)init
 {
 	if (self = [super init])
 	{
-        self.tileSizeNumber = [NSNumber numberWithInt:32];
-        self.scaleNumber = [NSNumber numberWithFloat:1.0f];
     }
     return self;
 }
 - (void)dealloc
 {
-    self.tileSizeNumber = nil;
-    self.scaleNumber = nil;
     [super dealloc];
 }
 - (IBAction)apply:(id)sender
 {
+    [[[NSFontManager sharedFontManager] delegate] changeFont:[NSFontManager sharedFontManager]];
 }
 @end

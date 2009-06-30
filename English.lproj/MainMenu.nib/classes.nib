@@ -108,21 +108,12 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>apply</key>
-				<string>id</string>
-				<key>chooseFont</key>
-				<string>id</string>
-				<key>close</key>
-				<string>id</string>
-			</dict>
 			<key>CLASS</key>
 			<string>DMDFontmapperController</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
-			<string>NSWindowController</string>
+			<string>NSViewController</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -136,8 +127,6 @@
 				<key>dotMedium</key>
 				<string>id</string>
 				<key>dotOff</key>
-				<string>id</string>
-				<key>fontize</key>
 				<string>id</string>
 				<key>frameNext</key>
 				<string>id</string>

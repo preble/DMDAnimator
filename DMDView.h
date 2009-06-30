@@ -50,5 +50,4 @@
 - (IBAction)dotHigh:(id)sender;
 - (IBAction)resize:(id)sender;
 - (IBAction)showViewSettings:(id)sender;
-- (IBAction)fontize:(id)sender;
 @end

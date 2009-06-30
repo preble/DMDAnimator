@@ -3,6 +3,7 @@
 #import "DMDAnimatorAppDelegate.h"
 #import "DMDResizeWindowController.h"
 #import "DMDViewSettingsController.h" 
+#import "DMDFontmapperController.h"
 
 @implementation DMDView
 
@@ -27,7 +28,8 @@
     [self setFrame:NSMakeRect(0, 0, [animation columns] * 8, [animation rows] * 8)];
     [[NSFontManager sharedFontManager] setDelegate:self];
     [[NSFontManager sharedFontManager] setSelectedFont:[NSFont fontWithName:@"Helvetica" size:24.0f] isMultiple:NO];
-    [[NSFontPanel sharedFontPanel] setAccessoryView:[[[NSViewController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]] view]];
+    fontmapperController = [[DMDFontmapperController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]];
+    [[NSFontPanel sharedFontPanel] setAccessoryView:[fontmapperController view]];
 }
 - (bool)acceptsFirstResponder
 {
@@ -454,19 +456,17 @@ void PointToDot(NSPoint point, int *row, int *col)
     [self setNeedsDisplay:YES];
 }
 
-- (IBAction)fontize:(id)sender
-{
-    [fontmapperController show];
-//    [[animation frame] fillWithFont];
-//    [self setNeedsDisplay:YES];
-}
-
 - (void)changeFont:(id)sender
 {
-    //NSFont *oldFont = [self font];
+    guidesEnabled = YES;
+    guidesX = [animation columns]/10;
+    guidesY = [animation rows]/10;
+    
     NSFont *newFont = [sender convertFont:[sender selectedFont]];
-    NSLog(@"%@", newFont);
-    //[self setFont:newFont];
+    float verticalOffset = [[fontmapperController verticalOffsetField] floatValue];
+    NSLog(@"%@ verticalOffset=%0.2f", newFont, verticalOffset);
+    [animation fillWithFont:newFont verticalOffset:verticalOffset];
+    [self setNeedsDisplay:YES];
     return;
 }
 

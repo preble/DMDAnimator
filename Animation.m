@@ -197,5 +197,77 @@
 		[frame resize:newSize];
 }
 
+- (void)fillWithFont:(NSFont *)font verticalOffset:(float)verticalOffset
+{
+    [frames removeAllObjects];
+    frameNumber = 0;
+    [frames addObject:[[Frame alloc] initWithRows:rows columns:cols dots:NULL]];
+    [self insertFrameAfterCurrent];
+    // Now we have two frames.
+    Frame *bitmapFrame = [self frame];
+    Frame *widthsFrame = [frames objectAtIndex:1];
+
+	const int stride = 10; // chars per line
+	const float charSize = cols / (float)stride;
+	NSRect bitmapRect = NSMakeRect(0.0, 0.0, cols, rows);
+	NSBitmapImageRep* bitmapRep = nil;
+	
+	bitmapRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
+                                                        pixelsWide:bitmapRect.size.width
+                                                        pixelsHigh:bitmapRect.size.height
+                                                     bitsPerSample:8
+                                                   samplesPerPixel:1
+                                                          hasAlpha:NO
+                                                          isPlanar:NO
+                                                    colorSpaceName:NSCalibratedWhiteColorSpace
+                                                      bitmapFormat:0
+                                                       bytesPerRow:(1 * bitmapRect.size.width)
+                                                      bitsPerPixel:8];
+	
+	[NSGraphicsContext saveGraphicsState];
+	[NSGraphicsContext setCurrentContext:[NSGraphicsContext
+										  graphicsContextWithBitmapImageRep:bitmapRep]];
+    [[NSColor blackColor] setFill];
+	NSRectFill(bitmapRect);
+    
+	// Draw your content...
+	//NSFont *font = [NSFont fontWithName:@"Futura" size:charSize];
+	//NSFont *font = [NSFont fontWithName:@"Andale Mono" size:charSize];
+	[font set];
+    
+	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+								[NSColor whiteColor], NSForegroundColorAttributeName,
+								font, NSFontAttributeName,
+								nil];
+	
+    int i;
+	for (i = 0; i < 96; i++)
+	{
+		unichar ch = (unichar)(i+32);
+		NSString *str = [NSString stringWithCharacters:&ch length:1];
+        float x = (i % stride) * charSize;
+        float y = (i / stride) * charSize;
+        y += verticalOffset; //1.6f * charSize;
+		NSRect rect = NSMakeRect(x, rows - y, charSize, charSize * 2.0);
+		//NSLog(@"Drawing %@ at %d, %d", str, (int)rect.origin.x, (int)rect.origin.y);
+		[str drawInRect:rect withAttributes:attributes];
+        NSSize charSize = [str sizeWithAttributes:attributes];
+        [widthsFrame bytes][i] = (char)charSize.width;
+	}
+	
+	
+	[NSGraphicsContext restoreGraphicsState];
+	
+	unsigned char *buffer = [bitmapRep bitmapData];
+    
+    int x, y;
+    for (y = 0; y < rows; y++)
+        for (x = 0; x < cols; x++)
+            [bitmapFrame setDotAtRow:y column:x toState:(*buffer++)>>6];
+    
+    [bitmapRep release];
+}
+
+
 @end // Animation
 

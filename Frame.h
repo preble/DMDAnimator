@@ -24,7 +24,8 @@ typedef enum DotState
 }
 - (id)initWithRows:(int)theRows columns:(int)theCols dots:(char*)dotData;
 // Saving/loading dots
--(NSData*)data;
+- (NSData*)data;
+- (char *)bytes;
 
 @property (readonly) int rows;
 @property (readonly) int columns;
@@ -44,5 +45,4 @@ typedef enum DotState
 -(void)shiftRect:(NSRect)rect horizontal:(int)direction;
 
 - (void)resize:(NSSize)newSize;
-- (void)fillWithFont;
 @end
