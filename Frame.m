@@ -4,7 +4,7 @@
 @implementation Frame
 @synthesize rows, columns=cols;
 
-- (id)initWithRows:(int)theRows columns:(int)theCols dots:(char*)dotData
+- (id)initWithRows:(int)theRows columns:(int)theCols dots:(const char*)dotData
 {
 	if (self = [super init])
 	{
@@ -32,6 +32,27 @@
 	[super dealloc];
 }
 
+#define kFrameArchiveKeyDots @"dots"
+#define kFrameArchiveKeyWidth @"width"
+#define kFrameArchiveKeyHeight @"height"
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    //[super encodeWithCoder:coder];
+    [coder encodeObject:[NSData dataWithBytes:dots length:frameSize] forKey:kFrameArchiveKeyDots];
+    [coder encodeInt:rows forKey:kFrameArchiveKeyHeight];
+    [coder encodeInt:cols forKey:kFrameArchiveKeyWidth];
+}
+- (id)initWithCoder:(NSCoder *)coder {
+    if (self = [super init]) //self = [super initWithCoder:coder];
+    {
+        rows = [coder decodeIntForKey:kFrameArchiveKeyHeight];
+        cols = [coder decodeIntForKey:kFrameArchiveKeyWidth];
+        NSData *dotData = [coder decodeObjectForKey:kFrameArchiveKeyDots];
+        self = [self initWithRows:rows columns:cols dots:[dotData bytes]];
+    }
+    return self;
+}
+
 -(NSData*)data
 {
 	return [NSData dataWithBytes:dots length:frameSize];
@@ -42,9 +63,9 @@
 }
 - (id)mutableCopyWithZone:(NSZone *)zone
 {
-	return [[[Frame alloc] initWithRows:rows 
-								columns:cols 
-								   dots:dots] retain];
+	return [[Frame alloc] initWithRows:rows 
+                               columns:cols 
+                                  dots:dots];
 }
 -(DotState)dotAtRow:(int)row column:(int) col
 {
@@ -145,6 +166,22 @@
 	for(i = 0; i < frameSize; i++) {
 		dots[i] = Dot_Off;
 	}
+}
+
+- (Frame *)frameWithRect:(NSRect)rect
+{
+    Frame *frame = [[[Frame alloc] initWithRows:rect.size.height columns:rect.size.width dots:NULL] autorelease];
+    for(int x = 0; x < rect.size.width; x++)
+        for (int y = 0; y < rect.size.height; y++)
+            [frame setDotAtRow:y column:x toState:[self dotAtRow:y+rect.origin.y column:x+rect.origin.x]];
+    return frame;
+}
+
+- (void)setDotsFromFrame:(Frame *)frame sourceOrigin:(NSPoint)source destOrigin:(NSPoint)dest size:(NSSize)size
+{
+    for(int x = 0; x < size.width; x++)
+        for (int y = 0; y < size.height; y++)
+            [self setDotAtRow:dest.y+y column:dest.x+x toState:[frame dotAtRow:y+source.y column:x+source.x]];
 }
 
 @end

@@ -15,14 +15,14 @@ typedef enum DotState
 } DotState;
 
 
-@interface Frame : NSObject
+@interface Frame : NSObject <NSCoding>
 {
 	char *dots;
 	bool edited;
 	int rows, cols;
 	int frameSize;
 }
-- (id)initWithRows:(int)theRows columns:(int)theCols dots:(char*)dotData;
+- (id)initWithRows:(int)theRows columns:(int)theCols dots:(const char*)dotData;
 // Saving/loading dots
 - (NSData*)data;
 - (char *)bytes;
@@ -45,4 +45,8 @@ typedef enum DotState
 -(void)shiftRect:(NSRect)rect horizontal:(int)direction;
 
 - (void)resize:(NSSize)newSize;
+
+- (Frame *)frameWithRect:(NSRect)rect;
+- (void)setDotsFromFrame:(Frame *)frame sourceOrigin:(NSPoint)source destOrigin:(NSPoint)dest size:(NSSize)size;
+
 @end

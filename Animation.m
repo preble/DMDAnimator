@@ -24,7 +24,7 @@
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
 		frames = [[NSMutableArray arrayWithCapacity:1] retain];
-		[frames addObject:[[Frame alloc] initWithRows:rows columns:cols dots:NULL]];
+		[frames addObject:[[[Frame alloc] initWithRows:rows columns:cols dots:NULL] autorelease]];
 		frameNumber = 0;
 		playing = NO;
     }
@@ -116,9 +116,9 @@
 		int frameCount = buffer[0];
 		while([frames count] < frameCount) 
 		{
-			[frames addObject:[[Frame alloc] initWithRows:rows 
-												  columns:cols 
-													 dots:buffer + 1 + ([frames count] * (rows * cols))]];
+			[frames addObject:[[[Frame alloc] initWithRows:rows 
+                                                   columns:cols 
+                                                      dots:buffer + 1 + ([frames count] * (rows * cols))] autorelease]];
 		}
 	}
 	else if(wordPtr[0] == 0x00646D64) // DMD0 format
@@ -135,9 +135,9 @@
 		}
 		while ([frames count] < frameCount)
 		{
-			[frames addObject:[[Frame alloc] initWithRows:rows 
-												  columns:cols 
-													 dots:buffer]];
+			[frames addObject:[[[Frame alloc] initWithRows:rows 
+                                                   columns:cols 
+                                                      dots:buffer] autorelease]];
 			buffer += rows * cols;
 		}
 	}
@@ -172,7 +172,7 @@
 -(void)insertFrameAfterCurrent
 {
 	Frame* currentFrame = [frames objectAtIndex:frameNumber];
-	[frames insertObject:[currentFrame mutableCopy] atIndex:frameNumber+1];
+	[frames insertObject:[[currentFrame mutableCopy] autorelease] atIndex:frameNumber+1];
 }
 -(void)play
 {

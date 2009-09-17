@@ -31,7 +31,7 @@
     fontmapperController = [[DMDFontmapperController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]];
     [[NSFontPanel sharedFontPanel] setAccessoryView:[fontmapperController view]];
 }
-- (bool)acceptsFirstResponder
+- (BOOL)acceptsFirstResponder
 {
 	return YES;
 }
@@ -245,22 +245,8 @@
 - (void)copy:(id)sender
 {
 	if(rectSelected) {
-		int clipboardLength = rectSelection.size.width * rectSelection.size.height;
-		char *clipboardDots = (char*)malloc(clipboardLength);
-		int row, col;
-		for(row = 0; row < rectSelection.size.height; row++) {
-			for(col = 0; col < rectSelection.size.width; col++) {
-				clipboardDots[row * (int)rectSelection.size.width + col] = 
-					[[animation frame] dotAtRow:rectSelection.origin.y + row 
-					column:rectSelection.origin.x + col];
-			}
-		}
-		NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-							  [NSValue valueWithSize:rectSelection.size], @"size",
-							  [NSData dataWithBytes:clipboardDots length:clipboardLength], @"dots",
-							  nil];
-		[[NSPasteboard generalPasteboard] setData:[NSArchiver archivedDataWithRootObject:data] forType:DMDDotsPboardType];
-		NSLog(@"%s after copy", _cmd);
+        Frame *frame = [[animation frame] frameWithRect:rectSelection];
+		[[NSPasteboard generalPasteboard] setData:[NSKeyedArchiver archivedDataWithRootObject:frame] forType:DMDDotsPboardType];
 	} else {
 		NSLog(@"copy: when no rectSelected");
 	}
@@ -273,21 +259,11 @@
 		NSLog(@"Type not found on pasteboard");
 		return;
 	}
-	NSDictionary *data = (NSDictionary*)[NSUnarchiver unarchiveObjectWithData:[[NSPasteboard generalPasteboard] dataForType:DMDDotsPboardType]];
-	if (data == nil)
-	{
-		NSLog(@"Paste but no data!");
-		return;
-	}
-	NSSize clipboardSize = [[data objectForKey:@"size"] sizeValue];
-	char *dotData = (char*)[[data objectForKey:@"dots"] bytes];
-	int row, col;
-	for(row = 0; row < clipboardSize.height; row++) {
-		for(col = 0; col < clipboardSize.width; col++) {
-			[[animation frame] setDotAtRow:cursorRow + row column:cursorCol + col 
-				toState:dotData[row * (int)clipboardSize.width + col]];
-		}
-	}
+	Frame *frame = (Frame*)[NSKeyedUnarchiver unarchiveObjectWithData:[[NSPasteboard generalPasteboard] dataForType:DMDDotsPboardType]];
+    NSPoint sourceOrigin = NSMakePoint(0, 0);
+    NSPoint destOrigin = NSMakePoint(cursorCol, cursorRow);
+    NSSize size = NSMakeSize([frame columns], [frame rows]);
+    [[animation frame] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
 	[self setNeedsDisplay:YES];
 }
 
