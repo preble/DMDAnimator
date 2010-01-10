@@ -20,6 +20,8 @@
 	NSColor* colorMed;
 	NSColor* colorHigh;
 	
+	NSColor *sixteenColors[16];
+	
 	NSTimer* timer;
 
 	int cursorRow, cursorCol;

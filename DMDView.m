@@ -16,10 +16,23 @@
 		colorLow = [[NSColor colorWithDeviceRed: 0.5 green: 0.25 blue: 0.0 alpha: 1.0] retain];
 		colorMed = [[NSColor colorWithDeviceRed: 0.8 green: 0.5 blue: 0.0 alpha: 1.0] retain];
 		colorHigh = [[NSColor colorWithDeviceRed: 1.0 green: 0.7 blue: 0.0 alpha: 1.0] retain];
+		sixteenColors[0] = [colorOff retain];
+		for (int c = 1; c < 16; c++)
+		{
+			float q = (0.80 * ((float)c/15.0));
+			sixteenColors[c] = [[NSColor colorWithDeviceRed:q+0.20 green:q*0.8 blue:0 alpha:1] retain];
+		}
 		rectSelected = NO;
 		rectSelecting = NO;
 	}
 	return self;
+}
+- (void)dealloc
+{
+	for (int c = 0; c < 16; c++)
+		[sixteenColors[c] release];
+
+	[super dealloc];
 }
 - (void)awakeFromNib
 {
@@ -316,10 +329,17 @@ void PointToDot(NSPoint point, int *row, int *col)
 }
 -(NSColor*)dotStateToColor:(DotState)ds 
 {
-	switch(ds) {
-		case Dot_Low: return colorLow;
-		case Dot_Med: return colorMed;
-		case Dot_High: return colorHigh;
+	if (ds < 0x10)
+	{
+		switch(ds) {
+			case Dot_Low: return colorLow;
+			case Dot_Med: return colorMed;
+			case Dot_High: return colorHigh;
+		}
+	}
+	else if (ds < 0x20)
+	{
+		return sixteenColors[ds&0xf];
 	}
 	return colorOff;
 }
@@ -418,6 +438,10 @@ void PointToDot(NSPoint point, int *row, int *col)
 }
 - (IBAction)showViewSettings:(id)sender
 {
+	if (guidesX == 0 || guidesY == 0 && [animation rows] == [animation columns] && ([animation rows] % 10) == 0)
+	{
+		guidesY = guidesX = [animation rows]/10;
+	}
     [viewSettingsController setGuidelinesEnabled:[NSNumber numberWithBool:guidesEnabled]];
     [viewSettingsController setGuidelineSpacingX:[NSNumber numberWithInt:guidesX]];
     [viewSettingsController setGuidelineSpacingY:[NSNumber numberWithInt:guidesY]];
