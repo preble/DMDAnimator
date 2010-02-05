@@ -327,22 +327,6 @@ void PointToDot(NSPoint point, int *row, int *col)
 {
 	//[self addCursorRect:[self visibleRect] cursor: nil]; //[NSCursor crosshairCursor]];
 }
--(NSColor*)dotStateToColor:(DotState)ds 
-{
-	if (ds < 0x10)
-	{
-		switch(ds) {
-			case Dot_Low: return colorLow;
-			case Dot_Med: return colorMed;
-			case Dot_High: return colorHigh;
-		}
-	}
-	else if (ds < 0x20)
-	{
-		return sixteenColors[ds&0xf];
-	}
-	return colorOff;
-}
 
 - (void)drawRect:(NSRect)rect
 {
@@ -368,8 +352,7 @@ void PointToDot(NSPoint point, int *row, int *col)
 			DotState state = [frame dotAtRow:row column:col];
 			if(state != Dot_Off) {
 				if(state != lastState) {
-					//NSColor* color = DotStateToColor(state);
-					[[self dotStateToColor:state] set];
+					[sixteenColors[state&0xf] set];
 					lastState = state;
 				}
 				NSRectFill(NSMakeRect(col * dotSize + 1, (row) * dotSize + 1, dotSize-2, dotSize-2));

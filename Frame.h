@@ -9,9 +9,9 @@ typedef enum DotState
 {
 	Dot_Clear = 0,
 	Dot_Off = 0,
-	Dot_Low = 1,
-	Dot_Med = 2,
-	Dot_High = 3
+	Dot_Low = 0x5,
+	Dot_Med = 0xa,
+	Dot_High = 0xf
 } DotState;
 
 

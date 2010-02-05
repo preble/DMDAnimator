@@ -35,7 +35,6 @@
     int guidesX;
     int guidesY;
 }
--(NSColor*)dotStateToColor:(DotState)ds;
 -(void)tick:(NSTimer*)timer;
 - (void)updateWindowTitle;
 - (void)setGuidelinesEnabled:(BOOL)enable horizontal:(int)x vertical:(int)y;
