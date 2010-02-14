@@ -24,7 +24,7 @@
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
 		frames = [[NSMutableArray arrayWithCapacity:1] retain];
-		[frames addObject:[[[Frame alloc] initWithRows:rows columns:cols dots:NULL] autorelease]];
+		[frames addObject:[[[Frame alloc] initWithRows:rows columns:cols dots:NULL document:self] autorelease]];
 		frameNumber = 0;
 		playing = NO;
     }
@@ -82,7 +82,6 @@
 		for (Frame *frame in frames)
 		{
 			[data appendData:[frame data]];
-			[frame clearEdited];
 		}
 	}
 	else
@@ -96,7 +95,6 @@
 		for(frame = 0; frame < frameCount; frame++) {
 			Frame* frameObj = [frames objectAtIndex:frame];
 			[data appendData:[frameObj data]];
-			[frameObj clearEdited];
 		}
 	}
 	
@@ -118,7 +116,8 @@
 		{
 			[frames addObject:[[[Frame alloc] initWithRows:rows 
                                                    columns:cols 
-                                                      dots:buffer + 1 + ([frames count] * (rows * cols))] autorelease]];
+                                                      dots:buffer + 1 + ([frames count] * (rows * cols))
+												  document:self] autorelease]];
 		}
 	}
 	else if(wordPtr[0] == 0x00646D64) // DMD0 format
@@ -137,7 +136,8 @@
 		{
 			[frames addObject:[[[Frame alloc] initWithRows:rows 
                                                    columns:cols 
-                                                      dots:buffer] autorelease]];
+                                                      dots:buffer
+												  document:self] autorelease]];
 			buffer += rows * cols;
 		}
 	}
@@ -145,16 +145,6 @@
 	buffer = NULL;
     
     return YES;
-}
--(BOOL)isEdited
-{
-	int i = 0;
-	for(i = 0; i < [frames count]; i++) {
-		if([[frames objectAtIndex:i] isEdited]) {
-			return YES;
-		}
-	}
-	return NO;
 }
 
 -(void)nextFrame
@@ -201,7 +191,7 @@
 {
     [frames removeAllObjects];
     frameNumber = 0;
-    [frames addObject:[[Frame alloc] initWithRows:rows columns:cols dots:NULL]];
+    [frames addObject:[[Frame alloc] initWithRows:rows columns:cols dots:NULL document:self]];
     [self insertFrameAfterCurrent];
     // Now we have two frames.
     Frame *bitmapFrame = [self frame];

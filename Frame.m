@@ -1,10 +1,11 @@
 // DMDAnimator Copyright (c) 2007 Adam Preble.  All Rights Reserved.
 #import "Frame.h"
+#import "Animation.h"
 
 @implementation Frame
 @synthesize rows, columns=cols;
 
-- (id)initWithRows:(int)theRows columns:(int)theCols dots:(const char*)dotData
+- (id)initWithRows:(int)theRows columns:(int)theCols dots:(const char*)dotData document:(Animation*)theDocument
 {
 	if (self = [super init])
 	{
@@ -21,7 +22,7 @@
 		{
 			memcpy(dots, dotData, frameSize);
 		}
-		edited = NO;
+		document = theDocument;
 	}
 	return self;
 }
@@ -48,7 +49,7 @@
         rows = [coder decodeIntForKey:kFrameArchiveKeyHeight];
         cols = [coder decodeIntForKey:kFrameArchiveKeyWidth];
         NSData *dotData = [coder decodeObjectForKey:kFrameArchiveKeyDots];
-        self = [self initWithRows:rows columns:cols dots:[dotData bytes]];
+        self = [self initWithRows:rows columns:cols dots:[dotData bytes] document:nil];
     }
     return self;
 }
@@ -56,6 +57,15 @@
 -(NSData*)data
 {
 	return [NSData dataWithBytes:dots length:frameSize];
+}
+- (void)setData:(NSData *)data
+{
+	if ([data length] != frameSize)
+	{
+		NSLog(@"%s ignored; data length %d != frame size %d", _cmd, [data length], frameSize);
+		return;
+	}
+	memcpy(dots, [data bytes], frameSize);
 }
 - (char *)bytes
 {
@@ -65,7 +75,8 @@
 {
 	return [[Frame alloc] initWithRows:rows 
                                columns:cols 
-                                  dots:dots];
+                                  dots:dots
+							  document:document];
 }
 -(DotState)dotAtRow:(int)row column:(int) col
 {
@@ -73,29 +84,35 @@
 }
 -(void)setDotAtRow:(int)row column:(int)col toState:(DotState)state
 {
+	[[[document undoManager] prepareWithInvocationTarget:self] setDotAtRow:row column:col toState:[self dotAtRow:row column:col]];
+	[[document undoManager] setActionName:@"Set Dot"];
 	dots[row * cols + col] = state;
-	edited = YES;
 }
--(BOOL)isEdited
+- (void)setDotsInRect:(NSRect)rect toState:(DotState)state
 {
-	return edited;
-}
--(void)clearEdited
-{
-	edited = NO;
+	// No need to do an undo group here; all undos in a run loop pass are automatically grouped.
+	int x, y;
+	for(x = 0; x < rect.size.width; x++) {
+		for(y = 0; y < rect.size.height; y++) {
+			[self setDotAtRow:rect.origin.y+y column:rect.origin.x+x toState:state];
+		}
+	}
 }
 - (void)shiftUp
 {
+	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	memmove(dots, dots + cols, cols*(rows-1));
 	memset(dots + (cols*rows-1), Dot_Clear, cols);
 }
 - (void)shiftDown
 {
+	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	memmove(dots + cols, dots, cols*(rows-1));
 	memset(dots, Dot_Clear, cols);
 }
 - (void)shiftLeft
 {
+	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	int row;
 	for(row = 0; row < rows; row++) {
 		char* rowBase = dots + row * cols;
@@ -105,6 +122,7 @@
 }
 - (void)shiftRight
 {
+	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	int row;
 	for(row = 0; row < rows; row++) {
 		char* rowBase = dots + row * cols;
@@ -170,7 +188,7 @@
 
 - (Frame *)frameWithRect:(NSRect)rect
 {
-    Frame *frame = [[[Frame alloc] initWithRows:rect.size.height columns:rect.size.width dots:NULL] autorelease];
+    Frame *frame = [[[Frame alloc] initWithRows:rect.size.height columns:rect.size.width dots:NULL document:nil] autorelease];
     for(int x = 0; x < rect.size.width; x++)
         for (int y = 0; y < rect.size.height; y++)
             [frame setDotAtRow:y column:x toState:[self dotAtRow:y+rect.origin.y column:x+rect.origin.x]];

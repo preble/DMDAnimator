@@ -14,28 +14,28 @@ typedef enum DotState
 	Dot_High = 0xf
 } DotState;
 
+@class Animation;
 
 @interface Frame : NSObject <NSCoding>
 {
 	char *dots;
-	bool edited;
 	int rows, cols;
 	int frameSize;
+	Animation *document;
 }
-- (id)initWithRows:(int)theRows columns:(int)theCols dots:(const char*)dotData;
+- (id)initWithRows:(int)theRows columns:(int)theCols dots:(const char*)dotData document:(Animation*)document;
 // Saving/loading dots
 - (NSData*)data;
+- (void)setData:(NSData *)data;
 - (char *)bytes;
 
 @property (readonly) int rows;
 @property (readonly) int columns;
 
--(BOOL)isEdited;
--(void)clearEdited;
-
 // Dot Accessors
 -(DotState)dotAtRow:(int)row column:(int) col;
 -(void)setDotAtRow:(int)row column:(int)col toState:(DotState)state;
+- (void)setDotsInRect:(NSRect)rect toState:(DotState)state;
 // Dot Manipulators
 -(void)shiftUp;
 -(void)shiftDown;

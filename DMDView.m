@@ -43,6 +43,12 @@
     [[NSFontManager sharedFontManager] setSelectedFont:[NSFont fontWithName:@"Helvetica" size:24.0f] isMultiple:NO];
     fontmapperController = [[DMDFontmapperController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]];
     [[NSFontPanel sharedFontPanel] setAccessoryView:[fontmapperController view]];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUndo:) name:NSUndoManagerDidUndoChangeNotification object:nil];
+}
+- (void)didUndo:(NSNotification*)notification
+{
+	[self setNeedsDisplay:YES];
 }
 - (BOOL)acceptsFirstResponder
 {
@@ -171,19 +177,12 @@
 		NSLog(@"Unknown character: %C", character);
 	}
 	[self setNeedsDisplay: YES];
-	[[self window] setDocumentEdited:[animation isEdited]];
 	[self updateWindowTitle];
 }
 - (void)setDot:(DotState)state
 {
 	if(rectSelected) {
-		Frame* frame = [animation frame];
-		int x, y;
-		for(x = 0; x < rectSelection.size.width; x++) {
-			for(y = 0; y < rectSelection.size.height; y++) {
-				[frame setDotAtRow:rectSelection.origin.y+y column:rectSelection.origin.x+x toState:state];
-			}
-		}
+		[[animation frame] setDotsInRect:rectSelection toState:state];
 	} else {
 		[[animation frame] setDotAtRow:cursorRow column:cursorCol toState:state];
 	}
@@ -259,7 +258,16 @@
 {
 	if(rectSelected) {
         Frame *frame = [[animation frame] frameWithRect:rectSelection];
-		[[NSPasteboard generalPasteboard] setData:[NSKeyedArchiver archivedDataWithRootObject:frame] forType:DMDDotsPboardType];
+		if (frame == nil) {
+			NSLog(@"copy: Failed to get frame in selection");
+			return;
+		}
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:frame];
+		if (data == nil) {
+			NSLog(@"copy: Failed to archived data from frame");
+			return;
+		}
+		[[NSPasteboard generalPasteboard] setData:data forType:DMDDotsPboardType];
 	} else {
 		NSLog(@"copy: when no rectSelected");
 	}
@@ -407,7 +415,7 @@ void PointToDot(NSPoint point, int *row, int *col)
 
 - (IBAction)resize:(id)sender
 {
-	if ([animation isEdited])
+	if ([[self window] isDocumentEdited])
 	{
 		NSAlert *alert = [NSAlert alertWithMessageText:@"Cannot resize unsaved animation."
 										 defaultButton:@"OK" 

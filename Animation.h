@@ -22,7 +22,6 @@
 -(int)frameNumber;
 -(int)frameCount;
 -(Frame*)frame;
--(BOOL)isEdited;
 -(void)nextFrame;
 -(void)prevFrame;
 -(void)insertFrameAfterCurrent;
