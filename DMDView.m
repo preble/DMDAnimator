@@ -101,7 +101,8 @@
 		unichar character = [[event characters] characterAtIndex:charIndex];
 		
 		if(character >= NSUpArrowFunctionKey && character <= NSRightArrowFunctionKey) {
-			// Shift+Arrow: Rectangle selection.
+			int inc = (modifiers & NSAlternateKeyMask) ? 4 : 1; // Option key makes us move by 4.
+			// Shift+[Opt]+Arrow: Rectangle selection.
 			if(modifiers & NSShiftKeyMask) {
 				if(rectSelecting == NO) {
 					// Setup for the selection.
@@ -113,24 +114,28 @@
 				switch(character) {
 				case NSUpArrowFunctionKey: 
 					if(rectSelection.origin.y > 0) { 
-						rectSelection.origin.y--; 
-						rectSelection.size.height++; 
+                        inc = MIN(inc, rectSelection.origin.y);
+						rectSelection.origin.y -= inc; 
+						rectSelection.size.height += inc; 
 					}
 					break;
 				case NSDownArrowFunctionKey: 
 					if(rectSelection.size.height < [animation rows]-1) {
-						rectSelection.size.height++; 
+                        inc = MIN(inc, [animation rows] - rectSelection.size.height);
+						rectSelection.size.height += inc; 
 					}
 					break;
 				case NSLeftArrowFunctionKey: 
 					if(rectSelection.origin.x > 0) {
-						rectSelection.origin.x--; 
-						rectSelection.size.width++; 
+                        inc = MIN(inc, rectSelection.origin.x);
+						rectSelection.origin.x -= inc; 
+						rectSelection.size.width += inc;
 					}
 					break;
 				case NSRightArrowFunctionKey: 
 					if(rectSelection.size.width < [animation columns]-1) {
-						rectSelection.size.width++; 
+                        inc = MIN(inc, [animation columns] - rectSelection.size.width);
+						rectSelection.size.width += inc;
 					}
 					break;
 				}
@@ -145,7 +150,6 @@
 				cursorRow = rectSelection.origin.y;
 			}
 			// [Opt]+Arrow: Move cursor.
-			int inc = (modifiers & NSAlternateKeyMask) ? 4 : 1;
 			switch(character) {
 				case NSUpArrowFunctionKey: [self moveCursorToRow:cursorRow-inc column:cursorCol]; continue;
 				case NSDownArrowFunctionKey: [self moveCursorToRow:cursorRow+inc column:cursorCol]; continue;
