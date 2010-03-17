@@ -6,6 +6,7 @@
 #import "DMDFontmapperController.h"
 
 @implementation DMDView
+@synthesize viewFontTools;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
@@ -371,7 +372,23 @@ void PointToDot(NSPoint point, int *row, int *col)
 			}
 		}
 	}
-	//[frame setDotAtRow:rand()%5 column:rand()%[animation columns] toState:rand()%4];
+
+    if (viewFontTools && [animation frameCount] == 2 && [animation frameNumber] == 0 && [animation rows] == [animation columns])
+    {
+		[[NSColor colorWithCalibratedRed:0.5 green:0 blue:0 alpha:1] setStroke];
+        NSBezierPath* thePath = [NSBezierPath bezierPath];
+        Frame *widthsFrame = [animation frameAtIndex:1];
+        char *widths = (char*)[widthsFrame bytes];
+        for (int i = 0; i < 96; i++)
+        {
+            int x = (i % 10) * [animation rows]/10 + widths[i];
+            int y = (i / 10) * [animation rows]/10;
+            [thePath moveToPoint:NSMakePoint(0.5 + dotSize * x, 0.5 + dotSize * y)];
+            [thePath lineToPoint:NSMakePoint(0.5 + dotSize * x, 0.5 + dotSize * (y + [animation rows]/10))];
+        }
+        [thePath stroke];
+    }
+    
 	[frame release];
 	if(cursorShown) {
 		[[NSColor grayColor] setFill];
@@ -463,6 +480,57 @@ void PointToDot(NSPoint point, int *row, int *col)
     [animation fillWithFont:newFont verticalOffset:verticalOffset];
     [self setNeedsDisplay:YES];
     return;
+}
+
+- (IBAction)toggleFontTools:(id)sender
+{
+    [self setViewFontTools:![self viewFontTools]];
+    if ([self viewFontTools]) // Should be doing this in a validateMenuItem:.
+    {
+        [self setGuidelinesEnabled:YES horizontal:[animation rows]/10 vertical:[animation rows]/10];
+    }
+    [self setNeedsDisplay:YES];
+}
+- (void)incremementCharWidth:(int)inc
+{
+    if ([animation frameCount] == 2 && [animation frameNumber] == 0 && [animation rows] == [animation columns])
+    {
+        int charSize = [animation rows]/10;
+        int charIndex = (cursorCol / charSize) + (cursorRow / charSize) * 10;
+        int x = charIndex % [animation columns];
+        int y = charIndex / [animation columns];
+        int value = [[animation frameAtIndex:1] dotAtRow:y column:x] + inc;
+        if (value < 0 || value > charSize)
+            return;
+        [[animation frameAtIndex:1] setDotAtRow:y column:x toState:value];
+        [self setNeedsDisplay:YES];
+    }
+}
+- (IBAction)increaseCharWidth:(id)sender
+{
+    [self incremementCharWidth:1];
+}
+- (IBAction)decreaseCharWidth:(id)sender
+{
+    [self incremementCharWidth:-1];
+}
+
+-(BOOL)validateMenuItem:(NSMenuItem *)theMenuItem
+{
+    if ([theMenuItem action] == @selector(increaseCharWidth:))
+    {
+        return viewFontTools;
+    }
+    if ([theMenuItem action] == @selector(decreaseCharWidth:))
+    {
+        return viewFontTools;
+    }
+    if ([theMenuItem action] == @selector(toggleFontTools:))
+    {
+        [theMenuItem setState:viewFontTools ? NSOnState : NSOffState];
+        return [animation rows] == [animation columns];
+    }
+    return YES;
 }
 
 @end

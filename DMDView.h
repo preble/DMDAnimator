@@ -34,6 +34,8 @@
     BOOL guidesEnabled;
     int guidesX;
     int guidesY;
+    
+    BOOL viewFontTools;
 }
 -(void)tick:(NSTimer*)timer;
 - (void)updateWindowTitle;
@@ -51,4 +53,10 @@
 - (IBAction)dotHigh:(id)sender;
 - (IBAction)resize:(id)sender;
 - (IBAction)showViewSettings:(id)sender;
+
+- (IBAction)toggleFontTools:(id)sender;
+- (IBAction)increaseCharWidth:(id)sender;
+- (IBAction)decreaseCharWidth:(id)sender;
+
+@property (nonatomic, assign) BOOL viewFontTools;
 @end

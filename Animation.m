@@ -51,6 +51,10 @@
 	}
 	return frameOut;
 }
+- (Frame*)frameAtIndex:(int)index
+{
+    return [frames objectAtIndex:index];
+}
 
 - (NSString *)windowNibName
 {

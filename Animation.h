@@ -30,4 +30,5 @@
 -(BOOL)togglePlay;
 - (void)resize:(NSSize)newSize;
 - (void)fillWithFont:(NSFont *)font verticalOffset:(float)verticalOffset;
+- (Frame*)frameAtIndex:(int)index;
 @end
