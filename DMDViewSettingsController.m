@@ -8,8 +8,7 @@
 
 #import "DMDViewSettingsController.h"
 #import "DMDView.h"
-
-void CommitWindowChanges(NSWindow *oMainDocumentWindow);
+#import "NSWindowAdditions.h"
 
 @implementation DMDViewSettingsController
 
@@ -43,7 +42,7 @@ void CommitWindowChanges(NSWindow *oMainDocumentWindow);
 }
 - (IBAction)okButton:(id)sender
 {
-	CommitWindowChanges(sheet);
+	[sheet commitChanges];
     [documentView setGuidelinesEnabled:[[self guidelinesEnabled] boolValue] horizontal:[[self guidelineSpacingX] intValue] vertical:[[self guidelineSpacingY] intValue]];
 	[NSApp endSheet:sheet returnCode:NSRunStoppedResponse];
 }
