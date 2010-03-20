@@ -6,6 +6,7 @@
 // DMDAnimator Copyright (c) 2007 Adam Preble.  All Rights Reserved.
 
 #import "Animation.h"
+#import "DMDEditorWindowController.h"
 
 @implementation Animation
 @synthesize rows, columns=cols;
@@ -262,6 +263,12 @@
     [bitmapRep release];
 }
 
+- (void)makeWindowControllers
+{
+    DMDEditorWindowController *editorWindowController = [[DMDEditorWindowController alloc] initWithWindowNibName:@"EditorWindow"];
+    [self addWindowController:editorWindowController];
+    [editorWindowController release];
+}
 
 @end // Animation
 

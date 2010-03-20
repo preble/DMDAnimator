@@ -37,6 +37,9 @@
 }
 - (void)awakeFromNib
 {
+    animation = [[[self window] windowController] document];
+    [resizeWindowController setDocument:animation];
+    [viewSettingsController setDocument:animation];
 	[[self window] makeFirstResponder:self];
 	[[self window] setAcceptsMouseMovedEvents: YES];
     [self setFrame:NSMakeRect(0, 0, [animation columns] * 8, [animation rows] * 8)];

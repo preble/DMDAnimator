@@ -16,7 +16,6 @@
 	IBOutlet NSView *documentView;
 	NSNumber *width;
 	NSNumber *height;
-	IBOutlet Animation *animation;
 }
 @property (nonatomic, copy) NSNumber *width;
 @property (nonatomic, copy) NSNumber *height;

@@ -10,7 +10,7 @@
 
 @interface DMDView : NSView
 {
-    IBOutlet Animation *animation;
+    Animation *animation;
 	IBOutlet DMDResizeWindowController *resizeWindowController;
     IBOutlet DMDViewSettingsController *viewSettingsController;
     IBOutlet DMDFontmapperController *fontmapperController;
