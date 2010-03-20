@@ -9,27 +9,31 @@
 #import "DMDEditorWindowController.h"
 
 @implementation Animation
-@synthesize rows, columns=cols;
+@synthesize height, width=width;
 
 - (id)init
 {
-	return [self initWithRows:32 columns:128];
+	return [self initWithSize:NSMakeSize(128, 32)];
 }
 
-- (id)initWithRows:(int)theRows columns:(int)theCols
+- (id)initWithSize:(NSSize)size
 {
     if (self = [super init]) 
 	{
-		rows = theRows;
-		cols = theCols;
+		height = size.height;
+		width = size.width;
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
 		frames = [[NSMutableArray arrayWithCapacity:1] retain];
-		[frames addObject:[[[Frame alloc] initWithRows:rows columns:cols dots:NULL document:self] autorelease]];
+		[frames addObject:[[[Frame alloc] initWithSize:size dots:NULL document:self] autorelease]];
 		frameNumber = 0;
 		playing = NO;
     }
     return self;
+}
+- (NSSize)size
+{
+    return NSMakeSize(width, height);
 }
 - (int)frameNumber
 {
@@ -79,11 +83,11 @@
 		// New file format:
 		int32_t format = 0x00646D64;
 		int32_t frameCount = [frames count];
-		data = [NSMutableData dataWithCapacity:4 * 4 + rows * cols * frameCount];
+		data = [NSMutableData dataWithCapacity:4 * 4 + height * width * frameCount];
 		[data appendBytes:&format length:4];
 		[data appendBytes:&frameCount length:4];
-		[data appendBytes:&cols length:4];
-		[data appendBytes:&rows length:4];
+		[data appendBytes:&width length:4];
+		[data appendBytes:&height length:4];
 		for (Frame *frame in frames)
 		{
 			[data appendData:[frame data]];
@@ -92,7 +96,7 @@
 	else
 	{
 		 // Legacy file format:
-		data = [NSMutableData dataWithCapacity:1 + (rows * cols) * [frames count]];
+		data = [NSMutableData dataWithCapacity:1 + (height * width) * [frames count]];
 		char frameCount = (char)[frames count];
 		[data appendBytes:&frameCount length:1];
 		
@@ -119,19 +123,18 @@
 		int frameCount = buffer[0];
 		while([frames count] < frameCount) 
 		{
-			[frames addObject:[[[Frame alloc] initWithRows:rows 
-                                                   columns:cols 
-                                                      dots:buffer + 1 + ([frames count] * (rows * cols))
+			[frames addObject:[[[Frame alloc] initWithSize:[self size] 
+                                                      dots:buffer + 1 + ([frames count] * (height * width))
 												  document:self] autorelease]];
 		}
 	}
 	else if(wordPtr[0] == 0x00646D64) // DMD0 format
 	{
 		int frameCount = wordPtr[1];
-		cols = wordPtr[2];
-		rows = wordPtr[3];
+		width = wordPtr[2];
+		height = wordPtr[3];
 		buffer = ((char*)[data bytes]) + 4 * 4;
-		int expectedLength = 4 * 4 + rows * cols * frameCount;
+		int expectedLength = 4 * 4 + height * width * frameCount;
 		if ([data length] != expectedLength)
 		{
 			NSLog(@"Actual file length %d != %d (expected).", (int)[data length], expectedLength);
@@ -139,11 +142,10 @@
 		}
 		while ([frames count] < frameCount)
 		{
-			[frames addObject:[[[Frame alloc] initWithRows:rows 
-                                                   columns:cols 
+			[frames addObject:[[[Frame alloc] initWithSize:[self size]
                                                       dots:buffer
 												  document:self] autorelease]];
-			buffer += rows * cols;
+			buffer += height * width;
 		}
 	}
 	frameNumber = 0;
@@ -186,8 +188,8 @@
 
 - (void)resize:(NSSize)newSize
 {
-	rows = newSize.height;
-	cols = newSize.width;
+	height = newSize.height;
+	width = newSize.width;
 	for (Frame *frame in frames)
 		[frame resize:newSize];
 }
@@ -196,15 +198,15 @@
 {
     [frames removeAllObjects];
     frameNumber = 0;
-    [frames addObject:[[Frame alloc] initWithRows:rows columns:cols dots:NULL document:self]];
+    [frames addObject:[[Frame alloc] initWithSize:[self size] dots:NULL document:self]];
     [self insertFrameAfterCurrent];
     // Now we have two frames.
     Frame *bitmapFrame = [self frame];
     Frame *widthsFrame = [frames objectAtIndex:1];
 
 	const int stride = 10; // chars per line
-	const float charSize = cols / (float)stride;
-	NSRect bitmapRect = NSMakeRect(0.0, 0.0, cols, rows);
+	const float charSize = width / (float)stride;
+	NSRect bitmapRect = NSMakeRect(0.0, 0.0, width, height);
 	NSBitmapImageRep* bitmapRep = nil;
 	
 	bitmapRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
@@ -243,7 +245,7 @@
         float x = (i % stride) * charSize;
         float y = (i / stride) * charSize;
         y += verticalOffset; //1.6f * charSize;
-		NSRect rect = NSMakeRect(x, rows - y, charSize, charSize * 2.0);
+		NSRect rect = NSMakeRect(x, height - y, charSize, charSize * 2.0);
 		//NSLog(@"Drawing %@ at %d, %d", str, (int)rect.origin.x, (int)rect.origin.y);
 		[str drawInRect:rect withAttributes:attributes];
         NSSize charSize = [str sizeWithAttributes:attributes];
@@ -256,8 +258,8 @@
 	unsigned char *buffer = [bitmapRep bitmapData];
     
     int x, y;
-    for (y = 0; y < rows; y++)
-        for (x = 0; x < cols; x++)
+    for (y = 0; y < height; y++)
+        for (x = 0; x < width; x++)
             [bitmapFrame setDotAtRow:y column:x toState:(*buffer++)>>6];
     
     [bitmapRep release];

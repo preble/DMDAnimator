@@ -19,18 +19,19 @@ typedef enum DotState
 @interface Frame : NSObject <NSCoding>
 {
 	char *dots;
-	int rows, cols;
+	int height, width;
 	int frameSize;
 	Animation *document;
 }
-- (id)initWithRows:(int)theRows columns:(int)theCols dots:(const char*)dotData document:(Animation*)document;
+- (id)initWithSize:(NSSize)size dots:(const char*)dotData document:(Animation*)document;
 // Saving/loading dots
 - (NSData*)data;
 - (void)setData:(NSData *)data;
 - (char *)bytes;
 
-@property (readonly) int rows;
-@property (readonly) int columns;
+@property (readonly) int height;
+@property (readonly) int width;
+@property (readonly) NSSize size;
 
 // Dot Accessors
 -(DotState)dotAtRow:(int)row column:(int) col;

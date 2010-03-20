@@ -42,7 +42,7 @@
     [viewSettingsController setDocument:animation];
 	[[self window] makeFirstResponder:self];
 	[[self window] setAcceptsMouseMovedEvents: YES];
-    [self setFrame:NSMakeRect(0, 0, [animation columns] * 8, [animation rows] * 8)];
+    [self setFrame:NSMakeRect(0, 0, [animation width] * 8, [animation height] * 8)];
     [[NSFontManager sharedFontManager] setDelegate:self];
     [[NSFontManager sharedFontManager] setSelectedFont:[NSFont fontWithName:@"Helvetica" size:24.0f] isMultiple:NO];
     fontmapperController = [[DMDFontmapperController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]];
@@ -75,17 +75,17 @@
 		rectSelecting = NO;
 	}
 	if(row != cursorRow || col != cursorCol) {
-		cursorRow = row % [animation rows];
-		cursorCol = col % [animation columns];
+		cursorRow = row % [animation height];
+		cursorCol = col % [animation width];
 		doDisplay = YES;
 		if(cursorRow < 0) {
-			cursorRow = [animation rows]-1;
+			cursorRow = [animation height]-1;
 		}
 		if(cursorCol < 0) {
-			cursorCol = [animation columns]-1;
+			cursorCol = [animation width]-1;
 		}
 	}
-	//if(row < 0 || row >= [animation rows] || col < 0 || col >= [animation columns]) {
+	//if(row < 0 || row >= [animation height] || col < 0 || col >= [animation width]) {
 	//	cursorShown = NO;
 	//}
 	[self setNeedsDisplay: doDisplay];
@@ -124,8 +124,8 @@
 					}
 					break;
 				case NSDownArrowFunctionKey: 
-					if(rectSelection.size.height < [animation rows]-1) {
-                        inc = MIN(inc, [animation rows] - rectSelection.size.height);
+					if(rectSelection.size.height < [animation height]-1) {
+                        inc = MIN(inc, [animation height] - rectSelection.size.height);
 						rectSelection.size.height += inc; 
 					}
 					break;
@@ -137,8 +137,8 @@
 					}
 					break;
 				case NSRightArrowFunctionKey: 
-					if(rectSelection.size.width < [animation columns]-1) {
-                        inc = MIN(inc, [animation columns] - rectSelection.size.width);
+					if(rectSelection.size.width < [animation width]-1) {
+                        inc = MIN(inc, [animation width] - rectSelection.size.width);
 						rectSelection.size.width += inc;
 					}
 					break;
@@ -291,7 +291,7 @@
 	Frame *frame = (Frame*)[NSKeyedUnarchiver unarchiveObjectWithData:[[NSPasteboard generalPasteboard] dataForType:DMDDotsPboardType]];
     NSPoint sourceOrigin = NSMakePoint(0, 0);
     NSPoint destOrigin = NSMakePoint(cursorCol, cursorRow);
-    NSSize size = NSMakeSize([frame columns], [frame rows]);
+    NSSize size = NSMakeSize([frame width], [frame height]);
     [[animation frame] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
 	[self setNeedsDisplay:YES];
 }
@@ -355,15 +355,15 @@ void PointToDot(NSPoint point, int *row, int *col)
 	}
 	[frame retain];
 	
-	int row0 = ((int)rect.origin.y)/dotSize;
-	int col0 = ((int)rect.origin.x)/dotSize;
-	int rowCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame rows]);
-	int colCount = MIN(1 + ((int)rect.size.width)/dotSize, [frame columns]);
+	int y0 = ((int)rect.origin.y)/dotSize;
+	int x0 = ((int)rect.origin.x)/dotSize;
+	int yCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame height]);
+	int xCount = MIN(1 + ((int)rect.size.width)/dotSize, [frame width]);
 
 	DotState lastState = Dot_Off;
 	int row, col;
-	for(row = row0; row < row0 + rowCount; row++) {
-		for(col = col0; col < col0 + colCount; col++) {
+	for(row = y0; row < y0 + yCount; row++) {
+		for(col = x0; col < x0 + xCount; col++) {
 			//NSLog(@"%d, %d", row, col);
 			DotState state = [frame dotAtRow:row column:col];
 			if(state != Dot_Off) {
@@ -376,7 +376,7 @@ void PointToDot(NSPoint point, int *row, int *col)
 		}
 	}
 
-    if (viewFontTools && [animation frameCount] == 2 && [animation frameNumber] == 0 && [animation rows] == [animation columns])
+    if (viewFontTools && [animation frameCount] == 2 && [animation frameNumber] == 0 && [animation height] == [animation width])
     {
 		[[NSColor colorWithCalibratedRed:0.5 green:0 blue:0 alpha:1] setStroke];
         NSBezierPath* thePath = [NSBezierPath bezierPath];
@@ -384,10 +384,10 @@ void PointToDot(NSPoint point, int *row, int *col)
         char *widths = (char*)[widthsFrame bytes];
         for (int i = 0; i < 96; i++)
         {
-            int x = (i % 10) * [animation rows]/10 + widths[i];
-            int y = (i / 10) * [animation rows]/10;
-            [thePath moveToPoint:NSMakePoint(0.5 + dotSize * x, 0.5 + dotSize * y)];
-            [thePath lineToPoint:NSMakePoint(0.5 + dotSize * x, 0.5 + dotSize * (y + [animation rows]/10))];
+            int x1 = (i % 10) * [animation height]/10 + widths[i];
+            int y1 = (i / 10) * [animation height]/10;
+            [thePath moveToPoint:NSMakePoint(0.5 + dotSize * x1, 0.5 + dotSize * y1)];
+            [thePath lineToPoint:NSMakePoint(0.5 + dotSize * x1, 0.5 + dotSize * (y1 + [animation height]/10))];
         }
         [thePath stroke];
     }
@@ -408,7 +408,7 @@ void PointToDot(NSPoint point, int *row, int *col)
         NSBezierPath* thePath = [NSBezierPath bezierPath];
         if (guidesY > 0)
         {
-            for(row = (guidesY * (1 + row0/guidesY)); row < row0 + rowCount; row += guidesY) 
+            for(row = (guidesY * (1 + y0/guidesY)); row < y0 + yCount; row += guidesY) 
             {
                 [thePath moveToPoint:NSMakePoint(0, 0.5+dotSize * row)];
                 [thePath lineToPoint:NSMakePoint([self bounds].size.width, 0.5+dotSize * row)];
@@ -416,7 +416,7 @@ void PointToDot(NSPoint point, int *row, int *col)
         }
         if (guidesX > 0)
         {
-            for(col = (guidesX * (1 + col0/guidesY)); col < col0 + colCount; col += guidesX) 
+            for(col = (guidesX * (1 + x0/guidesY)); col < x0 + xCount; col += guidesX) 
             {
                 [thePath moveToPoint:NSMakePoint(0.5 + dotSize * col, 0)];
                 [thePath lineToPoint:NSMakePoint(0.5 + dotSize * col, [self bounds].size.height)];
@@ -453,9 +453,9 @@ void PointToDot(NSPoint point, int *row, int *col)
 }
 - (IBAction)showViewSettings:(id)sender
 {
-	if (guidesX == 0 || guidesY == 0 && [animation rows] == [animation columns] && ([animation rows] % 10) == 0)
+	if (guidesX == 0 || guidesY == 0 && [animation height] == [animation width] && ([animation height] % 10) == 0)
 	{
-		guidesY = guidesX = [animation rows]/10;
+		guidesY = guidesX = [animation height]/10;
 	}
     [viewSettingsController setGuidelinesEnabled:[NSNumber numberWithBool:guidesEnabled]];
     [viewSettingsController setGuidelineSpacingX:[NSNumber numberWithInt:guidesX]];
@@ -474,8 +474,8 @@ void PointToDot(NSPoint point, int *row, int *col)
 - (void)changeFont:(id)sender
 {
     guidesEnabled = YES;
-    guidesX = [animation columns]/10;
-    guidesY = [animation rows]/10;
+    guidesX = [animation width]/10;
+    guidesY = [animation height]/10;
     
     NSFont *newFont = [sender convertFont:[sender selectedFont]];
     float verticalOffset = [[fontmapperController verticalOffsetField] floatValue];
@@ -490,18 +490,18 @@ void PointToDot(NSPoint point, int *row, int *col)
     [self setViewFontTools:![self viewFontTools]];
     if ([self viewFontTools]) // Should be doing this in a validateMenuItem:.
     {
-        [self setGuidelinesEnabled:YES horizontal:[animation rows]/10 vertical:[animation rows]/10];
+        [self setGuidelinesEnabled:YES horizontal:[animation height]/10 vertical:[animation height]/10];
     }
     [self setNeedsDisplay:YES];
 }
 - (void)incremementCharWidth:(int)inc
 {
-    if ([animation frameCount] == 2 && [animation frameNumber] == 0 && [animation rows] == [animation columns])
+    if ([animation frameCount] == 2 && [animation frameNumber] == 0 && [animation height] == [animation width])
     {
-        int charSize = [animation rows]/10;
+        int charSize = [animation height]/10;
         int charIndex = (cursorCol / charSize) + (cursorRow / charSize) * 10;
-        int x = charIndex % [animation columns];
-        int y = charIndex / [animation columns];
+        int x = charIndex % [animation width];
+        int y = charIndex / [animation width];
         int value = [[animation frameAtIndex:1] dotAtRow:y column:x] + inc;
         if (value < 0 || value > charSize)
             return;
@@ -531,7 +531,7 @@ void PointToDot(NSPoint point, int *row, int *col)
     if ([theMenuItem action] == @selector(toggleFontTools:))
     {
         [theMenuItem setState:viewFontTools ? NSOnState : NSOffState];
-        return [animation rows] == [animation columns];
+        return [animation height] == [animation width];
     }
     return YES;
 }
