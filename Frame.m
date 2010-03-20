@@ -91,6 +91,7 @@
 - (void)setDotsInRect:(NSRect)rect toState:(DotState)state
 {
 	// No need to do an undo group here; all undos in a run loop pass are automatically grouped.
+    // TODO: Find a more efficient way to do this.  Undo makes this very time-consuming.
 	int x, y;
 	for(x = 0; x < rect.size.width; x++) {
 		for(y = 0; y < rect.size.height; y++) {
@@ -197,6 +198,7 @@
 
 - (void)setDotsFromFrame:(Frame *)frame sourceOrigin:(NSPoint)source destOrigin:(NSPoint)dest size:(NSSize)size
 {
+    // TODO: Find a more efficient way to do this.  Undo makes this very time-consuming.
     for(int x = 0; x < size.width; x++)
         for (int y = 0; y < size.height; y++)
             [self setDotAtRow:dest.y+y column:dest.x+x toState:[frame dotAtRow:y+source.y column:x+source.x]];
