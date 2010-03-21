@@ -24,7 +24,7 @@
 	
 	NSTimer* timer;
 
-	int cursorRow, cursorCol;
+    NSPoint cursor;
 	bool cursorShown;
 	
 	bool rectSelected; // YES if a selection has been completed.

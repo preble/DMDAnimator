@@ -85,20 +85,28 @@
 {
 	return dots[row * width + col];
 }
+-(DotState)dotAtPoint:(NSPoint)point
+{
+    return dots[((int)point.y)*width + ((int)point.x)];
+}
 -(void)setDotAtRow:(int)row column:(int)col toState:(DotState)state
 {
-	[[[document undoManager] prepareWithInvocationTarget:self] setDotAtRow:row column:col toState:[self dotAtRow:row column:col]];
+    [self setDotAtPoint:NSMakePoint(col, row) toState:state];
+}
+- (void)setDotAtPoint:(NSPoint)point toState:(DotState)state
+{
+	[[[document undoManager] prepareWithInvocationTarget:self] setDotAtPoint:point toState:[self dotAtPoint:point]];
 	[[document undoManager] setActionName:@"Set Dot"];
-	dots[row * width + col] = state;
+	dots[((int)point.y)*width + ((int)point.x)] = state;
 }
 - (void)setDotsInRect:(NSRect)rect toState:(DotState)state
 {
-	// No need to do an undo group here; all undos in a run loop pass are automatically grouped.
-    // TODO: Find a more efficient way to do this.  Undo makes this very time-consuming.
+	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
+	[[document undoManager] setActionName:@"Set Dots"];
 	int x, y;
 	for(x = 0; x < rect.size.width; x++) {
 		for(y = 0; y < rect.size.height; y++) {
-			[self setDotAtRow:rect.origin.y+y column:rect.origin.x+x toState:state];
+            dots[((int)rect.origin.y + y) * width + ((int)rect.origin.x + x)] = state;
 		}
 	}
 }
@@ -195,16 +203,17 @@
     Frame *frame = [[[Frame alloc] initWithSize:rect.size dots:NULL document:nil] autorelease];
     for(int x = 0; x < rect.size.width; x++)
         for (int y = 0; y < rect.size.height; y++)
-            [frame setDotAtRow:y column:x toState:[self dotAtRow:y+rect.origin.y column:x+rect.origin.x]];
+            [frame setDotAtPoint:NSMakePoint(x,y) toState:[self dotAtPoint:NSMakePoint(x+rect.origin.x, y+rect.origin.y)]];
     return frame;
 }
 
 - (void)setDotsFromFrame:(Frame *)frame sourceOrigin:(NSPoint)source destOrigin:(NSPoint)dest size:(NSSize)size
 {
-    // TODO: Find a more efficient way to do this.  Undo makes this very time-consuming.
+	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
+	[[document undoManager] setActionName:@"Paste Dots"];
     for(int x = 0; x < size.width; x++)
         for (int y = 0; y < size.height; y++)
-            [self setDotAtRow:dest.y+y column:dest.x+x toState:[frame dotAtRow:y+source.y column:x+source.x]];
+            dots[((int)dest.y + y) * width + ((int)dest.x + x)] = [frame dotAtPoint:NSMakePoint(x+source.x, y+source.y)];
 }
 
 @end

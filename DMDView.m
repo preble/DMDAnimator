@@ -65,7 +65,7 @@
 		[self setNeedsDisplay: YES];
 	}
 }
-- (void)moveCursorToRow:(int)row column:(int)col
+- (void)moveCursorToPoint:(NSPoint)point
 {
 	bool doDisplay = NO;
 	if(!cursorShown) {
@@ -74,15 +74,15 @@
 		rectSelected = NO;
 		rectSelecting = NO;
 	}
-	if(row != cursorRow || col != cursorCol) {
-		cursorRow = row % [animation height];
-		cursorCol = col % [animation width];
+	if (!NSEqualPoints(cursor, point)) {
+		cursor.x = ((int)point.x) % [animation width];
+		cursor.y = ((int)point.y) % [animation height];
 		doDisplay = YES;
-		if(cursorRow < 0) {
-			cursorRow = [animation height]-1;
+		if(cursor.y < 0) {
+			cursor.y = [animation height]-1;
 		}
-		if(cursorCol < 0) {
-			cursorCol = [animation width]-1;
+		if(cursor.x < 0) {
+			cursor.x = [animation width]-1;
 		}
 	}
 	//if(row < 0 || row >= [animation height] || col < 0 || col >= [animation width]) {
@@ -112,7 +112,7 @@
 					// Setup for the selection.
 					rectSelecting = YES;
 					rectSelected = YES; // Set these independently for mouse...?
-					rectSelection = NSMakeRect(cursorCol, cursorRow, 1, 1);
+					rectSelection = NSMakeRect(cursor.x, cursor.y, 1, 1);
 					cursorShown = NO;
 				}
 				switch(character) {
@@ -150,15 +150,14 @@
 				rectSelecting = NO;
 				rectSelected = NO; // could change this to shift the selection area...?
 				cursorShown = YES;
-				cursorCol = rectSelection.origin.x;
-				cursorRow = rectSelection.origin.y;
+				cursor = rectSelection.origin;
 			}
 			// [Opt]+Arrow: Move cursor.
 			switch(character) {
-				case NSUpArrowFunctionKey: [self moveCursorToRow:cursorRow-inc column:cursorCol]; continue;
-				case NSDownArrowFunctionKey: [self moveCursorToRow:cursorRow+inc column:cursorCol]; continue;
-				case NSLeftArrowFunctionKey: [self moveCursorToRow:cursorRow column:cursorCol-inc]; continue;
-				case NSRightArrowFunctionKey: [self moveCursorToRow:cursorRow column:cursorCol+inc]; continue;
+				case NSUpArrowFunctionKey: [self moveCursorToPoint:NSMakePoint(cursor.x, cursor.y-inc)]; continue;
+				case NSDownArrowFunctionKey: [self moveCursorToPoint:NSMakePoint(cursor.x, cursor.y+inc)]; continue;
+				case NSLeftArrowFunctionKey: [self moveCursorToPoint:NSMakePoint(cursor.x-inc, cursor.y)]; continue;
+				case NSRightArrowFunctionKey: [self moveCursorToPoint:NSMakePoint(cursor.x+inc, cursor.y)]; continue;
 			}
 		}
 		
@@ -192,7 +191,7 @@
 	if(rectSelected) {
 		[[animation frame] setDotsInRect:rectSelection toState:state];
 	} else {
-		[[animation frame] setDotAtRow:cursorRow column:cursorCol toState:state];
+		[[animation frame] setDotAtPoint:cursor toState:state];
 	}
 	[self setNeedsDisplay: YES];
 }
@@ -290,7 +289,7 @@
 	}
 	Frame *frame = (Frame*)[NSKeyedUnarchiver unarchiveObjectWithData:[[NSPasteboard generalPasteboard] dataForType:DMDDotsPboardType]];
     NSPoint sourceOrigin = NSMakePoint(0, 0);
-    NSPoint destOrigin = NSMakePoint(cursorCol, cursorRow);
+    NSPoint destOrigin = NSMakePoint(cursor.x, cursor.y);
     NSSize size = NSMakeSize([frame width], [frame height]);
     [[animation frame] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
 	[self setNeedsDisplay:YES];
@@ -305,19 +304,16 @@
 	[[self window] setTitle: [NSString stringWithFormat:@"%@ - %d/%d", 
 		[filename lastPathComponent], [animation frameNumber]+1, [animation frameCount]]];
 }
-void PointToDot(NSPoint point, int *row, int *col)
+NSPoint PointToDot(NSPoint point)
 {
-	*row = (int)floor((point.y) / dotSize);
-	*col = (int)floor(point.x / dotSize);
+    return NSMakePoint(floor(point.x / dotSize), floor(point.y / dotSize));
 }
 - (void)mouseMoved:(NSEvent*)event
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	if(NSPointInRect(localPoint, NSIntersectionRect([self bounds], [[self superview] bounds]))) {
 		int row, col;
-		PointToDot(localPoint, &row, &col);
-		//NSLog(@"mouseMoved %f, %f => %d, %d", localPoint.x, localPoint.y, col, row);
-		[self moveCursorToRow:row column:col];
+		[self moveCursorToPoint:PointToDot(localPoint)];
 		[NSCursor setHiddenUntilMouseMoves:YES];
 	} else {
 		// mouse has left the view
@@ -332,11 +328,10 @@ void PointToDot(NSPoint point, int *row, int *col)
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	//NSLog(@"mouseUp: %f, %f -> %d, %d)", localPoint.x, localPoint.y, col, row);
-	int row, col;
-	PointToDot(localPoint, &row, &col);
+	NSPoint dotPos = PointToDot(localPoint);
 	Frame* frame = [animation frame];
-	DotState state = [frame dotAtRow:row column:col];
-	[frame setDotAtRow:row column:col toState:(state + 1) % 4];
+	DotState state = [frame dotAtPoint:dotPos];
+	[frame setDotAtPoint:dotPos toState:(state + 1) % 4];
 	[self setNeedsDisplay: YES];
 }
 - (void)resetCursorRects
@@ -395,7 +390,7 @@ void PointToDot(NSPoint point, int *row, int *col)
 	[frame release];
 	if(cursorShown) {
 		[[NSColor grayColor] setFill];
-		NSFrameRect(NSMakeRect(cursorCol * dotSize, (cursorRow) * dotSize, dotSize, dotSize));
+		NSFrameRect(NSMakeRect(cursor.x * dotSize, (cursor.y) * dotSize, dotSize, dotSize));
 	}
 	if(rectSelecting || rectSelected) {
 		[[NSColor grayColor] setFill];
@@ -499,13 +494,13 @@ void PointToDot(NSPoint point, int *row, int *col)
     if ([animation frameCount] == 2 && [animation frameNumber] == 0 && [animation height] == [animation width])
     {
         int charSize = [animation height]/10;
-        int charIndex = (cursorCol / charSize) + (cursorRow / charSize) * 10;
+        int charIndex = (cursor.x / charSize) + (cursor.y / charSize) * 10;
         int x = charIndex % [animation width];
         int y = charIndex / [animation width];
         int value = [[animation frameAtIndex:1] dotAtRow:y column:x] + inc;
         if (value < 0 || value > charSize)
             return;
-        [[animation frameAtIndex:1] setDotAtRow:y column:x toState:value];
+        [[animation frameAtIndex:1] setDotAtPoint:NSMakePoint(x, y) toState:value];
         [self setNeedsDisplay:YES];
     }
 }

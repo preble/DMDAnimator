@@ -35,7 +35,9 @@ typedef enum DotState
 
 // Dot Accessors
 -(DotState)dotAtRow:(int)row column:(int) col;
+-(DotState)dotAtPoint:(NSPoint)point;
 -(void)setDotAtRow:(int)row column:(int)col toState:(DotState)state;
+-(void)setDotAtPoint:(NSPoint)point toState:(DotState)state;
 - (void)setDotsInRect:(NSRect)rect toState:(DotState)state;
 // Dot Manipulators
 -(void)shiftUp;
