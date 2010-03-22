@@ -7,8 +7,14 @@
 //
 
 #import "DMDEditorWindowController.h"
-
+#import "DMDView.h"
 
 @implementation DMDEditorWindowController
+
+- (void)windowDidLoad
+{
+    // Can't set first responder as dataSource in IB?
+    [dmdView setDataSource:[self document]];
+}
 
 @end

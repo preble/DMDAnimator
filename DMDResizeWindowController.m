@@ -45,7 +45,7 @@
 - (IBAction)okButton:(id)sender
 {
 	[resizeSheet commitChanges];
-	[[self document] resize:NSMakeSize([width intValue], [height intValue])];
+	[(Animation*)[self document] resize:NSMakeSize([width intValue], [height intValue])];
 	//[mainWindow setContentMaxSize:NSMakeSize([width intValue] * 8, [height intValue] * 8)];
 	[documentView setFrame:NSMakeRect(0, 0, [width intValue] * 8, [height intValue] * 8)];
 	[documentView setNeedsDisplay:YES];

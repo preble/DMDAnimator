@@ -8,9 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class DMDView;
 
 @interface DMDEditorWindowController : NSWindowController {
-
+    IBOutlet DMDView *dmdView;
 }
 
 @end

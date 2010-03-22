@@ -272,5 +272,29 @@
     [editorWindowController release];
 }
 
+
+// DMDViewDataSource //
+- (Frame *)currentFrameInDmdView:(DMDView *)dmdView
+{
+    return [frames objectAtIndex:frameNumber];
+}
+- (int)currentFrameIndexInDmdView:(DMDView *)dmdView
+{
+    return frameNumber;
+}
+- (int)numberOfFramesInDmdView:(DMDView *)dmdView
+{
+    return [frames count];
+}
+- (Frame *)dmdView:(DMDView *)dmdView frameAtIndex:(int)frameIndex
+{
+    return [frames objectAtIndex:frameIndex];
+}
+- (NSSize)sizeOfFrameInDmdView:(DMDView *)dmdView
+{
+    return NSMakeSize(width, height);
+}
+
+
 @end // Animation
 

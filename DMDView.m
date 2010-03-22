@@ -1,11 +1,15 @@
 // DMDAnimator Copyright (c) 2007 Adam Preble.  All Rights Reserved.
 #import "DMDView.h"
+#import "Animation.h"
 #import "DMDAnimatorAppDelegate.h"
 #import "DMDResizeWindowController.h"
 #import "DMDViewSettingsController.h" 
 #import "DMDFontmapperController.h"
 
+NSString * const DMDViewDataSourceDidChangeNotification = @"net.adampreble.dmd.dmdView.dataSourceDidChange";
+
 @implementation DMDView
+@synthesize dataSource;
 @synthesize viewFontTools;
 
 - (id)initWithFrame:(NSRect)frameRect
@@ -33,22 +37,29 @@
 	for (int c = 0; c < 16; c++)
 		[sixteenColors[c] release];
 
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUndoManagerDidUndoChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:DMDViewDataSourceDidChangeNotification object:nil];
+    
 	[super dealloc];
 }
 - (void)awakeFromNib
 {
-    animation = [[[self window] windowController] document];
-    [resizeWindowController setDocument:animation];
-    [viewSettingsController setDocument:animation];
 	[[self window] makeFirstResponder:self];
 	[[self window] setAcceptsMouseMovedEvents: YES];
-    [self setFrame:NSMakeRect(0, 0, [animation width] * 8, [animation height] * 8)];
     [[NSFontManager sharedFontManager] setDelegate:self];
     [[NSFontManager sharedFontManager] setSelectedFont:[NSFont fontWithName:@"Helvetica" size:24.0f] isMultiple:NO];
     fontmapperController = [[DMDFontmapperController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]];
     [[NSFontPanel sharedFontPanel] setAccessoryView:[fontmapperController view]];
 	
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataSourceDidChange:) name:DMDViewDataSourceDidChangeNotification object:nil];
+    
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUndo:) name:NSUndoManagerDidUndoChangeNotification object:nil];
+}
+- (void)dataSourceDidChange:(NSNotification*)notification
+{
+    // Do this as some sort of "size did change" notification?
+    NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
+    [self setFrame:NSMakeRect(0, 0, frameSize.width * 8, frameSize.height * 8)];
 }
 - (void)didUndo:(NSNotification*)notification
 {
@@ -57,6 +68,11 @@
 - (BOOL)acceptsFirstResponder
 {
 	return YES;
+}
+- (BOOL)fitsFontCriteria
+{
+    NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
+    return [dataSource numberOfFramesInDmdView:self] == 2 && [dataSource currentFrameIndexInDmdView:self] == 0 && frameSize.width == frameSize.height;
 }
 - (void)showCursor:(bool)value
 {
@@ -75,19 +91,17 @@
 		rectSelecting = NO;
 	}
 	if (!NSEqualPoints(cursor, point)) {
-		cursor.x = ((int)point.x) % [animation width];
-		cursor.y = ((int)point.y) % [animation height];
+        NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
+		cursor.x = ((int)point.x) % (int)frameSize.width;
+		cursor.y = ((int)point.y) % (int)frameSize.height;
 		doDisplay = YES;
 		if(cursor.y < 0) {
-			cursor.y = [animation height]-1;
+			cursor.y = frameSize.height-1;
 		}
 		if(cursor.x < 0) {
-			cursor.x = [animation width]-1;
+			cursor.x = frameSize.width-1;
 		}
 	}
-	//if(row < 0 || row >= [animation height] || col < 0 || col >= [animation width]) {
-	//	cursorShown = NO;
-	//}
 	[self setNeedsDisplay: doDisplay];
 }
 - (void)keyUp:(NSEvent*)event
@@ -97,6 +111,7 @@
 {
     int charIndex;
     int charsInEvent;
+    NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
 
 	unsigned int modifiers = [event modifierFlags];
 
@@ -124,8 +139,8 @@
 					}
 					break;
 				case NSDownArrowFunctionKey: 
-					if(rectSelection.size.height < [animation height]-1) {
-                        inc = MIN(inc, [animation height] - rectSelection.size.height);
+					if(rectSelection.size.height < frameSize.height-1) {
+                        inc = MIN(inc, frameSize.height - rectSelection.size.height);
 						rectSelection.size.height += inc; 
 					}
 					break;
@@ -137,8 +152,8 @@
 					}
 					break;
 				case NSRightArrowFunctionKey: 
-					if(rectSelection.size.width < [animation width]-1) {
-                        inc = MIN(inc, [animation width] - rectSelection.size.width);
+					if(rectSelection.size.width < frameSize.width-1) {
+                        inc = MIN(inc, frameSize.width - rectSelection.size.width);
 						rectSelection.size.width += inc;
 					}
 					break;
@@ -172,14 +187,14 @@
 			case ',': [self framePrevious:self];  continue;
 		}
 		
-		if(character == ' ') {
-			if([animation togglePlay]) {
-				timer = [NSTimer scheduledTimerWithTimeInterval: 1.0/10.0 target:self selector:@selector(tick:) userInfo:nil repeats:YES];
-			} else {
-				[timer invalidate];
-			}
-			continue;
-		}
+//		if(character == ' ') {
+//			if([animation togglePlay]) {
+//				timer = [NSTimer scheduledTimerWithTimeInterval: 1.0/10.0 target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+//			} else {
+//				[timer invalidate];
+//			}
+//			continue;
+//		}
 		
 		NSLog(@"Unknown character: %C", character);
 	}
@@ -189,9 +204,9 @@
 - (void)setDot:(DotState)state
 {
 	if(rectSelected) {
-		[[animation frame] setDotsInRect:rectSelection toState:state];
+		[[dataSource currentFrameInDmdView:self] setDotsInRect:rectSelection toState:state];
 	} else {
-		[[animation frame] setDotAtPoint:cursor toState:state];
+		[[dataSource currentFrameInDmdView:self] setDotAtPoint:cursor toState:state];
 	}
 	[self setNeedsDisplay: YES];
 }
@@ -203,59 +218,59 @@
 
 - (IBAction)frameNew:(id)sender
 {
-	[animation insertFrameAfterCurrent];
-	[animation nextFrame];
+//	[animation insertFrameAfterCurrent];
+//	[animation nextFrame];
 	[self updateWindowTitle];
 }
 - (IBAction)framePrevious:(id)sender
 {
-	[animation prevFrame];
+//	[animation prevFrame];
 	[self updateWindowTitle];
 	[self setNeedsDisplay: YES];
 }
 - (IBAction)frameNext:(id)sender
 {
-	[animation nextFrame];
+//	[animation nextFrame];
 	[self updateWindowTitle];
 	[self setNeedsDisplay: YES];
 }
 - (IBAction)frameShiftRight:(id)sender
 {
 	if(rectSelected) {
-		[[animation frame] shiftRect:rectSelection horizontal:1];
+		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection horizontal:1];
 		rectSelection.origin.x++;
 	} else {
-		[[animation frame] shiftRight];
+		[[dataSource currentFrameInDmdView:self] shiftRight];
 	}
 	[self setNeedsDisplay: YES];
 }
 - (IBAction)frameShiftLeft:(id)sender
 {
 	if(rectSelected) {
-		[[animation frame] shiftRect:rectSelection horizontal:-1];
+		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection horizontal:-1];
 		rectSelection.origin.x--;
 	} else {
-		[[animation frame] shiftLeft];
+		[[dataSource currentFrameInDmdView:self] shiftLeft];
 	}
 	[self setNeedsDisplay: YES];
 }
 - (IBAction)frameShiftUp:(id)sender
 {
 	if(rectSelected) {
-		[[animation frame] shiftRect:rectSelection vertical:-1];
+		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection vertical:-1];
 		rectSelection.origin.y--;
 	} else {
-		[[animation frame] shiftUp];
+		[[dataSource currentFrameInDmdView:self] shiftUp];
 	}
 	[self setNeedsDisplay: YES];
 }
 - (IBAction)frameShiftDown:(id)sender
 {
 	if(rectSelected) {
-		[[animation frame] shiftRect:rectSelection vertical:1];
+		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection vertical:1];
 		rectSelection.origin.y++;
 	} else {
-		[[animation frame] shiftDown];
+		[[dataSource currentFrameInDmdView:self] shiftDown];
 	}
 	[self setNeedsDisplay: YES];
 }
@@ -264,7 +279,7 @@
 - (void)copy:(id)sender
 {
 	if(rectSelected) {
-        Frame *frame = [[animation frame] frameWithRect:rectSelection];
+        Frame *frame = [[dataSource currentFrameInDmdView:self] frameWithRect:rectSelection];
 		if (frame == nil) {
 			NSLog(@"copy: Failed to get frame in selection");
 			return;
@@ -289,9 +304,9 @@
 	}
 	Frame *frame = (Frame*)[NSKeyedUnarchiver unarchiveObjectWithData:[[NSPasteboard generalPasteboard] dataForType:DMDDotsPboardType]];
     NSPoint sourceOrigin = NSMakePoint(0, 0);
-    NSPoint destOrigin = NSMakePoint(cursor.x, cursor.y);
-    NSSize size = NSMakeSize([frame width], [frame height]);
-    [[animation frame] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
+    NSPoint destOrigin = cursor;
+    NSSize size = [frame size];
+    [[dataSource currentFrameInDmdView:self] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
 	[self setNeedsDisplay:YES];
 }
 
@@ -302,7 +317,7 @@
 		filename = @"Untitled";
 	}
 	[[self window] setTitle: [NSString stringWithFormat:@"%@ - %d/%d", 
-		[filename lastPathComponent], [animation frameNumber]+1, [animation frameCount]]];
+		[filename lastPathComponent], [dataSource currentFrameIndexInDmdView:self]+1, [dataSource numberOfFramesInDmdView:self]]];
 }
 NSPoint PointToDot(NSPoint point)
 {
@@ -329,7 +344,7 @@ NSPoint PointToDot(NSPoint point)
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	//NSLog(@"mouseUp: %f, %f -> %d, %d)", localPoint.x, localPoint.y, col, row);
 	NSPoint dotPos = PointToDot(localPoint);
-	Frame* frame = [animation frame];
+	Frame* frame = [dataSource currentFrameInDmdView:self];
 	DotState state = [frame dotAtPoint:dotPos];
 	[frame setDotAtPoint:dotPos toState:(state + 1) % 4];
 	[self setNeedsDisplay: YES];
@@ -344,7 +359,7 @@ NSPoint PointToDot(NSPoint point)
 	[[NSColor blackColor] set];
 	NSRectFill(rect);
 
-	Frame* frame = [[animation frame] retain];
+	Frame* frame = [[dataSource currentFrameInDmdView:self] retain];
 	if(frame == nil) {
 		return;
 	}
@@ -371,18 +386,19 @@ NSPoint PointToDot(NSPoint point)
 		}
 	}
 
-    if (viewFontTools && [animation frameCount] == 2 && [animation frameNumber] == 0 && [animation height] == [animation width])
+    if (viewFontTools && [self fitsFontCriteria])
     {
 		[[NSColor colorWithCalibratedRed:0.5 green:0 blue:0 alpha:1] setStroke];
         NSBezierPath* thePath = [NSBezierPath bezierPath];
-        Frame *widthsFrame = [animation frameAtIndex:1];
+        Frame *widthsFrame = [dataSource dmdView:self frameAtIndex:1];
+        NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
         char *widths = (char*)[widthsFrame bytes];
         for (int i = 0; i < 96; i++)
         {
-            int x1 = (i % 10) * [animation height]/10 + widths[i];
-            int y1 = (i / 10) * [animation height]/10;
+            int x1 = (i % 10) * (int)frameSize.width/10 + widths[i];
+            int y1 = (i / 10) * (int)frameSize.height/10;
             [thePath moveToPoint:NSMakePoint(0.5 + dotSize * x1, 0.5 + dotSize * y1)];
-            [thePath lineToPoint:NSMakePoint(0.5 + dotSize * x1, 0.5 + dotSize * (y1 + [animation height]/10))];
+            [thePath lineToPoint:NSMakePoint(0.5 + dotSize * x1, 0.5 + dotSize * (y1 + frameSize.height/10))];
         }
         [thePath stroke];
     }
@@ -448,9 +464,10 @@ NSPoint PointToDot(NSPoint point)
 }
 - (IBAction)showViewSettings:(id)sender
 {
-	if (guidesX == 0 || guidesY == 0 && [animation height] == [animation width] && ([animation height] % 10) == 0)
+	if (guidesX == 0 || guidesY == 0 && [self fitsFontCriteria])
 	{
-		guidesY = guidesX = [animation height]/10;
+        NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
+		guidesY = guidesX = (int)frameSize.width/10;
 	}
     [viewSettingsController setGuidelinesEnabled:[NSNumber numberWithBool:guidesEnabled]];
     [viewSettingsController setGuidelineSpacingX:[NSNumber numberWithInt:guidesX]];
@@ -468,39 +485,41 @@ NSPoint PointToDot(NSPoint point)
 
 - (void)changeFont:(id)sender
 {
+    NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
     guidesEnabled = YES;
-    guidesX = [animation width]/10;
-    guidesY = [animation height]/10;
+    guidesX = frameSize.width/10;
+    guidesY = frameSize.height/10;
     
     NSFont *newFont = [sender convertFont:[sender selectedFont]];
     float verticalOffset = [[fontmapperController verticalOffsetField] floatValue];
     NSLog(@"%@ verticalOffset=%0.2f", newFont, verticalOffset);
-    [animation fillWithFont:newFont verticalOffset:verticalOffset];
+//    [animation fillWithFont:newFont verticalOffset:verticalOffset];
     [self setNeedsDisplay:YES];
     return;
 }
-
 - (IBAction)toggleFontTools:(id)sender
 {
     [self setViewFontTools:![self viewFontTools]];
     if ([self viewFontTools]) // Should be doing this in a validateMenuItem:.
     {
-        [self setGuidelinesEnabled:YES horizontal:[animation height]/10 vertical:[animation height]/10];
+        NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
+        [self setGuidelinesEnabled:YES horizontal:frameSize.width/10 vertical:frameSize.height/10];
     }
     [self setNeedsDisplay:YES];
 }
 - (void)incremementCharWidth:(int)inc
 {
-    if ([animation frameCount] == 2 && [animation frameNumber] == 0 && [animation height] == [animation width])
+    if ([self fitsFontCriteria])
     {
-        int charSize = [animation height]/10;
+        NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
+        int charSize = frameSize.height/10;
         int charIndex = (cursor.x / charSize) + (cursor.y / charSize) * 10;
-        int x = charIndex % [animation width];
-        int y = charIndex / [animation width];
-        int value = [[animation frameAtIndex:1] dotAtRow:y column:x] + inc;
+        int x = charIndex % (int)frameSize.width;
+        int y = charIndex / (int)frameSize.width;
+        int value = [[dataSource dmdView:self frameAtIndex:1] dotAtRow:y column:x] + inc;
         if (value < 0 || value > charSize)
             return;
-        [[animation frameAtIndex:1] setDotAtPoint:NSMakePoint(x, y) toState:value];
+        [[dataSource dmdView:self frameAtIndex:1] setDotAtPoint:NSMakePoint(x, y) toState:value];
         [self setNeedsDisplay:YES];
     }
 }
@@ -526,7 +545,7 @@ NSPoint PointToDot(NSPoint point)
     if ([theMenuItem action] == @selector(toggleFontTools:))
     {
         [theMenuItem setState:viewFontTools ? NSOnState : NSOffState];
-        return [animation height] == [animation width];
+        return [self fitsFontCriteria];
     }
     return YES;
 }

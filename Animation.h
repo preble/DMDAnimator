@@ -7,8 +7,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "Frame.h"
+#import "DMDView.h"
 
-@interface Animation : NSDocument
+@interface Animation : NSDocument <DMDViewDataSource>
 {
 	NSMutableArray* frames;
 	int frameNumber;

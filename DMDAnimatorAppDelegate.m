@@ -7,15 +7,38 @@
 //
 
 #import "DMDAnimatorAppDelegate.h"
+#import "DMDFontPreviewWindowController.h"
 
 NSString *DMDDotsPboardType = @"dmdanimator.dots";
 
 @implementation DMDAnimatorAppDelegate
 
+- (void)dealloc
+{
+    [fontPreviewWindowController release];
+    fontPreviewWindowController = nil;
+    
+    [super dealloc];
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
 	[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObjects:DMDDotsPboardType, nil] owner:self];
+}
+
+
+
+- (IBAction)toggleFontPreview:(id)sender
+{
+    if (fontPreviewWindowController == nil)
+    {
+        fontPreviewWindowController = [[DMDFontPreviewWindowController alloc] initWithWindowNibName:@"FontPreviewWindow"];
+        [[fontPreviewWindowController window] orderOut:self]; // if we don't call this, isVisible says true below?
+    }
+    if ([[fontPreviewWindowController window] isVisible])
+        [[fontPreviewWindowController window] orderOut:self];
+    else
+        [fontPreviewWindowController showWindow:sender];
 }
 
 @end

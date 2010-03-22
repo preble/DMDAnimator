@@ -10,8 +10,10 @@
 
 extern NSString *DMDDotsPboardType;
 
+@class DMDFontPreviewWindowController;
+
 @interface DMDAnimatorAppDelegate : NSObject {
-
+    DMDFontPreviewWindowController *fontPreviewWindowController;
 }
-
+- (IBAction)toggleFontPreview:(id)sender;
 @end

@@ -2,15 +2,23 @@
 // DMDAnimator Copyright (c) 2007 Adam Preble.  All Rights Reserved.
 
 #import <Cocoa/Cocoa.h>
-#include "Animation.h"
 
 #define dotSize 8
 
 @class DMDViewSettingsController, DMDResizeWindowController, DMDFontmapperController;
+@class DMDView, Animation, Frame;
+
+@protocol DMDViewDataSource<NSObject>
+- (Frame *)currentFrameInDmdView:(DMDView *)dmdView;
+- (int)currentFrameIndexInDmdView:(DMDView *)dmdView;
+- (int)numberOfFramesInDmdView:(DMDView *)dmdView;
+- (Frame *)dmdView:(DMDView *)dmdView frameAtIndex:(int)frameIndex;
+- (NSSize)sizeOfFrameInDmdView:(DMDView *)dmdView;
+@end
 
 @interface DMDView : NSView
 {
-    Animation *animation;
+    IBOutlet id<DMDViewDataSource> dataSource;
 	IBOutlet DMDResizeWindowController *resizeWindowController;
     IBOutlet DMDViewSettingsController *viewSettingsController;
     IBOutlet DMDFontmapperController *fontmapperController;
@@ -37,7 +45,8 @@
     
     BOOL viewFontTools;
 }
--(void)tick:(NSTimer*)timer;
+@property (nonatomic, assign) id<DMDViewDataSource> dataSource;
+- (void)tick:(NSTimer*)timer;
 - (void)updateWindowTitle;
 - (void)setGuidelinesEnabled:(BOOL)enable horizontal:(int)x vertical:(int)y;
 - (IBAction)frameNext:(id)sender;

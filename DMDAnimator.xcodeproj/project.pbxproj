@@ -12,6 +12,8 @@
 		669E949F11547A5B006B05D3 /* DMDEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E949E11547A5B006B05D3 /* DMDEditorWindowController.m */; };
 		669E94A311547A82006B05D3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669E94A111547A82006B05D3 /* MainMenu.xib */; };
 		669E94D311547F9A006B05D3 /* NSWindowAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E94D211547F9A006B05D3 /* NSWindowAdditions.m */; };
+		669E956311569838006B05D3 /* DMDFontPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */; };
+		669E95651156984C006B05D3 /* FontPreviewWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669E95641156984C006B05D3 /* FontPreviewWindow.xib */; };
 		66EA5CCD0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */; };
 		66EA5D1D0FF6C61E000CDEC0 /* DMDResizeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */; };
 		66EA5D2A0FF6C75A000CDEC0 /* DMDResizeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EA5D290FF6C75A000CDEC0 /* DMDResizeWindow.xib */; };
@@ -49,6 +51,9 @@
 		669E94A211547A82006B05D3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		669E94D111547F9A006B05D3 /* NSWindowAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSWindowAdditions.h; sourceTree = "<group>"; };
 		669E94D211547F9A006B05D3 /* NSWindowAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSWindowAdditions.m; sourceTree = "<group>"; };
+		669E956111569838006B05D3 /* DMDFontPreviewWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDFontPreviewWindowController.h; sourceTree = "<group>"; };
+		669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDFontPreviewWindowController.m; sourceTree = "<group>"; };
+		669E95641156984C006B05D3 /* FontPreviewWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FontPreviewWindow.xib; sourceTree = "<group>"; };
 		66EA5CCB0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDAnimatorAppDelegate.h; sourceTree = "<group>"; };
 		66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDAnimatorAppDelegate.m; sourceTree = "<group>"; };
 		66EA5D1B0FF6C61E000CDEC0 /* DMDResizeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDResizeWindowController.h; sourceTree = "<group>"; };
@@ -154,6 +159,7 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				66EA5F590FF80254000CDEC0 /* DMDViewSettings.xib */,
 				66FBEB2A0FF86E9600E6EED2 /* FontmapperView.xib */,
+				669E95641156984C006B05D3 /* FontPreviewWindow.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -189,6 +195,8 @@
 				66EA5F5D0FF80442000CDEC0 /* DMDViewSettingsController.m */,
 				66FBEAD80FF8635200E6EED2 /* DMDFontmapperController.h */,
 				66FBEAD90FF8635200E6EED2 /* DMDFontmapperController.m */,
+				669E956111569838006B05D3 /* DMDFontPreviewWindowController.h */,
+				669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -245,6 +253,7 @@
 				66EA5F5A0FF80254000CDEC0 /* DMDViewSettings.xib in Resources */,
 				66FBEB2B0FF86E9600E6EED2 /* FontmapperView.xib in Resources */,
 				669E94A311547A82006B05D3 /* MainMenu.xib in Resources */,
+				669E95651156984C006B05D3 /* FontPreviewWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +274,7 @@
 				66FBEADA0FF8635200E6EED2 /* DMDFontmapperController.m in Sources */,
 				669E949F11547A5B006B05D3 /* DMDEditorWindowController.m in Sources */,
 				669E94D311547F9A006B05D3 /* NSWindowAdditions.m in Sources */,
+				669E956311569838006B05D3 /* DMDFontPreviewWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
