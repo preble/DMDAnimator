@@ -23,11 +23,6 @@
     IBOutlet DMDViewSettingsController *viewSettingsController;
     IBOutlet DMDFontmapperController *fontmapperController;
 
-	NSColor* colorOff;
-	NSColor* colorLow;
-	NSColor* colorMed;
-	NSColor* colorHigh;
-	
 	NSColor *sixteenColors[16];
 	
 	NSTimer* timer;

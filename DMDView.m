@@ -17,11 +17,7 @@ NSString * const DMDViewDataSourceDidChangeNotification = @"net.adampreble.dmd.d
 	if ((self = [super initWithFrame:frameRect]) != nil) {
 		// Add initialization code here
 		NSLog(@"Initializing");
-		colorOff = [NSColor blackColor];
-		colorLow = [[NSColor colorWithDeviceRed: 0.5 green: 0.25 blue: 0.0 alpha: 1.0] retain];
-		colorMed = [[NSColor colorWithDeviceRed: 0.8 green: 0.5 blue: 0.0 alpha: 1.0] retain];
-		colorHigh = [[NSColor colorWithDeviceRed: 1.0 green: 0.7 blue: 0.0 alpha: 1.0] retain];
-		sixteenColors[0] = [colorOff retain];
+		sixteenColors[0] = [[NSColor blackColor] retain];
 		for (int c = 1; c < 16; c++)
 		{
 			float q = (0.80 * ((float)c/15.0));
