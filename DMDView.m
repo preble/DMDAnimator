@@ -2,11 +2,13 @@
 #import "DMDView.h"
 #import "Animation.h"
 #import "DMDAnimatorAppDelegate.h"
-#import "DMDResizeWindowController.h"
 #import "DMDViewSettingsController.h" 
 #import "DMDFontmapperController.h"
 
-NSString * const DMDViewDataSourceDidChangeNotification = @"net.adampreble.dmd.dmdView.dataSourceDidChange";
+@interface DMDView ()
+- (void)updateFrameSize;
+@end
+
 
 @implementation DMDView
 @synthesize dataSource;
@@ -39,7 +41,8 @@ NSString * const DMDViewDataSourceDidChangeNotification = @"net.adampreble.dmd.d
     dotImage = nil;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUndoManagerDidUndoChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:DMDViewDataSourceDidChangeNotification object:nil];
+    
+    [self removeObserver:self forKeyPath:@"dataSource"];
     
 	[super dealloc];
 }
@@ -52,16 +55,33 @@ NSString * const DMDViewDataSourceDidChangeNotification = @"net.adampreble.dmd.d
     fontmapperController = [[DMDFontmapperController alloc] initWithNibName:@"FontmapperView" bundle:[NSBundle mainBundle]];
     [[NSFontPanel sharedFontPanel] setAccessoryView:[fontmapperController view]];
 	
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataSourceDidChange:) name:DMDViewDataSourceDidChangeNotification object:nil];
-    
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUndo:) name:NSUndoManagerDidUndoChangeNotification object:nil];
+    
+    [self addObserver:self forKeyPath:@"dataSource" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
 }
-- (void)dataSourceDidChange:(NSNotification*)notification
+
+- (void)updateFrameSize
 {
-    // Do this as some sort of "size did change" notification?
     NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
     [self setFrame:NSMakeRect(0, 0, frameSize.width * 8, frameSize.height * 8)];
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqual:@"dataSource"])
+    {
+        // We are abusing the DMDViewDataSource protocol here, since we know it has a "size" key...
+        if ([change objectForKey:NSKeyValueChangeOldKey] != [NSNull null])
+            [[change objectForKey:NSKeyValueChangeOldKey] removeObserver:self forKeyPath:@"size"];
+        [(id)[self dataSource] addObserver:self forKeyPath:@"size" options:0 context:nil];
+        [self updateFrameSize];
+    }
+    else if (object == [self dataSource] && [keyPath isEqual:@"size"])
+    {
+        [self updateFrameSize];
+    }
+}
+
 - (void)didUndo:(NSNotification*)notification
 {
 	[self setNeedsDisplay:YES];
@@ -457,20 +477,6 @@ NSPoint PointToDot(NSPoint point)
 }
 
 
-- (IBAction)resize:(id)sender
-{
-	if ([[self window] isDocumentEdited])
-	{
-		NSAlert *alert = [NSAlert alertWithMessageText:@"Cannot resize unsaved animation."
-										 defaultButton:@"OK" 
-									   alternateButton:nil
-										   otherButton:nil
-							 informativeTextWithFormat:@"This feature is intended to be used with new documents."];
-		[alert runModal];
-		return;
-	}
-	[resizeWindowController show];
-}
 - (IBAction)showViewSettings:(id)sender
 {
 	if (guidesX == 0 || guidesY == 0 && [self fitsFontCriteria])

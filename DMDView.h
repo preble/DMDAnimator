@@ -24,7 +24,6 @@ typedef enum DMDDisplayMode {
 @interface DMDView : NSView
 {
     IBOutlet id<DMDViewDataSource> dataSource;
-	IBOutlet DMDResizeWindowController *resizeWindowController;
     IBOutlet DMDViewSettingsController *viewSettingsController;
     IBOutlet DMDFontmapperController *fontmapperController;
 
@@ -62,7 +61,6 @@ typedef enum DMDDisplayMode {
 - (IBAction)dotLow:(id)sender;
 - (IBAction)dotMedium:(id)sender;
 - (IBAction)dotHigh:(id)sender;
-- (IBAction)resize:(id)sender;
 - (IBAction)showViewSettings:(id)sender;
 
 - (IBAction)toggleFontTools:(id)sender;

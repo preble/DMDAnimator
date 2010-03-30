@@ -188,10 +188,12 @@
 
 - (void)resize:(NSSize)newSize
 {
+    [self willChangeValueForKey:@"size"];
 	height = newSize.height;
 	width = newSize.width;
 	for (Frame *frame in frames)
 		[frame resize:newSize];
+    [self didChangeValueForKey:@"size"];
 }
 
 - (void)fillWithFont:(NSFont *)font verticalOffset:(float)verticalOffset

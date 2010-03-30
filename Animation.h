@@ -18,7 +18,7 @@
 }
 @property (readonly) int height;
 @property (readonly) int width;
-@property (readonly) NSSize size;
+@property (readonly) NSSize size; // KV-observable.
 
 - (id)initWithSize:(NSSize)size;
 -(int)frameNumber;

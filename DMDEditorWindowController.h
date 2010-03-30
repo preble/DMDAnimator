@@ -9,9 +9,11 @@
 #import <Cocoa/Cocoa.h>
 
 @class DMDView;
+@class DMDResizeWindowController;
 
 @interface DMDEditorWindowController : NSWindowController {
     IBOutlet DMDView *dmdView;
+    IBOutlet DMDResizeWindowController *resizeWindowController;
 }
-
+- (IBAction)resize:(id)sender;
 @end

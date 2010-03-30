@@ -46,9 +46,6 @@
 {
 	[resizeSheet commitChanges];
 	[(Animation*)[self document] resize:NSMakeSize([width intValue], [height intValue])];
-	//[mainWindow setContentMaxSize:NSMakeSize([width intValue] * 8, [height intValue] * 8)];
-	[documentView setFrame:NSMakeRect(0, 0, [width intValue] * 8, [height intValue] * 8)];
-	[documentView setNeedsDisplay:YES];
 	[NSApp endSheet:resizeSheet returnCode:NSRunStoppedResponse];
 }
 - (IBAction)cancelButton:(id)sender
