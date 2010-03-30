@@ -23,6 +23,8 @@ NSString * const DMDViewDataSourceDidChangeNotification = @"net.adampreble.dmd.d
 			float q = (0.80 * ((float)c/15.0));
 			sixteenColors[c] = [[NSColor colorWithDeviceRed:q+0.20 green:q*0.8 blue:0 alpha:1] retain];
 		}
+        dotImage = [[NSImage imageNamed:@"Dot"] retain];
+        displayMode = DMDDisplayModeRealistic;
 		rectSelected = NO;
 		rectSelecting = NO;
 	}
@@ -32,6 +34,9 @@ NSString * const DMDViewDataSourceDidChangeNotification = @"net.adampreble.dmd.d
 {
 	for (int c = 0; c < 16; c++)
 		[sixteenColors[c] release];
+    
+    [dotImage release];
+    dotImage = nil;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUndoManagerDidUndoChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:DMDViewDataSourceDidChangeNotification object:nil];
@@ -377,7 +382,15 @@ NSPoint PointToDot(NSPoint point)
 					[sixteenColors[state&0xf] set];
 					lastState = state;
 				}
-				NSRectFill(NSMakeRect(col * dotSize + 1, (row) * dotSize + 1, dotSize-2, dotSize-2));
+                if (displayMode == DMDDisplayModeBasic)
+                {
+                    NSRectFill(NSMakeRect(col * dotSize + 1, (row) * dotSize + 1, dotSize-2, dotSize-2));
+                }
+                else if (displayMode == DMDDisplayModeRealistic)
+                {
+                    float alpha = (float)(state&0xf)/15.0f;
+                    [dotImage drawInRect:NSMakeRect(col * dotSize, (row) * dotSize, dotSize, dotSize) fromRect:NSZeroRect operation:NSCompositeCopy fraction:alpha];
+                }
 			}
 		}
 	}

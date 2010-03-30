@@ -14,6 +14,7 @@
 		669E94D311547F9A006B05D3 /* NSWindowAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E94D211547F9A006B05D3 /* NSWindowAdditions.m */; };
 		669E956311569838006B05D3 /* DMDFontPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */; };
 		669E95651156984C006B05D3 /* FontPreviewWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669E95641156984C006B05D3 /* FontPreviewWindow.xib */; };
+		66A82855116049AD00745627 /* Dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 66A82854116049AD00745627 /* Dot.png */; };
 		66EA5CCD0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */; };
 		66EA5D1D0FF6C61E000CDEC0 /* DMDResizeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */; };
 		66EA5D2A0FF6C75A000CDEC0 /* DMDResizeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EA5D290FF6C75A000CDEC0 /* DMDResizeWindow.xib */; };
@@ -54,6 +55,7 @@
 		669E956111569838006B05D3 /* DMDFontPreviewWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDFontPreviewWindowController.h; sourceTree = "<group>"; };
 		669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDFontPreviewWindowController.m; sourceTree = "<group>"; };
 		669E95641156984C006B05D3 /* FontPreviewWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FontPreviewWindow.xib; sourceTree = "<group>"; };
+		66A82854116049AD00745627 /* Dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dot.png; sourceTree = "<group>"; };
 		66EA5CCB0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDAnimatorAppDelegate.h; sourceTree = "<group>"; };
 		66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDAnimatorAppDelegate.m; sourceTree = "<group>"; };
 		66EA5D1B0FF6C61E000CDEC0 /* DMDResizeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDResizeWindowController.h; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				66EA5F590FF80254000CDEC0 /* DMDViewSettings.xib */,
 				66FBEB2A0FF86E9600E6EED2 /* FontmapperView.xib */,
 				669E95641156984C006B05D3 /* FontPreviewWindow.xib */,
+				66A82854116049AD00745627 /* Dot.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				66FBEB2B0FF86E9600E6EED2 /* FontmapperView.xib in Resources */,
 				669E94A311547A82006B05D3 /* MainMenu.xib in Resources */,
 				669E95651156984C006B05D3 /* FontPreviewWindow.xib in Resources */,
+				66A82855116049AD00745627 /* Dot.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

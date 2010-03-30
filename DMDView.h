@@ -5,6 +5,11 @@
 
 #define dotSize 8
 
+typedef enum DMDDisplayMode {
+    DMDDisplayModeBasic,
+    DMDDisplayModeRealistic
+} DMDDisplayMode;
+
 @class DMDViewSettingsController, DMDResizeWindowController, DMDFontmapperController;
 @class DMDView, Animation, Frame;
 
@@ -24,6 +29,8 @@
     IBOutlet DMDFontmapperController *fontmapperController;
 
 	NSColor *sixteenColors[16];
+    DMDDisplayMode displayMode;
+    NSImage *dotImage;
 	
 	NSTimer* timer;
 
