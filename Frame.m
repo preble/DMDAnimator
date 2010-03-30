@@ -15,7 +15,7 @@
 		{
 			int i;
 			for(i = 0; i < frameSize; i++) {
-				dots[i] = Dot_Clear;
+				dots[i] = DMDDotClear;
 			}
 		}
 		else
@@ -81,25 +81,25 @@
 {
     return NSMakeSize(width, height);
 }
--(DotState)dotAtRow:(int)row column:(int) col
+-(DMDDotState)dotAtRow:(int)row column:(int) col
 {
 	return dots[row * width + col];
 }
--(DotState)dotAtPoint:(NSPoint)point
+-(DMDDotState)dotAtPoint:(NSPoint)point
 {
     return dots[((int)point.y)*width + ((int)point.x)];
 }
--(void)setDotAtRow:(int)row column:(int)col toState:(DotState)state
+-(void)setDotAtRow:(int)row column:(int)col toState:(DMDDotState)state
 {
     [self setDotAtPoint:NSMakePoint(col, row) toState:state];
 }
-- (void)setDotAtPoint:(NSPoint)point toState:(DotState)state
+- (void)setDotAtPoint:(NSPoint)point toState:(DMDDotState)state
 {
 	[[[document undoManager] prepareWithInvocationTarget:self] setDotAtPoint:point toState:[self dotAtPoint:point]];
 	[[document undoManager] setActionName:@"Set Dot"];
 	dots[((int)point.y)*width + ((int)point.x)] = state;
 }
-- (void)setDotsInRect:(NSRect)rect toState:(DotState)state
+- (void)setDotsInRect:(NSRect)rect toState:(DMDDotState)state
 {
 	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	[[document undoManager] setActionName:@"Set Dots"];
@@ -114,13 +114,13 @@
 {
 	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	memmove(dots, dots + width, width*(height-1));
-	memset(dots + (width*height-1), Dot_Clear, width);
+	memset(dots + (width*height-1), DMDDotClear, width);
 }
 - (void)shiftDown
 {
 	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	memmove(dots + width, dots, width*(height-1));
-	memset(dots, Dot_Clear, width);
+	memset(dots, DMDDotClear, width);
 }
 - (void)shiftLeft
 {
@@ -129,7 +129,7 @@
 	for(row = 0; row < height; row++) {
 		char* rowBase = dots + row * width;
 		memmove(rowBase, rowBase + 1, width-1);
-		rowBase[width-1] = Dot_Clear;
+		rowBase[width-1] = DMDDotClear;
 	}
 }
 - (void)shiftRight
@@ -139,7 +139,7 @@
 	for(row = 0; row < height; row++) {
 		char* rowBase = dots + row * width;
 		memmove(rowBase + 1, rowBase, width-1);
-		rowBase[width-1] = Dot_Clear;
+		rowBase[width-1] = DMDDotClear;
 	}
 }
 - (void)shiftRect:(NSRect)rect vertical:(int)direction
@@ -156,9 +156,9 @@
 			}
 		}
 		if(direction < 0) {
-			[self setDotAtRow:rect.origin.y+rect.size.height-1 column:rect.origin.x+col toState:Dot_Clear];
+			[self setDotAtRow:rect.origin.y+rect.size.height-1 column:rect.origin.x+col toState:DMDDotClear];
 		} else {
-			[self setDotAtRow:rect.origin.y column:rect.origin.x+col toState:Dot_Clear];
+			[self setDotAtRow:rect.origin.y column:rect.origin.x+col toState:DMDDotClear];
 		}
 	}
 }
@@ -176,9 +176,9 @@
 			}
 		}
 		if(direction < 0) {
-			[self setDotAtRow:rect.origin.y+row column:rect.origin.x+rect.size.width-1 toState:Dot_Clear];
+			[self setDotAtRow:rect.origin.y+row column:rect.origin.x+rect.size.width-1 toState:DMDDotClear];
 		} else {
-			[self setDotAtRow:rect.origin.y+row column:rect.origin.x toState:Dot_Clear];
+			[self setDotAtRow:rect.origin.y+row column:rect.origin.x toState:DMDDotClear];
 		}
 	}
 }
@@ -194,7 +194,7 @@
 
 	int i;
 	for(i = 0; i < frameSize; i++) {
-		dots[i] = Dot_Off;
+		dots[i] = DMDDotOff;
 	}
 }
 

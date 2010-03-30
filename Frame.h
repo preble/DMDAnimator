@@ -5,14 +5,14 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum DotState
+typedef enum DMDDotState
 {
-	Dot_Clear = 0,
-	Dot_Off = 0,
-	Dot_Low = 0x5,
-	Dot_Med = 0xa,
-	Dot_High = 0xf
-} DotState;
+	DMDDotClear = 0,
+	DMDDotOff = 0,
+	DMDDotLow = 0x5,
+	DMDDotMed = 0xa,
+	DMDDotHigh = 0xf
+} DMDDotState;
 
 @class Animation;
 
@@ -34,11 +34,11 @@ typedef enum DotState
 @property (readonly) NSSize size;
 
 // Dot Accessors
--(DotState)dotAtRow:(int)row column:(int) col;
--(DotState)dotAtPoint:(NSPoint)point;
--(void)setDotAtRow:(int)row column:(int)col toState:(DotState)state;
--(void)setDotAtPoint:(NSPoint)point toState:(DotState)state;
-- (void)setDotsInRect:(NSRect)rect toState:(DotState)state;
+-(DMDDotState)dotAtRow:(int)row column:(int) col;
+-(DMDDotState)dotAtPoint:(NSPoint)point;
+-(void)setDotAtRow:(int)row column:(int)col toState:(DMDDotState)state;
+-(void)setDotAtPoint:(NSPoint)point toState:(DMDDotState)state;
+- (void)setDotsInRect:(NSRect)rect toState:(DMDDotState)state;
 // Dot Manipulators
 -(void)shiftUp;
 -(void)shiftDown;

@@ -222,7 +222,7 @@
 	[self setNeedsDisplay: YES];
 	[self updateWindowTitle];
 }
-- (void)setDot:(DotState)state
+- (void)setDot:(DMDDotState)state
 {
 	if(rectSelected) {
 		[[dataSource currentFrameInDmdView:self] setDotsInRect:rectSelection toState:state];
@@ -231,11 +231,11 @@
 	}
 	[self setNeedsDisplay: YES];
 }
-- (IBAction)dotClear:(id)sender { [self setDot:Dot_Clear]; }
-- (IBAction)dotOff:(id)sender { [self setDot:Dot_Off]; }
-- (IBAction)dotLow:(id)sender { [self setDot:Dot_Low]; }
-- (IBAction)dotMedium:(id)sender { [self setDot:Dot_Med]; }
-- (IBAction)dotHigh:(id)sender { [self setDot:Dot_High]; }
+- (IBAction)dotClear:(id)sender { [self setDot:DMDDotClear]; }
+- (IBAction)dotOff:(id)sender { [self setDot:DMDDotOff]; }
+- (IBAction)dotLow:(id)sender { [self setDot:DMDDotLow]; }
+- (IBAction)dotMedium:(id)sender { [self setDot:DMDDotMed]; }
+- (IBAction)dotHigh:(id)sender { [self setDot:DMDDotHigh]; }
 
 - (IBAction)frameNew:(id)sender
 {
@@ -366,7 +366,7 @@ NSPoint PointToDot(NSPoint point)
 	//NSLog(@"mouseUp: %f, %f -> %d, %d)", localPoint.x, localPoint.y, col, row);
 	NSPoint dotPos = PointToDot(localPoint);
 	Frame* frame = [dataSource currentFrameInDmdView:self];
-	DotState state = [frame dotAtPoint:dotPos];
+	DMDDotState state = [frame dotAtPoint:dotPos];
 	[frame setDotAtPoint:dotPos toState:(state + 1) % 4];
 	[self setNeedsDisplay: YES];
 }
@@ -391,13 +391,13 @@ NSPoint PointToDot(NSPoint point)
 	int yCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame height]);
 	int xCount = MIN(1 + ((int)rect.size.width)/dotSize, [frame width]);
 
-	DotState lastState = Dot_Off;
+	DMDDotState lastState = DMDDotOff;
 	int row, col;
 	for(row = y0; row < y0 + yCount; row++) {
 		for(col = x0; col < x0 + xCount; col++) {
 			//NSLog(@"%d, %d", row, col);
-			DotState state = [frame dotAtRow:row column:col];
-			if(state != Dot_Off) {
+			DMDDotState state = [frame dotAtRow:row column:col];
+			if(state != DMDDotOff) {
 				if(state != lastState) {
 					[sixteenColors[state&0xf] set];
 					lastState = state;
