@@ -340,7 +340,7 @@
 	[[self window] setTitle: [NSString stringWithFormat:@"%@ - %d/%d", 
 		[filename lastPathComponent], [dataSource currentFrameIndexInDmdView:self]+1, [dataSource numberOfFramesInDmdView:self]]];
 }
-NSPoint PointToDot(NSPoint point)
+- (NSPoint)pointToDot:(NSPoint)point
 {
     return NSMakePoint(floor(point.x / dotSize), floor(point.y / dotSize));
 }
@@ -349,7 +349,7 @@ NSPoint PointToDot(NSPoint point)
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	if(NSPointInRect(localPoint, NSIntersectionRect([self bounds], [[self superview] bounds]))) {
 		int row, col;
-		[self moveCursorToPoint:PointToDot(localPoint)];
+		[self moveCursorToPoint:[self pointToDot:localPoint]];
 		[NSCursor setHiddenUntilMouseMoves:YES];
 	} else {
 		// mouse has left the view
@@ -364,7 +364,7 @@ NSPoint PointToDot(NSPoint point)
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	//NSLog(@"mouseUp: %f, %f -> %d, %d)", localPoint.x, localPoint.y, col, row);
-	NSPoint dotPos = PointToDot(localPoint);
+	NSPoint dotPos = [self pointToDot:localPoint];
 	Frame* frame = [dataSource currentFrameInDmdView:self];
 	DMDDotState state = [frame dotAtPoint:dotPos];
 	[frame setDotAtPoint:dotPos toState:(state + 1) % 4];
