@@ -7,12 +7,15 @@
 
 @interface DMDView ()
 - (void)updateFrameSize;
+- (void)setNeedsDisplayRefreshDots:(BOOL)flag;
+@property (nonatomic, retain) NSImage *cachedDots;
 @end
 
 
 @implementation DMDView
 @synthesize dataSource;
 @synthesize viewFontTools;
+@synthesize cachedDots;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
@@ -29,6 +32,7 @@
         displayMode = DMDDisplayModeRealistic;
 		rectSelected = NO;
 		rectSelecting = NO;
+        [self setCachedDots:[[[NSImage alloc] init] autorelease]];
 	}
 	return self;
 }
@@ -39,6 +43,8 @@
     
     [dotImage release];
     dotImage = nil;
+    
+    [self setCachedDots:nil];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUndoManagerDidUndoChangeNotification object:nil];
     
@@ -60,10 +66,19 @@
     [self addObserver:self forKeyPath:@"dataSource" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
 }
 
+- (void)setNeedsDisplayRefreshDots:(BOOL)flag
+{
+    refreshDots |= flag;
+    [self setNeedsDisplay:YES];
+}
+
 - (void)updateFrameSize
 {
     NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
-    [self setFrame:NSMakeRect(0, 0, frameSize.width * 8, frameSize.height * 8)];
+    NSRect newFrame = NSMakeRect(0, 0, frameSize.width * 8, frameSize.height * 8);
+    [self setFrame:newFrame];
+    [self setCachedDots:[[[NSImage alloc] initWithSize:newFrame.size] autorelease]];
+    [self setNeedsDisplayRefreshDots:YES];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -84,7 +99,7 @@
 
 - (void)didUndo:(NSNotification*)notification
 {
-	[self setNeedsDisplay:YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (BOOL)acceptsFirstResponder
 {
@@ -99,15 +114,13 @@
 {
 	if(value != cursorShown) {
 		cursorShown = value;
-		[self setNeedsDisplay: YES];
+		[self setNeedsDisplayRefreshDots:NO];
 	}
 }
 - (void)moveCursorToPoint:(NSPoint)point
 {
-	bool doDisplay = NO;
 	if(!cursorShown) {
 		cursorShown = YES;
-		doDisplay = YES;
 		rectSelected = NO;
 		rectSelecting = NO;
 	}
@@ -115,7 +128,6 @@
         NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
 		cursor.x = ((int)point.x) % (int)frameSize.width;
 		cursor.y = ((int)point.y) % (int)frameSize.height;
-		doDisplay = YES;
 		if(cursor.y < 0) {
 			cursor.y = frameSize.height-1;
 		}
@@ -123,7 +135,7 @@
 			cursor.x = frameSize.width-1;
 		}
 	}
-	[self setNeedsDisplay: doDisplay];
+	[self setNeedsDisplayRefreshDots:NO];
 }
 - (void)keyUp:(NSEvent*)event
 {
@@ -219,7 +231,7 @@
 		
 		NSLog(@"Unknown character: %C", character);
 	}
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:NO];
 	[self updateWindowTitle];
 }
 - (void)setDot:(DMDDotState)state
@@ -229,7 +241,7 @@
 	} else {
 		[[dataSource currentFrameInDmdView:self] setDotAtPoint:cursor toState:state];
 	}
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)dotClear:(id)sender { [self setDot:DMDDotClear]; }
 - (IBAction)dotOff:(id)sender { [self setDot:DMDDotOff]; }
@@ -247,13 +259,13 @@
 {
 //	[animation prevFrame];
 	[self updateWindowTitle];
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameNext:(id)sender
 {
 //	[animation nextFrame];
 	[self updateWindowTitle];
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftRight:(id)sender
 {
@@ -263,7 +275,7 @@
 	} else {
 		[[dataSource currentFrameInDmdView:self] shiftRight];
 	}
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftLeft:(id)sender
 {
@@ -273,7 +285,7 @@
 	} else {
 		[[dataSource currentFrameInDmdView:self] shiftLeft];
 	}
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftUp:(id)sender
 {
@@ -283,7 +295,7 @@
 	} else {
 		[[dataSource currentFrameInDmdView:self] shiftUp];
 	}
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftDown:(id)sender
 {
@@ -293,7 +305,7 @@
 	} else {
 		[[dataSource currentFrameInDmdView:self] shiftDown];
 	}
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 
 // Clipboard
@@ -328,7 +340,7 @@
     NSPoint destOrigin = cursor;
     NSSize size = [frame size];
     [[dataSource currentFrameInDmdView:self] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
-	[self setNeedsDisplay:YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 
 - (void)updateWindowTitle
@@ -368,29 +380,29 @@
 	Frame* frame = [dataSource currentFrameInDmdView:self];
 	DMDDotState state = [frame dotAtPoint:dotPos];
 	[frame setDotAtPoint:dotPos toState:(state + 1) % 4];
-	[self setNeedsDisplay: YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 - (void)resetCursorRects
 {
 	//[self addCursorRect:[self visibleRect] cursor: nil]; //[NSCursor crosshairCursor]];
 }
 
-- (void)drawRect:(NSRect)rect
+- (void)renderDotsFromFrame:(Frame *)frame toImage:(NSImage *)image inRect:(NSRect)rect
 {
-	[[NSColor blackColor] set];
+    [image lockFocus];
+
+    [[NSColor blackColor] set];
 	NSRectFill(rect);
 
-	Frame* frame = [[dataSource currentFrameInDmdView:self] retain];
-	if(frame == nil) {
-		return;
-	}
-	[frame retain];
-	
-	int y0 = ((int)rect.origin.y)/dotSize;
+    int y0 = ((int)rect.origin.y)/dotSize;
 	int x0 = ((int)rect.origin.x)/dotSize;
 	int yCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame height]);
 	int xCount = MIN(1 + ((int)rect.size.width)/dotSize, [frame width]);
-
+    // Render the whole frame no matter what:
+    x0 = y0 = 0;
+    xCount = [frame width];
+    yCount = [frame height];
+    
 	DMDDotState lastState = DMDDotOff;
 	int row, col;
 	for(row = y0; row < y0 + yCount; row++) {
@@ -414,6 +426,35 @@
 			}
 		}
 	}
+    
+    [image unlockFocus];
+}
+
+- (void)drawRect:(NSRect)rect
+{
+	int row, col;
+    
+	[[NSColor blackColor] set];
+	NSRectFill(rect);
+
+	Frame* frame = [[dataSource currentFrameInDmdView:self] retain];
+	if(frame == nil) {
+		return;
+	}
+	[frame retain];
+	
+    int y0 = ((int)rect.origin.y)/dotSize;
+	int x0 = ((int)rect.origin.x)/dotSize;
+	int yCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame height]);
+	int xCount = MIN(1 + ((int)rect.size.width)/dotSize, [frame width]);
+    
+    if (refreshDots)
+    {
+        [self renderDotsFromFrame:frame toImage:cachedDots inRect:rect];
+        refreshDots = NO;
+    }
+    [cachedDots drawInRect:rect fromRect:rect operation:NSCompositeCopy fraction:1.0];
+    
 
     if (viewFontTools && [self fitsFontCriteria])
     {
@@ -473,7 +514,7 @@
 
 -(void)tick:(NSTimer*)timer
 {
-	[self setNeedsDisplay:YES];
+	[self setNeedsDisplayRefreshDots:YES];
 }
 
 
@@ -495,7 +536,7 @@
     guidesEnabled = enable;
     guidesX = x;
     guidesY = y;
-    [self setNeedsDisplay:YES];
+    [self setNeedsDisplayRefreshDots:NO];
 }
 
 - (void)changeFont:(id)sender
@@ -509,7 +550,7 @@
     float verticalOffset = [[fontmapperController verticalOffsetField] floatValue];
     NSLog(@"%@ verticalOffset=%0.2f", newFont, verticalOffset);
 //    [animation fillWithFont:newFont verticalOffset:verticalOffset];
-    [self setNeedsDisplay:YES];
+    [self setNeedsDisplayRefreshDots:YES];
     return;
 }
 - (IBAction)toggleFontTools:(id)sender
@@ -520,7 +561,7 @@
         NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
         [self setGuidelinesEnabled:YES horizontal:frameSize.width/10 vertical:frameSize.height/10];
     }
-    [self setNeedsDisplay:YES];
+    [self setNeedsDisplayRefreshDots:NO];
 }
 - (void)incremementCharWidth:(int)inc
 {
@@ -535,7 +576,7 @@
         if (value < 0 || value > charSize)
             return;
         [[dataSource dmdView:self frameAtIndex:1] setDotAtPoint:NSMakePoint(x, y) toState:value];
-        [self setNeedsDisplay:YES];
+        [self setNeedsDisplayRefreshDots:NO];
     }
 }
 - (IBAction)increaseCharWidth:(id)sender

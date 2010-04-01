@@ -45,6 +45,9 @@ typedef enum DMDDisplayMode {
     int guidesY;
     
     BOOL viewFontTools;
+    
+    BOOL refreshDots; // YES if the dots should be refreshed on the next -drawRect.
+    NSImage *cachedDots;
 }
 @property (nonatomic, assign) id<DMDViewDataSource> dataSource;
 - (void)tick:(NSTimer*)timer;
