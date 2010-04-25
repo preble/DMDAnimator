@@ -8,6 +8,7 @@
 @interface DMDView ()
 - (void)updateFrameSize;
 - (void)setNeedsDisplayRefreshDots:(BOOL)flag;
+- (Frame *)currentFrame;
 @property (nonatomic, retain) NSImage *cachedDots;
 @end
 
@@ -66,6 +67,11 @@
     [self addObserver:self forKeyPath:@"dataSource" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
 }
 
+- (Frame *)currentFrame
+{
+	return [dataSource dmdView:self frameAtIndex:frameIndex];
+}
+
 - (void)setNeedsDisplayRefreshDots:(BOOL)flag
 {
     refreshDots |= flag;
@@ -108,7 +114,7 @@
 - (BOOL)fitsFontCriteria
 {
     NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
-    return [dataSource numberOfFramesInDmdView:self] == 2 && [dataSource currentFrameIndexInDmdView:self] == 0 && frameSize.width == frameSize.height;
+    return [dataSource numberOfFramesInDmdView:self] == 2 && frameIndex == 0 && frameSize.width == frameSize.height;
 }
 - (void)showCursor:(bool)value
 {
@@ -237,9 +243,9 @@
 - (void)setDot:(DMDDotState)state
 {
 	if(rectSelected) {
-		[[dataSource currentFrameInDmdView:self] setDotsInRect:rectSelection toState:state];
+		[[self currentFrame] setDotsInRect:rectSelection toState:state];
 	} else {
-		[[dataSource currentFrameInDmdView:self] setDotAtPoint:cursor toState:state];
+		[[self currentFrame] setDotAtPoint:cursor toState:state];
 	}
 	[self setNeedsDisplayRefreshDots:YES];
 }
@@ -257,53 +263,53 @@
 }
 - (IBAction)framePrevious:(id)sender
 {
-//	[animation prevFrame];
+	frameIndex = MAX(0, frameIndex - 1);
 	[self updateWindowTitle];
 	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameNext:(id)sender
 {
-//	[animation nextFrame];
+	frameIndex = MIN([dataSource numberOfFramesInDmdView:self]-1, frameIndex + 1);
 	[self updateWindowTitle];
 	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftRight:(id)sender
 {
 	if(rectSelected) {
-		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection horizontal:1];
+		[[self currentFrame] shiftRect:rectSelection horizontal:1];
 		rectSelection.origin.x++;
 	} else {
-		[[dataSource currentFrameInDmdView:self] shiftRight];
+		[[self currentFrame] shiftRight];
 	}
 	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftLeft:(id)sender
 {
 	if(rectSelected) {
-		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection horizontal:-1];
+		[[self currentFrame] shiftRect:rectSelection horizontal:-1];
 		rectSelection.origin.x--;
 	} else {
-		[[dataSource currentFrameInDmdView:self] shiftLeft];
+		[[self currentFrame] shiftLeft];
 	}
 	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftUp:(id)sender
 {
 	if(rectSelected) {
-		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection vertical:-1];
+		[[self currentFrame] shiftRect:rectSelection vertical:-1];
 		rectSelection.origin.y--;
 	} else {
-		[[dataSource currentFrameInDmdView:self] shiftUp];
+		[[self currentFrame] shiftUp];
 	}
 	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameShiftDown:(id)sender
 {
 	if(rectSelected) {
-		[[dataSource currentFrameInDmdView:self] shiftRect:rectSelection vertical:1];
+		[[self currentFrame] shiftRect:rectSelection vertical:1];
 		rectSelection.origin.y++;
 	} else {
-		[[dataSource currentFrameInDmdView:self] shiftDown];
+		[[self currentFrame] shiftDown];
 	}
 	[self setNeedsDisplayRefreshDots:YES];
 }
@@ -312,7 +318,7 @@
 - (void)copy:(id)sender
 {
 	if(rectSelected) {
-        Frame *frame = [[dataSource currentFrameInDmdView:self] frameWithRect:rectSelection];
+        Frame *frame = [[self currentFrame] frameWithRect:rectSelection];
 		if (frame == nil) {
 			NSLog(@"copy: Failed to get frame in selection");
 			return;
@@ -339,7 +345,7 @@
     NSPoint sourceOrigin = NSMakePoint(0, 0);
     NSPoint destOrigin = cursor;
     NSSize size = [frame size];
-    [[dataSource currentFrameInDmdView:self] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
+    [[self currentFrame] setDotsFromFrame:frame sourceOrigin:sourceOrigin destOrigin:destOrigin size:size];
 	[self setNeedsDisplayRefreshDots:YES];
 }
 
@@ -350,7 +356,7 @@
 		filename = @"Untitled";
 	}
 	[[self window] setTitle: [NSString stringWithFormat:@"%@ - %d/%d", 
-		[filename lastPathComponent], [dataSource currentFrameIndexInDmdView:self]+1, [dataSource numberOfFramesInDmdView:self]]];
+		[filename lastPathComponent], frameIndex+1, [dataSource numberOfFramesInDmdView:self]]];
 }
 - (NSPoint)pointToDot:(NSPoint)point
 {
@@ -377,7 +383,7 @@
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	//NSLog(@"mouseUp: %f, %f -> %d, %d)", localPoint.x, localPoint.y, col, row);
 	NSPoint dotPos = [self pointToDot:localPoint];
-	Frame* frame = [dataSource currentFrameInDmdView:self];
+	Frame* frame = [self currentFrame];
 	DMDDotState state = [frame dotAtPoint:dotPos];
 	[frame setDotAtPoint:dotPos toState:(state + 1) % 4];
 	[self setNeedsDisplayRefreshDots:YES];
@@ -437,7 +443,7 @@
 	[[NSColor blackColor] set];
 	NSRectFill(rect);
 
-	Frame* frame = [[dataSource currentFrameInDmdView:self] retain];
+	Frame* frame = [[self currentFrame] retain];
 	if(frame == nil) {
 		return;
 	}

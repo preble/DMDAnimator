@@ -12,8 +12,6 @@
 @interface Animation : NSDocument <DMDViewDataSource>
 {
 	NSMutableArray* frames;
-	int frameNumber;
-	BOOL playing;
 	int height, width;
 }
 @property (readonly) int height;
@@ -21,15 +19,7 @@
 @property (readonly) NSSize size; // KV-observable.
 
 - (id)initWithSize:(NSSize)size;
--(int)frameNumber;
--(int)frameCount;
--(Frame*)frame;
--(void)nextFrame;
--(void)prevFrame;
--(void)insertFrameAfterCurrent;
--(void)play;
--(void)pause;
--(BOOL)togglePlay;
+- (int)frameCount;
 - (void)resize:(NSSize)newSize;
 - (void)fillWithFont:(NSFont *)font verticalOffset:(float)verticalOffset;
 - (Frame*)frameAtIndex:(int)index;

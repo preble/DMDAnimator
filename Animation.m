@@ -26,8 +26,6 @@
         // If an error occurs here, send a [self release] message and return nil.
 		frames = [[NSMutableArray arrayWithCapacity:1] retain];
 		[frames addObject:[[[Frame alloc] initWithSize:size dots:NULL document:self] autorelease]];
-		frameNumber = 0;
-		playing = NO;
     }
     return self;
 }
@@ -35,26 +33,9 @@
 {
     return NSMakeSize(width, height);
 }
-- (int)frameNumber
-{
-	return frameNumber;
-}
 -(int)frameCount
 {
 	return [frames count];
-}
-- (Frame *)frame
-{
-	//NSLog(@"frameNumber = %d", frameNumber );
-	Frame * frameOut = nil;
-	if(frameNumber < [frames count]) {
-		frameOut = [frames objectAtIndex:frameNumber];
-	}
-	if(playing) {
-		frameNumber = (frameNumber + 1) % [frames count];
-		//NSLog(@"frameNumber advanced to %d", frameNumber );
-	}
-	return frameOut;
 }
 - (Frame*)frameAtIndex:(int)index
 {
@@ -148,42 +129,9 @@
 			buffer += height * width;
 		}
 	}
-	frameNumber = 0;
 	buffer = NULL;
     
     return YES;
-}
-
--(void)nextFrame
-{
-	if(frameNumber + 1 < [frames count]) {
-		frameNumber++;
-	}
-}
--(void)prevFrame
-{
-	if(frameNumber != 0) {
-		frameNumber--;
-	}
-}
--(void)insertFrameAfterCurrent
-{
-	Frame* currentFrame = [frames objectAtIndex:frameNumber];
-	[frames insertObject:[[currentFrame mutableCopy] autorelease] atIndex:frameNumber+1];
-}
--(void)play
-{
-	playing = YES;
-}
--(void)pause
-{
-	playing = NO;
-}
--(BOOL)togglePlay
-{
-	playing = !playing;
-	NSLog(@"playing = %d", playing);
-	return playing;
 }
 
 - (void)resize:(NSSize)newSize
@@ -198,14 +146,14 @@
 
 - (void)fillWithFont:(NSFont *)font verticalOffset:(float)verticalOffset
 {
-    [frames removeAllObjects];
-    frameNumber = 0;
-    [frames addObject:[[Frame alloc] initWithSize:[self size] dots:NULL document:self]];
-    [self insertFrameAfterCurrent];
     // Now we have two frames.
-    Frame *bitmapFrame = [self frame];
-    Frame *widthsFrame = [frames objectAtIndex:1];
+    Frame *bitmapFrame = [[[Frame alloc] initWithSize:[self size] dots:NULL document:self] autorelease];
+    Frame *widthsFrame = [[[Frame alloc] initWithSize:[self size] dots:NULL document:self] autorelease];
 
+    [frames removeAllObjects];
+	[frames addObject:bitmapFrame];
+	[frames addObject:widthsFrame];
+	
 	const int stride = 10; // chars per line
 	const float charSize = width / (float)stride;
 	NSRect bitmapRect = NSMakeRect(0.0, 0.0, width, height);
@@ -275,15 +223,9 @@
 }
 
 
-// DMDViewDataSource //
-- (Frame *)currentFrameInDmdView:(DMDView *)dmdView
-{
-    return [frames objectAtIndex:frameNumber];
-}
-- (int)currentFrameIndexInDmdView:(DMDView *)dmdView
-{
-    return frameNumber;
-}
+#pragma mark -
+#pragma mark DMDViewDataSource
+
 - (int)numberOfFramesInDmdView:(DMDView *)dmdView
 {
     return [frames count];

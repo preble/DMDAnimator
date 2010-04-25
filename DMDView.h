@@ -14,8 +14,6 @@ typedef enum DMDDisplayMode {
 @class DMDView, Animation, Frame;
 
 @protocol DMDViewDataSource<NSObject>
-- (Frame *)currentFrameInDmdView:(DMDView *)dmdView;
-- (int)currentFrameIndexInDmdView:(DMDView *)dmdView;
 - (int)numberOfFramesInDmdView:(DMDView *)dmdView;
 - (Frame *)dmdView:(DMDView *)dmdView frameAtIndex:(int)frameIndex;
 - (NSSize)sizeOfFrameInDmdView:(DMDView *)dmdView;
@@ -26,6 +24,8 @@ typedef enum DMDDisplayMode {
     IBOutlet id<DMDViewDataSource> dataSource;
     IBOutlet DMDViewSettingsController *viewSettingsController;
     IBOutlet DMDFontmapperController *fontmapperController;
+	
+	int frameIndex;
 
 	NSColor *sixteenColors[16];
     DMDDisplayMode displayMode;
