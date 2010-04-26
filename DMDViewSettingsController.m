@@ -13,6 +13,7 @@
 @implementation DMDViewSettingsController
 
 @synthesize guidelineSpacingX, guidelineSpacingY, guidelinesEnabled;
+@synthesize framesPerSecond;
 
 - (id)init
 {
@@ -21,6 +22,7 @@
 		self.guidelineSpacingX = [NSNumber numberWithInt:32];
 		self.guidelineSpacingY = [NSNumber numberWithInt:32];
 		self.guidelinesEnabled = [NSNumber numberWithBool:NO];
+		self.framesPerSecond = [NSNumber numberWithInt:60];
 	}
 	return self;
 }
@@ -29,6 +31,7 @@
 	self.guidelineSpacingX = nil;
 	self.guidelineSpacingY = nil;
 	self.guidelinesEnabled = nil;
+	self.framesPerSecond = nil;
 	[super dealloc];
 }
 
@@ -44,6 +47,7 @@
 {
 	[sheet commitChanges];
     [documentView setGuidelinesEnabled:[[self guidelinesEnabled] boolValue] horizontal:[[self guidelineSpacingX] intValue] vertical:[[self guidelineSpacingY] intValue]];
+	[documentView setFramesPerSecond:[[self framesPerSecond] intValue]];
 	[NSApp endSheet:sheet returnCode:NSRunStoppedResponse];
 }
 - (void)didEndSheet:(NSWindow *)theSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo

@@ -32,6 +32,7 @@ typedef enum DMDDisplayMode {
     NSImage *dotImage;
 	
 	NSTimer* timer;
+	int framesPerSecond;
 
     NSPoint cursor;
 	bool cursorShown;
@@ -71,4 +72,5 @@ typedef enum DMDDisplayMode {
 - (IBAction)decreaseCharWidth:(id)sender;
 
 @property (nonatomic, assign) BOOL viewFontTools;
+@property (nonatomic, assign) int framesPerSecond;
 @end

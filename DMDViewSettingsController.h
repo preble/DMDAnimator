@@ -17,10 +17,12 @@
 	NSNumber *guidelineSpacingX;
 	NSNumber *guidelineSpacingY;
 	NSNumber *guidelinesEnabled;
+	NSNumber *framesPerSecond;
 }
 @property (nonatomic, retain) NSNumber *guidelineSpacingX;
 @property (nonatomic, retain) NSNumber *guidelineSpacingY;
 @property (nonatomic, retain) NSNumber *guidelinesEnabled;
+@property (nonatomic, retain) NSNumber *framesPerSecond;
 - (IBAction)showViewSettings:(id)sender;
 - (IBAction)okButton:(id)sender;
 @end

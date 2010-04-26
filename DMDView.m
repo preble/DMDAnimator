@@ -17,6 +17,7 @@
 @synthesize dataSource;
 @synthesize viewFontTools;
 @synthesize cachedDots;
+@synthesize framesPerSecond;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
@@ -33,6 +34,7 @@
         displayMode = DMDDisplayModeRealistic;
 		rectSelected = NO;
 		rectSelecting = NO;
+		framesPerSecond = 60;
         [self setCachedDots:[[[NSImage alloc] init] autorelease]];
 	}
 	return self;
@@ -226,14 +228,16 @@
 			case ',': [self framePrevious:self];  continue;
 		}
 		
-//		if(character == ' ') {
-//			if([animation togglePlay]) {
-//				timer = [NSTimer scheduledTimerWithTimeInterval: 1.0/10.0 target:self selector:@selector(tick:) userInfo:nil repeats:YES];
-//			} else {
-//				[timer invalidate];
-//			}
-//			continue;
-//		}
+		if(character == ' ') {
+			if(!timer) {
+				timer = [[NSTimer scheduledTimerWithTimeInterval: 1.0/(float)framesPerSecond target:self selector:@selector(tick:) userInfo:nil repeats:YES] retain];
+			} else {
+				[timer invalidate];
+				[timer release];
+				timer = nil;
+			}
+			continue;
+		}
 		
 		NSLog(@"Unknown character: %C", character);
 	}
@@ -520,6 +524,10 @@
 
 -(void)tick:(NSTimer*)timer
 {
+	frameIndex++;
+	if (frameIndex == [dataSource numberOfFramesInDmdView:self])
+		frameIndex = 0;
+	[self updateWindowTitle];
 	[self setNeedsDisplayRefreshDots:YES];
 }
 
