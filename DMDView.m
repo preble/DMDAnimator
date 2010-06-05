@@ -18,6 +18,7 @@
 @synthesize viewFontTools;
 @synthesize cachedDots;
 @synthesize framesPerSecond;
+@synthesize frameIndex;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
@@ -72,6 +73,12 @@
 - (Frame *)currentFrame
 {
 	return [dataSource dmdView:self frameAtIndex:frameIndex];
+}
+
+- (void)setFrameIndex:(int)index
+{
+	frameIndex = index;
+	[self setNeedsDisplayRefreshDots:YES];
 }
 
 - (void)setNeedsDisplayRefreshDots:(BOOL)flag
@@ -267,13 +274,13 @@
 }
 - (IBAction)framePrevious:(id)sender
 {
-	frameIndex = MAX(0, frameIndex - 1);
+	[self setFrameIndex:MAX(0, frameIndex - 1)];
 	[self updateWindowTitle];
 	[self setNeedsDisplayRefreshDots:YES];
 }
 - (IBAction)frameNext:(id)sender
 {
-	frameIndex = MIN([dataSource numberOfFramesInDmdView:self]-1, frameIndex + 1);
+	[self setFrameIndex:MIN([dataSource numberOfFramesInDmdView:self]-1, frameIndex + 1)];
 	[self updateWindowTitle];
 	[self setNeedsDisplayRefreshDots:YES];
 }
@@ -447,12 +454,10 @@
 	[[NSColor blackColor] set];
 	NSRectFill(rect);
 
-	Frame* frame = [[self currentFrame] retain];
-	if(frame == nil) {
+	Frame* frame = [self currentFrame];
+	if(frame == nil)
 		return;
-	}
-	[frame retain];
-	
+
     int y0 = ((int)rect.origin.y)/dotSize;
 	int x0 = ((int)rect.origin.x)/dotSize;
 	int yCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame height]);
@@ -483,7 +488,6 @@
         [thePath stroke];
     }
     
-	[frame release];
 	if(cursorShown) {
 		[[NSColor grayColor] setFill];
 		NSFrameRect(NSMakeRect(cursor.x * dotSize, (cursor.y) * dotSize, dotSize, dotSize));
@@ -524,9 +528,9 @@
 
 -(void)tick:(NSTimer*)timer
 {
-	frameIndex++;
+	[self setFrameIndex:frameIndex + 1];
 	if (frameIndex == [dataSource numberOfFramesInDmdView:self])
-		frameIndex = 0;
+		[self setFrameIndex:0];
 	[self updateWindowTitle];
 	[self setNeedsDisplayRefreshDots:YES];
 }

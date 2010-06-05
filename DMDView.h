@@ -73,4 +73,5 @@ typedef enum DMDDisplayMode {
 
 @property (nonatomic, assign) BOOL viewFontTools;
 @property (nonatomic, assign) int framesPerSecond;
+@property (nonatomic, assign) int frameIndex;
 @end

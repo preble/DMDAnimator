@@ -8,6 +8,7 @@
 
 #import "DMDAnimatorAppDelegate.h"
 #import "DMDFontPreviewWindowController.h"
+#import "DMDTransportController.h"
 
 NSString *DMDDotsPboardType = @"dmdanimator.dots";
 
@@ -39,6 +40,12 @@ NSString *DMDDotsPboardType = @"dmdanimator.dots";
         [[fontPreviewWindowController window] orderOut:self];
     else
         [fontPreviewWindowController showWindow:sender];
+}
+
+- (IBAction)toggleTransportPanel:(id)sender
+{
+	DMDTransportController *transportController = [DMDTransportController sharedController];
+	[transportController toggleVisible];
 }
 
 @end

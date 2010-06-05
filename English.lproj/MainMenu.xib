@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10C540</string>
-		<string key="IBDocument.InterfaceBuilderVersion">761</string>
-		<string key="IBDocument.AppKitVersion">1038.25</string>
-		<string key="IBDocument.HIToolboxVersion">458.00</string>
+		<string key="IBDocument.SystemVersion">10D573</string>
+		<string key="IBDocument.InterfaceBuilderVersion">762</string>
+		<string key="IBDocument.AppKitVersion">1038.29</string>
+		<string key="IBDocument.HIToolboxVersion">460.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">761</string>
+			<string key="NS.object.0">762</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -747,6 +747,25 @@
 							<string key="NSTitle">View</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="289759143">
+									<reference key="NSMenu" ref="851594230"/>
+									<string key="NSTitle">Toggle Transport Controls</string>
+									<string key="NSKeyEquiv">T</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="597520868"/>
+									<reference key="NSMixedImage" ref="801650649"/>
+								</object>
+								<object class="NSMenuItem" id="417638068">
+									<reference key="NSMenu" ref="851594230"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="597520868"/>
+									<reference key="NSMixedImage" ref="801650649"/>
+								</object>
 								<object class="NSMenuItem" id="374698285">
 									<reference key="NSMenu" ref="851594230"/>
 									<string key="NSTitle">Font Mode</string>
@@ -1577,6 +1596,14 @@
 					</object>
 					<int key="connectionID">419</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleTransportPanel:</string>
+						<reference key="source" ref="248060946"/>
+						<reference key="destination" ref="289759143"/>
+					</object>
+					<int key="connectionID">424</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2350,6 +2377,8 @@
 							<reference ref="731172523"/>
 							<reference ref="374698285"/>
 							<reference ref="692467039"/>
+							<reference ref="417638068"/>
+							<reference ref="289759143"/>
 						</object>
 						<reference key="parent" ref="460912558"/>
 					</object>
@@ -2371,6 +2400,16 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">417</int>
 						<reference key="object" ref="692467039"/>
+						<reference key="parent" ref="851594230"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">421</int>
+						<reference key="object" ref="417638068"/>
+						<reference key="parent" ref="851594230"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">422</int>
+						<reference key="object" ref="289759143"/>
 						<reference key="parent" ref="851594230"/>
 					</object>
 				</object>
@@ -2575,6 +2614,8 @@
 					<string>408.IBPluginDependency</string>
 					<string>413.IBPluginDependency</string>
 					<string>417.IBPluginDependency</string>
+					<string>421.IBPluginDependency</string>
+					<string>422.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ImportedFromIB2</string>
 					<string>56.IBPluginDependency</string>
@@ -2678,7 +2719,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{268, 622}, {198, 203}}</string>
+					<string>{{318, 622}, {198, 203}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2801,7 +2842,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{218, 742}, {242, 83}}</string>
+					<string>{{218, 712}, {282, 113}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2858,7 +2901,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">419</int>
+			<int key="maxID">424</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2867,8 +2910,17 @@
 					<string key="className">DMDAnimatorAppDelegate</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">toggleFontPreview:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>toggleFontPreview:</string>
+							<string>toggleTransportPanel:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -2881,6 +2933,31 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">DMDEditorWindowController</string>
+					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">resize:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dmdView</string>
+							<string>resizeWindowController</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>DMDView</string>
+							<string>DMDResizeWindowController</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">DMDEditorWindowController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -2971,13 +3048,11 @@
 							<string>frameShiftRight:</string>
 							<string>frameShiftUp:</string>
 							<string>increaseCharWidth:</string>
-							<string>resize:</string>
 							<string>showViewSettings:</string>
 							<string>toggleFontTools:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2999,14 +3074,14 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dataSource</string>
 							<string>fontmapperController</string>
-							<string>resizeWindowController</string>
 							<string>viewSettingsController</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>DMDFontmapperController</string>
-							<string>DMDResizeWindowController</string>
 							<string>DMDViewSettingsController</string>
 						</object>
 					</object>

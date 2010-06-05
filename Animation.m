@@ -29,6 +29,12 @@
     }
     return self;
 }
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<Animation %p frameCount=%d>", self, [self frameCount]];
+}
+
 - (NSSize)size
 {
     return NSMakeSize(width, height);

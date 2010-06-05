@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+extern NSString * const DMDNotificationDocumentActivate;
+extern NSString * const DMDNotificationDocumentDeactivate;
+
 @class DMDView;
 @class DMDResizeWindowController;
 
@@ -16,4 +19,5 @@
     IBOutlet DMDResizeWindowController *resizeWindowController;
 }
 - (IBAction)resize:(id)sender;
+- (DMDView *)dmdView;
 @end

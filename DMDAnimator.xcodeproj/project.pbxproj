@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		66208CA70BFEC4560014A154 /* DMDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208CA60BFEC4560014A154 /* DMDView.m */; };
 		66208D770C020EB10014A154 /* Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208D760C020EB10014A154 /* Frame.m */; };
+		663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 663EFB66118548D400D00CB9 /* TransportControls.xib */; };
+		663EFB6D11854C2000D00CB9 /* DMDTransportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 663EFB6C11854C2000D00CB9 /* DMDTransportController.m */; };
 		669E949F11547A5B006B05D3 /* DMDEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E949E11547A5B006B05D3 /* DMDEditorWindowController.m */; };
 		669E94A311547A82006B05D3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669E94A111547A82006B05D3 /* MainMenu.xib */; };
 		669E94D311547F9A006B05D3 /* NSWindowAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E94D211547F9A006B05D3 /* NSWindowAdditions.m */; };
@@ -47,6 +49,9 @@
 		66208CA60BFEC4560014A154 /* DMDView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DMDView.m; sourceTree = "<group>"; };
 		66208D750C020EB10014A154 /* Frame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
 		66208D760C020EB10014A154 /* Frame.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Frame.m; sourceTree = "<group>"; };
+		663EFB66118548D400D00CB9 /* TransportControls.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransportControls.xib; sourceTree = "<group>"; };
+		663EFB6B11854C2000D00CB9 /* DMDTransportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDTransportController.h; sourceTree = "<group>"; };
+		663EFB6C11854C2000D00CB9 /* DMDTransportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDTransportController.m; sourceTree = "<group>"; };
 		669E949D11547A5B006B05D3 /* DMDEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDEditorWindowController.h; sourceTree = "<group>"; };
 		669E949E11547A5B006B05D3 /* DMDEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDEditorWindowController.m; sourceTree = "<group>"; };
 		669E94A211547A82006B05D3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -163,6 +168,7 @@
 				66FBEB2A0FF86E9600E6EED2 /* FontmapperView.xib */,
 				669E95641156984C006B05D3 /* FontPreviewWindow.xib */,
 				66A82854116049AD00745627 /* Dot.png */,
+				663EFB66118548D400D00CB9 /* TransportControls.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -200,6 +206,8 @@
 				66FBEAD90FF8635200E6EED2 /* DMDFontmapperController.m */,
 				669E956111569838006B05D3 /* DMDFontPreviewWindowController.h */,
 				669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */,
+				663EFB6B11854C2000D00CB9 /* DMDTransportController.h */,
+				663EFB6C11854C2000D00CB9 /* DMDTransportController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -258,6 +266,7 @@
 				669E94A311547A82006B05D3 /* MainMenu.xib in Resources */,
 				669E95651156984C006B05D3 /* FontPreviewWindow.xib in Resources */,
 				66A82855116049AD00745627 /* Dot.png in Resources */,
+				663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +288,7 @@
 				669E949F11547A5B006B05D3 /* DMDEditorWindowController.m in Sources */,
 				669E94D311547F9A006B05D3 /* NSWindowAdditions.m in Sources */,
 				669E956311569838006B05D3 /* DMDFontPreviewWindowController.m in Sources */,
+				663EFB6D11854C2000D00CB9 /* DMDTransportController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

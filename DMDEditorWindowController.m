@@ -10,6 +10,9 @@
 #import "DMDView.h"
 #import "DMDResizeWindowController.h"
 
+NSString * const DMDNotificationDocumentActivate = @"DMDNotificationDocumentActivate";
+NSString * const DMDNotificationDocumentDeactivate = @"DMDNotificationDocumentDeactivate";
+
 @implementation DMDEditorWindowController
 
 - (void)windowDidLoad
@@ -17,6 +20,11 @@
     // Can't set first responder as dataSource in IB?
     [dmdView setDataSource:[self document]];
     [resizeWindowController setDocument:[self document]];
+}
+
+- (DMDView *)dmdView
+{
+	return dmdView;
 }
 
 - (IBAction)resize:(id)sender
@@ -33,5 +41,25 @@
 	}
 	[resizeWindowController show];
 }
+
+
+#pragma mark -
+#pragma mark Window Delegate
+
+- (void)windowDidBecomeMain:(NSNotification *)notification
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDocumentActivate object:[self document]];
+}
+
+- (void)windowDidResignMain:(NSNotification *)notification
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDocumentDeactivate object:[self document]];
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDocumentDeactivate object:[self document]];
+}
+
 
 @end

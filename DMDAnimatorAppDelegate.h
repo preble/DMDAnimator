@@ -11,9 +11,11 @@
 extern NSString *DMDDotsPboardType;
 
 @class DMDFontPreviewWindowController;
+@class DMDTransportController;
 
 @interface DMDAnimatorAppDelegate : NSObject {
     DMDFontPreviewWindowController *fontPreviewWindowController;
 }
 - (IBAction)toggleFontPreview:(id)sender;
+- (IBAction)toggleTransportPanel:(id)sender;
 @end
