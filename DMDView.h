@@ -2,13 +2,7 @@
 // DMDAnimator Copyright (c) 2007 Adam Preble.  All Rights Reserved.
 
 #import <Cocoa/Cocoa.h>
-
-#define dotSize 8
-
-typedef enum DMDDisplayMode {
-    DMDDisplayModeBasic,
-    DMDDisplayModeRealistic
-} DMDDisplayMode;
+#import "Frame+Drawing.h"
 
 @class DMDViewSettingsController, DMDResizeWindowController, DMDFontmapperController;
 @class DMDView, Animation, Frame;
@@ -26,10 +20,10 @@ typedef enum DMDDisplayMode {
     IBOutlet DMDFontmapperController *fontmapperController;
 	
 	int frameIndex;
+	
+	int dotSize;
 
-	NSColor *sixteenColors[16];
     DMDDisplayMode displayMode;
-    NSImage *dotImage;
 	
 	NSTimer* timer;
 	int framesPerSecond;

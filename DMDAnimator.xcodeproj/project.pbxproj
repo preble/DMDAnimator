@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6616EA5311BAA11300D6C214 /* Frame+Drawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616EA5211BAA11300D6C214 /* Frame+Drawing.m */; };
 		66208CA70BFEC4560014A154 /* DMDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208CA60BFEC4560014A154 /* DMDView.m */; };
 		66208D770C020EB10014A154 /* Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208D760C020EB10014A154 /* Frame.m */; };
 		663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 663EFB66118548D400D00CB9 /* TransportControls.xib */; };
@@ -45,6 +46,8 @@
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* DMDAnimator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDAnimator_Prefix.pch; sourceTree = "<group>"; };
+		6616EA5111BAA11300D6C214 /* Frame+Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Frame+Drawing.h"; sourceTree = "<group>"; };
+		6616EA5211BAA11300D6C214 /* Frame+Drawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Frame+Drawing.m"; sourceTree = "<group>"; };
 		66208CA50BFEC4560014A154 /* DMDView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DMDView.h; sourceTree = "<group>"; };
 		66208CA60BFEC4560014A154 /* DMDView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DMDView.m; sourceTree = "<group>"; };
 		66208D750C020EB10014A154 /* Frame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
@@ -189,6 +192,8 @@
 				66208D760C020EB10014A154 /* Frame.m */,
 				2A37F4AEFDCFA73011CA2CEA /* Animation.h */,
 				2A37F4ACFDCFA73011CA2CEA /* Animation.m */,
+				6616EA5111BAA11300D6C214 /* Frame+Drawing.h */,
+				6616EA5211BAA11300D6C214 /* Frame+Drawing.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -289,6 +294,7 @@
 				669E94D311547F9A006B05D3 /* NSWindowAdditions.m in Sources */,
 				669E956311569838006B05D3 /* DMDFontPreviewWindowController.m in Sources */,
 				663EFB6D11854C2000D00CB9 /* DMDTransportController.m in Sources */,
+				6616EA5311BAA11300D6C214 /* Frame+Drawing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

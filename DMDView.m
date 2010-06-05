@@ -4,6 +4,7 @@
 #import "DMDAnimatorAppDelegate.h"
 #import "DMDViewSettingsController.h" 
 #import "DMDFontmapperController.h"
+#import "Frame+Drawing.h"
 
 @interface DMDView ()
 - (void)updateFrameSize;
@@ -24,14 +25,7 @@
 {
 	if ((self = [super initWithFrame:frameRect]) != nil) {
 		// Add initialization code here
-		NSLog(@"Initializing");
-		sixteenColors[0] = [[NSColor blackColor] retain];
-		for (int c = 1; c < 16; c++)
-		{
-			float q = (0.80 * ((float)c/15.0));
-			sixteenColors[c] = [[NSColor colorWithDeviceRed:q+0.20 green:q*0.8 blue:0 alpha:1] retain];
-		}
-        dotImage = [[NSImage imageNamed:@"Dot"] retain];
+		dotSize = 8;
         displayMode = DMDDisplayModeRealistic;
 		rectSelected = NO;
 		rectSelecting = NO;
@@ -42,12 +36,6 @@
 }
 - (void)dealloc
 {
-	for (int c = 0; c < 16; c++)
-		[sixteenColors[c] release];
-    
-    [dotImage release];
-    dotImage = nil;
-    
     [self setCachedDots:nil];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUndoManagerDidUndoChangeNotification object:nil];
@@ -251,6 +239,10 @@
 	[self setNeedsDisplayRefreshDots:NO];
 	[self updateWindowTitle];
 }
+
+#pragma mark -
+#pragma mark Dots
+
 - (void)setDot:(DMDDotState)state
 {
 	if(rectSelected) {
@@ -265,6 +257,9 @@
 - (IBAction)dotLow:(id)sender { [self setDot:DMDDotLow]; }
 - (IBAction)dotMedium:(id)sender { [self setDot:DMDDotMed]; }
 - (IBAction)dotHigh:(id)sender { [self setDot:DMDDotHigh]; }
+
+#pragma mark -
+#pragma mark Frames
 
 - (IBAction)frameNew:(id)sender
 {
@@ -407,43 +402,7 @@
 - (void)renderDotsFromFrame:(Frame *)frame toImage:(NSImage *)image inRect:(NSRect)rect
 {
     [image lockFocus];
-
-    [[NSColor blackColor] set];
-	NSRectFill(rect);
-
-    int y0 = ((int)rect.origin.y)/dotSize;
-	int x0 = ((int)rect.origin.x)/dotSize;
-	int yCount = MIN(1 + ((int)rect.size.height)/dotSize, [frame height]);
-	int xCount = MIN(1 + ((int)rect.size.width)/dotSize, [frame width]);
-    // Render the whole frame no matter what:
-    x0 = y0 = 0;
-    xCount = [frame width];
-    yCount = [frame height];
-    
-	DMDDotState lastState = DMDDotOff;
-	int row, col;
-	for(row = y0; row < y0 + yCount; row++) {
-		for(col = x0; col < x0 + xCount; col++) {
-			//NSLog(@"%d, %d", row, col);
-			DMDDotState state = [frame dotAtRow:row column:col];
-			if(state != DMDDotOff) {
-				if(state != lastState) {
-					[sixteenColors[state&0xf] set];
-					lastState = state;
-				}
-                if (displayMode == DMDDisplayModeBasic)
-                {
-                    NSRectFill(NSMakeRect(col * dotSize + 1, (row) * dotSize + 1, dotSize-2, dotSize-2));
-                }
-                else if (displayMode == DMDDisplayModeRealistic)
-                {
-                    float alpha = (float)(state&0xf)/15.0f;
-                    [dotImage drawInRect:NSMakeRect(col * dotSize, (row) * dotSize, dotSize, dotSize) fromRect:NSZeroRect operation:NSCompositeCopy fraction:alpha];
-                }
-			}
-		}
-	}
-    
+	[frame drawDotsInRect:rect dotSize:dotSize displayMode:displayMode];
     [image unlockFocus];
 }
 
