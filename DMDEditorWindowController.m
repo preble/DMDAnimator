@@ -59,6 +59,7 @@ NSString * const DMDNotificationDocumentDeactivate = @"DMDNotificationDocumentDe
 - (void)windowWillClose:(NSNotification *)notification
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDocumentDeactivate object:[self document]];
+	[dmdView setDataSource:nil];
 }
 
 
