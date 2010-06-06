@@ -9,6 +9,7 @@
 #import "DMDAnimatorAppDelegate.h"
 #import "DMDFontPreviewWindowController.h"
 #import "DMDTransportController.h"
+#import "DMDPaletteController.h"
 
 NSString *DMDDotsPboardType = @"dmdanimator.dots";
 
@@ -25,6 +26,8 @@ NSString *DMDDotsPboardType = @"dmdanimator.dots";
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
 	[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObjects:DMDDotsPboardType, nil] owner:self];
+	
+	[self togglePalettePanel:nil]; // show!
 }
 
 
@@ -46,6 +49,21 @@ NSString *DMDDotsPboardType = @"dmdanimator.dots";
 {
 	DMDTransportController *transportController = [DMDTransportController sharedController];
 	[transportController toggleVisible];
+}
+
+- (IBAction)togglePalettePanel:(id)sender
+{
+	DMDPaletteController *paletteController = [DMDPaletteController sharedController];
+	[paletteController toggleVisible];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if ([menuItem action] == @selector(toggleTransportPanel:))
+		[menuItem setState:[[[DMDTransportController sharedController] window] isVisible] ? NSOnState : NSOffState];
+	if ([menuItem action] == @selector(togglePalettePanel:))
+		[menuItem setState:[[[DMDPaletteController sharedController] window] isVisible] ? NSOnState : NSOffState];
+	return YES;
 }
 
 @end

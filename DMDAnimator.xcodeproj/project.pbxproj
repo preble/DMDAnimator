@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6616EA5311BAA11300D6C214 /* Frame+Drawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616EA5211BAA11300D6C214 /* Frame+Drawing.m */; };
+		6616EA9411BB437000D6C214 /* DMDPaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616EA9311BB437000D6C214 /* DMDPaletteController.m */; };
+		6616EA9C11BB459200D6C214 /* PalettePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6616EA9B11BB459200D6C214 /* PalettePanel.xib */; };
+		6616EAA011BB481200D6C214 /* DMDPaletteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616EA9F11BB481200D6C214 /* DMDPaletteView.m */; };
 		66208CA70BFEC4560014A154 /* DMDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208CA60BFEC4560014A154 /* DMDView.m */; };
 		66208D770C020EB10014A154 /* Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208D760C020EB10014A154 /* Frame.m */; };
 		663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 663EFB66118548D400D00CB9 /* TransportControls.xib */; };
@@ -48,6 +51,11 @@
 		32DBCF750370BD2300C91783 /* DMDAnimator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDAnimator_Prefix.pch; sourceTree = "<group>"; };
 		6616EA5111BAA11300D6C214 /* Frame+Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Frame+Drawing.h"; sourceTree = "<group>"; };
 		6616EA5211BAA11300D6C214 /* Frame+Drawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Frame+Drawing.m"; sourceTree = "<group>"; };
+		6616EA9211BB437000D6C214 /* DMDPaletteController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDPaletteController.h; sourceTree = "<group>"; };
+		6616EA9311BB437000D6C214 /* DMDPaletteController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDPaletteController.m; sourceTree = "<group>"; };
+		6616EA9B11BB459200D6C214 /* PalettePanel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PalettePanel.xib; sourceTree = "<group>"; };
+		6616EA9E11BB481200D6C214 /* DMDPaletteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDPaletteView.h; sourceTree = "<group>"; };
+		6616EA9F11BB481200D6C214 /* DMDPaletteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDPaletteView.m; sourceTree = "<group>"; };
 		66208CA50BFEC4560014A154 /* DMDView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DMDView.h; sourceTree = "<group>"; };
 		66208CA60BFEC4560014A154 /* DMDView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DMDView.m; sourceTree = "<group>"; };
 		66208D750C020EB10014A154 /* Frame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
@@ -172,6 +180,7 @@
 				669E95641156984C006B05D3 /* FontPreviewWindow.xib */,
 				66A82854116049AD00745627 /* Dot.png */,
 				663EFB66118548D400D00CB9 /* TransportControls.xib */,
+				6616EA9B11BB459200D6C214 /* PalettePanel.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -213,6 +222,10 @@
 				669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */,
 				663EFB6B11854C2000D00CB9 /* DMDTransportController.h */,
 				663EFB6C11854C2000D00CB9 /* DMDTransportController.m */,
+				6616EA9211BB437000D6C214 /* DMDPaletteController.h */,
+				6616EA9311BB437000D6C214 /* DMDPaletteController.m */,
+				6616EA9E11BB481200D6C214 /* DMDPaletteView.h */,
+				6616EA9F11BB481200D6C214 /* DMDPaletteView.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -272,6 +285,7 @@
 				669E95651156984C006B05D3 /* FontPreviewWindow.xib in Resources */,
 				66A82855116049AD00745627 /* Dot.png in Resources */,
 				663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */,
+				6616EA9C11BB459200D6C214 /* PalettePanel.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +309,8 @@
 				669E956311569838006B05D3 /* DMDFontPreviewWindowController.m in Sources */,
 				663EFB6D11854C2000D00CB9 /* DMDTransportController.m in Sources */,
 				6616EA5311BAA11300D6C214 /* Frame+Drawing.m in Sources */,
+				6616EA9411BB437000D6C214 /* DMDPaletteController.m in Sources */,
+				6616EAA011BB481200D6C214 /* DMDPaletteView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

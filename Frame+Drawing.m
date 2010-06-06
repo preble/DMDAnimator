@@ -18,7 +18,7 @@ static NSColor *sixteenColors[16];
 	{
 		dotImage = [[NSImage imageNamed:@"Dot"] retain];
 	}
-	if (!sixteenColors[0] && displayMode == DMDDisplayModeBasic)
+	if (!sixteenColors[0] && (displayMode == DMDDisplayModeBasic || displayMode == DMDDisplayModeRounded))
 	{
 		sixteenColors[0] = [[NSColor blackColor] retain];
 		for (int c = 1; c < 16; c++)
@@ -55,6 +55,11 @@ static NSColor *sixteenColors[16];
                 {
                     NSRectFill(NSMakeRect(col * dotSize + 1, (row) * dotSize + 1, dotSize-2, dotSize-2));
                 }
+				else if (displayMode == DMDDisplayModeRounded)
+				{
+					NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(col * dotSize + 1, (row) * dotSize + 1, dotSize-2, dotSize-2) xRadius:dotSize/3 yRadius:dotSize/3];
+					[path fill];
+				}
                 else if (displayMode == DMDDisplayModeRealistic)
                 {
                     float alpha = (float)(state&0xf)/15.0f;

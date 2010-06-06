@@ -11,7 +11,8 @@
 
 typedef enum DMDDisplayMode {
     DMDDisplayModeBasic,
-    DMDDisplayModeRealistic
+    DMDDisplayModeRealistic,
+	DMDDisplayModeRounded
 } DMDDisplayMode;
 
 @interface Frame (Drawing)

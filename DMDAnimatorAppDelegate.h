@@ -18,4 +18,5 @@ extern NSString *DMDDotsPboardType;
 }
 - (IBAction)toggleFontPreview:(id)sender;
 - (IBAction)toggleTransportPanel:(id)sender;
+- (IBAction)togglePalettePanel:(id)sender;
 @end

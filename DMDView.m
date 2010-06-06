@@ -5,6 +5,7 @@
 #import "DMDViewSettingsController.h" 
 #import "DMDFontmapperController.h"
 #import "Frame+Drawing.h"
+#import "DMDPaletteController.h"
 
 @interface DMDView ()
 - (void)updateFrameSize;
@@ -384,16 +385,22 @@
 {
 	
 }
--(void)mouseUp:(NSEvent*)event
+-(void)mouseDown:(NSEvent*)event
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	//NSLog(@"mouseUp: %f, %f -> %d, %d)", localPoint.x, localPoint.y, col, row);
 	NSPoint dotPos = [self pointToDot:localPoint];
 	Frame* frame = [self currentFrame];
-	DMDDotState state = [frame dotAtPoint:dotPos];
-	[frame setDotAtPoint:dotPos toState:(state + 1) % 4];
+	DMDDotState state = [[DMDPaletteController sharedController] selectedColor];
+	[frame setDotAtPoint:dotPos toState:state];
 	[self setNeedsDisplayRefreshDots:YES];
 }
+
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent; 
+{
+	return YES; 
+}
+
 - (void)resetCursorRects
 {
 	//[self addCursorRect:[self visibleRect] cursor: nil]; //[NSCursor crosshairCursor]];

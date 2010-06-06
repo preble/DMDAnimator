@@ -747,9 +747,17 @@
 							<string key="NSTitle">View</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="134258961">
+									<reference key="NSMenu" ref="851594230"/>
+									<string key="NSTitle">Show Palette</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="597520868"/>
+									<reference key="NSMixedImage" ref="801650649"/>
+								</object>
 								<object class="NSMenuItem" id="289759143">
 									<reference key="NSMenu" ref="851594230"/>
-									<string key="NSTitle">Toggle Transport Controls</string>
+									<string key="NSTitle">Show Transport Controls</string>
 									<string key="NSKeyEquiv">T</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1604,6 +1612,14 @@
 					</object>
 					<int key="connectionID">424</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">togglePalettePanel:</string>
+						<reference key="source" ref="248060946"/>
+						<reference key="destination" ref="134258961"/>
+					</object>
+					<int key="connectionID">426</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2379,6 +2395,7 @@
 							<reference ref="692467039"/>
 							<reference ref="417638068"/>
 							<reference ref="289759143"/>
+							<reference ref="134258961"/>
 						</object>
 						<reference key="parent" ref="460912558"/>
 					</object>
@@ -2410,6 +2427,11 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">422</int>
 						<reference key="object" ref="289759143"/>
+						<reference key="parent" ref="851594230"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">425</int>
+						<reference key="object" ref="134258961"/>
 						<reference key="parent" ref="851594230"/>
 					</object>
 				</object>
@@ -2616,6 +2638,7 @@
 					<string>417.IBPluginDependency</string>
 					<string>421.IBPluginDependency</string>
 					<string>422.IBPluginDependency</string>
+					<string>425.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ImportedFromIB2</string>
 					<string>56.IBPluginDependency</string>
@@ -2842,7 +2865,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{218, 712}, {282, 113}}</string>
+					<string>{{218, 692}, {282, 133}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2901,7 +2925,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">424</int>
+			<int key="maxID">426</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2914,10 +2938,12 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>toggleFontPreview:</string>
+							<string>togglePalettePanel:</string>
 							<string>toggleTransportPanel:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
