@@ -3,7 +3,7 @@
 //  DMDAnimator
 //
 //  Created by Adam Preble on 6/5/10.
-//  Copyright 2010 Big Nerd Ranch. All rights reserved.
+//  Copyright 2010 Adam Preble. All rights reserved.
 //
 
 #import "DMDPaletteController.h"
