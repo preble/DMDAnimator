@@ -7,6 +7,8 @@
 #import "Frame+Drawing.h"
 #import "DMDPaletteController.h"
 
+NSString * const DMDNotificationDotCursorMoved = @"DMDNotificationDotCursorMoved";
+
 @interface DMDView ()
 - (void)updateFrameSize;
 - (void)setNeedsDisplayRefreshDots:(BOOL)flag;
@@ -21,6 +23,7 @@
 @synthesize cachedDots;
 @synthesize framesPerSecond;
 @synthesize frameIndex;
+@synthesize cursor, rectSelection, rectSelecting;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
@@ -140,6 +143,7 @@
 		}
 	}
 	[self setNeedsDisplayRefreshDots:NO];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDotCursorMoved object:self userInfo:nil];
 }
 - (void)keyUp:(NSEvent*)event
 {
@@ -195,6 +199,7 @@
 					}
 					break;
 				}
+				[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDotCursorMoved object:self userInfo:nil];
 				continue;
 			}
 			if(rectSelecting == YES) {

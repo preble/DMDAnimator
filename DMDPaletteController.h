@@ -12,6 +12,7 @@
 
 @interface DMDPaletteController : NSWindowController {
 	IBOutlet DMDPaletteView *paletteView;
+	IBOutlet NSTextField *infoField;
 }
 + (DMDPaletteController *)sharedController;
 - (void)toggleVisible;

@@ -7,6 +7,8 @@
 @class DMDViewSettingsController, DMDResizeWindowController, DMDFontmapperController;
 @class DMDView, Animation, Frame;
 
+extern NSString * const DMDNotificationDotCursorMoved;
+
 @protocol DMDViewDataSource<NSObject>
 - (int)numberOfFramesInDmdView:(DMDView *)dmdView;
 - (Frame *)dmdView:(DMDView *)dmdView frameAtIndex:(int)frameIndex;
@@ -31,10 +33,10 @@
 	int framesPerSecond;
 
     NSPoint cursor;
-	bool cursorShown;
+	BOOL cursorShown;
 	
-	bool rectSelected; // YES if a selection has been completed.
-	bool rectSelecting; // YES if a selection is in progress.
+	BOOL rectSelected; // YES if a selection has been completed.
+	BOOL rectSelecting; // YES if a selection is in progress.
 	NSRect rectSelection; // Rectangle representing what's selected.
     
     BOOL guidesEnabled;
@@ -70,4 +72,8 @@
 @property (nonatomic, assign) BOOL viewFontTools;
 @property (nonatomic, assign) int framesPerSecond;
 @property (nonatomic, assign) int frameIndex;
+@property (nonatomic, readonly) NSPoint cursor;
+@property (nonatomic, readonly) NSRect rectSelection;
+@property (nonatomic, readonly) BOOL rectSelecting;
+
 @end

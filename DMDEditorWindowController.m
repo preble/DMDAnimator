@@ -58,7 +58,8 @@ NSString * const DMDNotificationDocumentDeactivate = @"DMDNotificationDocumentDe
 
 - (void)windowWillClose:(NSNotification *)notification
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDocumentDeactivate object:[self document]];
+	// Don't send DMDNotificationDocumentDeactivate here because it will be sent by windowDidResignMain:.
+	//[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDocumentDeactivate object:[self document]];
 	[dmdView setDataSource:nil];
 }
 

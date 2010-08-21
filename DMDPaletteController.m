@@ -8,6 +8,7 @@
 
 #import "DMDPaletteController.h"
 #import "DMDEditorWindowController.h"
+#import "DMDView.h"
 
 static DMDPaletteController *globalPaletteController;
 
@@ -44,14 +45,19 @@ static DMDPaletteController *globalPaletteController;
 
 - (void)setDocument:(NSDocument *)document
 {
-	[super setDocument:document];
-	
-	if (!document)
+	// Clear up on the old document:
+	if ([self document])
 	{
-		return;
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:DMDNotificationDotCursorMoved object:[self dmdViewForDocument]];
+		[infoField setStringValue:@""];
 	}
 	
-	//Animation *anim = (Animation *)document;
+	[super setDocument:document];
+	
+	if (document)
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dotCursorMoved:) name:DMDNotificationDotCursorMoved object:[self dmdViewForDocument]];
+	}
 }
 
 - (NSString *) windowTitleForDocumentDisplayName: (NSString *) displayName
@@ -65,7 +71,8 @@ static DMDPaletteController *globalPaletteController;
 	
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"palettePanel"];
-	
+
+	[self setDocument:[[NSDocumentController sharedDocumentController] currentDocument]];
 }
 
 - (uint8_t)selectedColor
@@ -76,14 +83,33 @@ static DMDPaletteController *globalPaletteController;
 #pragma mark -
 #pragma mark Notifications
 
-- (void)documentActivateNotification:(NSNotification *)notification
+- (void)documentActivateNotification:(NSNotification *)notification // DMDNotificationDocumentActivate
 {
 	[self setDocument:[notification object]];
 }
 
-- (void)documentDeactivateNotification:(NSNotification *)notification
+- (void)documentDeactivateNotification:(NSNotification *)notification // DMDNotificationDocumentDeactivate
 {
 	[self setDocument:nil];
+}
+
+- (void)dotCursorMoved:(NSNotification *)notification // DMDNotificationDotCursorMoved
+{
+	DMDView *dmdView = [self dmdViewForDocument];
+	NSPoint cursor = [dmdView cursor];
+	Frame *frame = [[dmdView dataSource] dmdView:dmdView frameAtIndex:[dmdView frameIndex]];
+	NSMutableString *info = [NSMutableString string];
+	if ([dmdView rectSelecting])
+	{
+		NSRect selection = [dmdView rectSelection];
+		[info appendFormat:@"%dx%d @ %d, %d\n", (int)selection.size.width, (int)selection.size.height, (int)selection.origin.x, (int)selection.origin.y];
+	}
+	else
+	{
+		[info appendFormat:@"%d, %d\n", (int)cursor.x, (int)cursor.y];
+	}
+	[info appendFormat:@"Color: %d", [frame dotAtPoint:cursor]];
+	[infoField setStringValue:info];
 }
 
 @end
