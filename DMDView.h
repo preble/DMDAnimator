@@ -11,6 +11,8 @@
 - (int)numberOfFramesInDmdView:(DMDView *)dmdView;
 - (Frame *)dmdView:(DMDView *)dmdView frameAtIndex:(int)frameIndex;
 - (NSSize)sizeOfFrameInDmdView:(DMDView *)dmdView;
+@optional
+- (void)dmdView:(DMDView *)dmdView insertFrame:(Frame *)frame atIndex:(int)frameIndex;
 @end
 
 @interface DMDView : NSView

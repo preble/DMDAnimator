@@ -264,8 +264,11 @@
 
 - (IBAction)frameNew:(id)sender
 {
-//	[animation insertFrameAfterCurrent];
-//	[animation nextFrame];
+	if ([dataSource respondsToSelector:@selector(dmdView:insertFrame:atIndex:)])
+	{
+		Frame *frame = [[dataSource dmdView:self frameAtIndex:frameIndex] mutableCopy];
+		[dataSource dmdView:self insertFrame:frame atIndex:frameIndex+1];
+	}
 	[self updateWindowTitle];
 }
 - (IBAction)framePrevious:(id)sender

@@ -245,6 +245,10 @@
     return NSMakeSize(width, height);
 }
 
+- (void)dmdView:(DMDView *)dmdView insertFrame:(Frame *)frame atIndex:(int)frameIndex
+{
+	[frames insertObject:frame atIndex:frameIndex];
+}
 
 @end // Animation
 
