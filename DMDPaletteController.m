@@ -36,19 +36,12 @@ static DMDPaletteController *globalPaletteController;
 	}
 }
 
-- (DMDView *)dmdViewForDocument
-{
-	NSWindowController *wc = [[[self document] windowControllers] objectAtIndex:0];
-	NSAssert1([wc respondsToSelector:@selector(dmdView)], @"Not the window controller we were hoping for: %@", wc);
-	return [(DMDEditorWindowController*)wc dmdView];
-}
-
 - (void)setDocument:(NSDocument *)document
 {
 	// Clear up on the old document:
 	if ([self document])
 	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:DMDNotificationDotCursorMoved object:[self dmdViewForDocument]];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:DMDNotificationDotCursorMoved object:[[self document] dmdView]];
 		[infoField setStringValue:@""];
 	}
 	
@@ -56,7 +49,7 @@ static DMDPaletteController *globalPaletteController;
 	
 	if (document)
 	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dotCursorMoved:) name:DMDNotificationDotCursorMoved object:[self dmdViewForDocument]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dotCursorMoved:) name:DMDNotificationDotCursorMoved object:[[self document] dmdView]];
 	}
 }
 
@@ -95,7 +88,7 @@ static DMDPaletteController *globalPaletteController;
 
 - (void)dotCursorMoved:(NSNotification *)notification // DMDNotificationDotCursorMoved
 {
-	DMDView *dmdView = [self dmdViewForDocument];
+	DMDView *dmdView = [[self document] dmdView];
 	NSPoint cursor = [dmdView cursor];
 	Frame *frame = [[dmdView dataSource] dmdView:dmdView frameAtIndex:[dmdView frameIndex]];
 	NSMutableString *info = [NSMutableString string];

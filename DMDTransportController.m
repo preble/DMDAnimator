@@ -38,13 +38,6 @@ static DMDTransportController *globalTransportController;
 	}
 }
 
-- (DMDView *)dmdViewForDocument
-{
-	NSWindowController *wc = [[[self document] windowControllers] objectAtIndex:0];
-	NSAssert1([wc respondsToSelector:@selector(dmdView)], @"Not the window controller we were hoping for: %@", wc);
-	return [(DMDEditorWindowController*)wc dmdView];
-}
-
 - (void)setDocument:(NSDocument *)document
 {
 	[super setDocument:document];
@@ -61,12 +54,12 @@ static DMDTransportController *globalTransportController;
 	[slider setMinValue:0];
 	[slider setMaxValue:[anim frameCount]-1];
 	[slider setNumberOfTickMarks:[anim frameCount]];
-	[slider setIntValue:[[self dmdViewForDocument] frameIndex]];
+	[slider setIntValue:[[[self document] dmdView] frameIndex]];
 }
 
 - (IBAction)sliderMoved:(id)sender
 {
-	[[self dmdViewForDocument] setFrameIndex:[slider intValue]];
+	[[[self document] dmdView] setFrameIndex:[slider intValue]];
 }
 
 - (NSString *) windowTitleForDocumentDisplayName: (NSString *) displayName

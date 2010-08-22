@@ -62,7 +62,7 @@
 {
 	if ([data length] != frameSize)
 	{
-		NSLog(@"%s ignored; data length %d != frame size %d", _cmd, [data length], frameSize);
+		NSLog(@"%@ ignored; data length %d != frame size %d", NSStringFromSelector(_cmd), [data length], frameSize);
 		return;
 	}
 	memcpy(dots, [data bytes], frameSize);
@@ -101,6 +101,8 @@
 }
 - (void)setDotsInRect:(NSRect)rect toState:(DMDDotState)state
 {
+	if (NSEqualRects(rect, NSZeroRect))
+		rect = NSMakeRect(0, 0, [self width], [self height]);
 	[[[document undoManager] prepareWithInvocationTarget:self] setData:[self data]];
 	[[document undoManager] setActionName:@"Set Dots"];
 	int x, y;
@@ -214,6 +216,64 @@
     for(int x = 0; x < size.width; x++)
         for (int y = 0; y < size.height; y++)
             dots[((int)dest.y + y) * width + ((int)dest.x + x)] = [frame dotAtPoint:NSMakePoint(x+source.x, y+source.y)];
+}
+
+#pragma mark -
+#pragma mark Compositing
+
+- (void)compositeRect:(NSRect)srcRect ontoFrame:(Frame *)dst atPoint:(NSPoint)destPoint withMode:(DMDCompositeMode)mode
+{
+	if (NSEqualRects(srcRect, NSZeroRect))
+		srcRect = NSMakeRect(0, 0, [self width], [self height]);
+	
+	// Constrain 'rect' to the source size:
+	srcRect = NSUnionRect(NSMakeRect(0, 0, width, height), srcRect);
+	// Constrain 'rect's size to the destination
+	NSRect destRect = NSMakeRect(destPoint.x, destPoint.y, NSWidth(srcRect), NSHeight(srcRect));
+	destRect = NSUnionRect(NSMakeRect(0, 0, [dst width], [dst height]), destRect);
+	srcRect.size.width  = MIN(NSWidth(srcRect),  NSWidth(destRect));
+	srcRect.size.height = MIN(NSHeight(srcRect), NSHeight(destRect));
+	
+	char *srcBytes = [self bytes];
+	char *dstBytes = [dst bytes];
+	
+	if (mode == DMDCompositeModeCopy)
+	{
+		[dst setDotsFromFrame:self sourceOrigin:srcRect.origin destOrigin:destPoint size:srcRect.size];
+	}
+	else
+	{
+		char (^dotTransform)(char, char) = nil;
+		switch (mode)
+		{
+			case DMDCompositeModeAdd:
+				dotTransform = ^(char srcDot, char dstDot) { return (char)MIN(srcDot + dstDot, 0xF); };
+				break;
+			case DMDCompositeModeSubtract:
+				dotTransform = ^(char srcDot, char dstDot) { return (char)MAX(dstDot - srcDot, 0x0); };
+				break;
+			case DMDCompositeModeBlackSrc:
+				dotTransform = ^(char srcDot, char dstDot) {
+					if ((srcDot & 0xf) != 0)
+						return (char)((dstDot & 0xf0) | (srcDot & 0xf));
+					else
+						return dstDot;
+				};
+				break;
+			default:
+				return;
+		}
+		for (int y = 0; y < NSHeight(srcRect); y++)
+		{
+			char *src_ptr = &srcBytes[((int)NSMinY(srcRect) + y) * [self width] + (int)NSMinX(srcRect)];
+			char *dst_ptr = &dstBytes[((int)destPoint.y + y) * [dst width] + (int)destPoint.x];
+			for (int x = 0; x < NSWidth(srcRect); x++)
+			{
+				dst_ptr[x] = dotTransform(src_ptr[x], dst_ptr[x]);
+			}
+		}
+		
+	}
 }
 
 @end

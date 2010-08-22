@@ -8,6 +8,7 @@
 #import "DMDPaletteController.h"
 
 NSString * const DMDNotificationDotCursorMoved = @"DMDNotificationDotCursorMoved";
+NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 
 @interface DMDView ()
 - (void)updateFrameSize;
@@ -381,7 +382,6 @@ NSString * const DMDNotificationDotCursorMoved = @"DMDNotificationDotCursorMoved
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	if(NSPointInRect(localPoint, NSIntersectionRect([self bounds], [[self superview] bounds]))) {
-		int row, col;
 		[self moveCursorToPoint:[self pointToDot:localPoint]];
 		[NSCursor setHiddenUntilMouseMoves:YES];
 	} else {
@@ -440,6 +440,7 @@ NSString * const DMDNotificationDotCursorMoved = @"DMDNotificationDotCursorMoved
     if (refreshDots)
     {
         [self renderDotsFromFrame:frame toImage:cachedDots inRect:rect];
+		[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationRefreshedDots object:self];
         refreshDots = NO;
     }
     [cachedDots drawInRect:rect fromRect:rect operation:NSCompositeCopy fraction:1.0];

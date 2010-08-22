@@ -8,6 +8,7 @@
 @class DMDView, Animation, Frame;
 
 extern NSString * const DMDNotificationDotCursorMoved;
+extern NSString * const DMDNotificationRefreshedDots;
 
 @protocol DMDViewDataSource<NSObject>
 - (int)numberOfFramesInDmdView:(DMDView *)dmdView;

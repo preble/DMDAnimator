@@ -15,6 +15,11 @@
 		66208D770C020EB10014A154 /* Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208D760C020EB10014A154 /* Frame.m */; };
 		663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 663EFB66118548D400D00CB9 /* TransportControls.xib */; };
 		663EFB6D11854C2000D00CB9 /* DMDTransportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 663EFB6C11854C2000D00CB9 /* DMDTransportController.m */; };
+		6679CC81122066BD00CC9529 /* DMDCompositingPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679CC80122066BD00CC9529 /* DMDCompositingPanelController.m */; };
+		6679CC86122067DD00CC9529 /* CompositingPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6679CC85122067DD00CC9529 /* CompositingPanel.xib */; };
+		6679CC8C12206AAD00CC9529 /* DMDLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679CC8B12206AAD00CC9529 /* DMDLayer.m */; };
+		6679CCAB1220703500CC9529 /* DMDDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679CCAA1220703500CC9529 /* DMDDocumentController.m */; };
+		6679CDD61220DB4B00CC9529 /* Animation+DMDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679CDD51220DB4B00CC9529 /* Animation+DMDView.m */; };
 		669E949F11547A5B006B05D3 /* DMDEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E949E11547A5B006B05D3 /* DMDEditorWindowController.m */; };
 		669E94A311547A82006B05D3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669E94A111547A82006B05D3 /* MainMenu.xib */; };
 		669E94D311547F9A006B05D3 /* NSWindowAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E94D211547F9A006B05D3 /* NSWindowAdditions.m */; };
@@ -63,6 +68,15 @@
 		663EFB66118548D400D00CB9 /* TransportControls.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransportControls.xib; sourceTree = "<group>"; };
 		663EFB6B11854C2000D00CB9 /* DMDTransportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDTransportController.h; sourceTree = "<group>"; };
 		663EFB6C11854C2000D00CB9 /* DMDTransportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDTransportController.m; sourceTree = "<group>"; };
+		6679CC7F122066BD00CC9529 /* DMDCompositingPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDCompositingPanelController.h; sourceTree = "<group>"; };
+		6679CC80122066BD00CC9529 /* DMDCompositingPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDCompositingPanelController.m; sourceTree = "<group>"; };
+		6679CC85122067DD00CC9529 /* CompositingPanel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CompositingPanel.xib; sourceTree = "<group>"; };
+		6679CC8A12206AAD00CC9529 /* DMDLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDLayer.h; sourceTree = "<group>"; };
+		6679CC8B12206AAD00CC9529 /* DMDLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDLayer.m; sourceTree = "<group>"; };
+		6679CCA91220703500CC9529 /* DMDDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDDocumentController.h; sourceTree = "<group>"; };
+		6679CCAA1220703500CC9529 /* DMDDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDDocumentController.m; sourceTree = "<group>"; };
+		6679CDD41220DB4B00CC9529 /* Animation+DMDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Animation+DMDView.h"; sourceTree = "<group>"; };
+		6679CDD51220DB4B00CC9529 /* Animation+DMDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Animation+DMDView.m"; sourceTree = "<group>"; };
 		669E949D11547A5B006B05D3 /* DMDEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDEditorWindowController.h; sourceTree = "<group>"; };
 		669E949E11547A5B006B05D3 /* DMDEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDEditorWindowController.m; sourceTree = "<group>"; };
 		669E94A211547A82006B05D3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -181,6 +195,7 @@
 				66A82854116049AD00745627 /* Dot.png */,
 				663EFB66118548D400D00CB9 /* TransportControls.xib */,
 				6616EA9B11BB459200D6C214 /* PalettePanel.xib */,
+				6679CC85122067DD00CC9529 /* CompositingPanel.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -203,6 +218,8 @@
 				2A37F4ACFDCFA73011CA2CEA /* Animation.m */,
 				6616EA5111BAA11300D6C214 /* Frame+Drawing.h */,
 				6616EA5211BAA11300D6C214 /* Frame+Drawing.m */,
+				6679CC8A12206AAD00CC9529 /* DMDLayer.h */,
+				6679CC8B12206AAD00CC9529 /* DMDLayer.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -226,6 +243,12 @@
 				6616EA9311BB437000D6C214 /* DMDPaletteController.m */,
 				6616EA9E11BB481200D6C214 /* DMDPaletteView.h */,
 				6616EA9F11BB481200D6C214 /* DMDPaletteView.m */,
+				6679CC7F122066BD00CC9529 /* DMDCompositingPanelController.h */,
+				6679CC80122066BD00CC9529 /* DMDCompositingPanelController.m */,
+				6679CCA91220703500CC9529 /* DMDDocumentController.h */,
+				6679CCAA1220703500CC9529 /* DMDDocumentController.m */,
+				6679CDD41220DB4B00CC9529 /* Animation+DMDView.h */,
+				6679CDD51220DB4B00CC9529 /* Animation+DMDView.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -289,6 +312,7 @@
 				66A82855116049AD00745627 /* Dot.png in Resources */,
 				663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */,
 				6616EA9C11BB459200D6C214 /* PalettePanel.xib in Resources */,
+				6679CC86122067DD00CC9529 /* CompositingPanel.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +338,10 @@
 				6616EA5311BAA11300D6C214 /* Frame+Drawing.m in Sources */,
 				6616EA9411BB437000D6C214 /* DMDPaletteController.m in Sources */,
 				6616EAA011BB481200D6C214 /* DMDPaletteView.m in Sources */,
+				6679CC81122066BD00CC9529 /* DMDCompositingPanelController.m in Sources */,
+				6679CC8C12206AAD00CC9529 /* DMDLayer.m in Sources */,
+				6679CCAB1220703500CC9529 /* DMDDocumentController.m in Sources */,
+				6679CDD61220DB4B00CC9529 /* Animation+DMDView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

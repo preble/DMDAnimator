@@ -14,6 +14,13 @@ typedef enum DMDDotState
 	DMDDotHigh = 0xf
 } DMDDotState;
 
+typedef enum {
+	DMDCompositeModeCopy,
+	DMDCompositeModeAdd,
+	DMDCompositeModeSubtract,
+	DMDCompositeModeBlackSrc,
+} DMDCompositeMode;
+
 @class Animation;
 
 @interface Frame : NSObject <NSCoding>
@@ -52,4 +59,5 @@ typedef enum DMDDotState
 - (Frame *)frameWithRect:(NSRect)rect;
 - (void)setDotsFromFrame:(Frame *)frame sourceOrigin:(NSPoint)source destOrigin:(NSPoint)dest size:(NSSize)size;
 
+- (void)compositeRect:(NSRect)rect ontoFrame:(Frame *)frame atPoint:(NSPoint)destPoint withMode:(DMDCompositeMode)mode;
 @end
