@@ -24,7 +24,7 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 @synthesize cachedDots;
 @synthesize framesPerSecond;
 @synthesize frameIndex;
-@synthesize cursor, rectSelection, rectSelecting;
+@synthesize cursor, rectSelecting;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
@@ -127,15 +127,18 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 }
 - (void)moveCursorToPoint:(NSPoint)point
 {
-	if(!cursorShown) {
-		cursorShown = YES;
-		rectSelected = NO;
-		rectSelecting = NO;
-	}
 	if (!NSEqualPoints(cursor, point)) {
         NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
-		cursor.x = ((int)point.x) % (int)frameSize.width;
-		cursor.y = ((int)point.y) % (int)frameSize.height;
+		if (rectSelecting)
+		{
+			if (NSPointInRect(point, NSMakeRect(0, 0, frameSize.width, frameSize.height)))
+				cursor = point;
+		}
+		else
+		{
+			cursor.x = ((int)point.x) % (int)frameSize.width;
+			cursor.y = ((int)point.y) % (int)frameSize.height;
+		}
 		if(cursor.y < 0) {
 			cursor.y = frameSize.height-1;
 		}
@@ -153,7 +156,6 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 {
     int charIndex;
     int charsInEvent;
-    NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
 
 	unsigned int modifiers = [event modifierFlags];
 
@@ -169,46 +171,15 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 					// Setup for the selection.
 					rectSelecting = YES;
 					rectSelected = YES; // Set these independently for mouse...?
-					rectSelection = NSMakeRect(cursor.x, cursor.y, 1, 1);
 					cursorShown = NO;
+					pinnedCursor = cursor;
 				}
-				switch(character) {
-				case NSUpArrowFunctionKey: 
-					if(rectSelection.origin.y > 0) { 
-                        inc = MIN(inc, rectSelection.origin.y);
-						rectSelection.origin.y -= inc; 
-						rectSelection.size.height += inc; 
-					}
-					break;
-				case NSDownArrowFunctionKey: 
-					if(rectSelection.size.height < frameSize.height-1) {
-                        inc = MIN(inc, frameSize.height - rectSelection.size.height);
-						rectSelection.size.height += inc; 
-					}
-					break;
-				case NSLeftArrowFunctionKey: 
-					if(rectSelection.origin.x > 0) {
-                        inc = MIN(inc, rectSelection.origin.x);
-						rectSelection.origin.x -= inc; 
-						rectSelection.size.width += inc;
-					}
-					break;
-				case NSRightArrowFunctionKey: 
-					if(rectSelection.size.width < frameSize.width-1) {
-                        inc = MIN(inc, frameSize.width - rectSelection.size.width);
-						rectSelection.size.width += inc;
-					}
-					break;
-				}
-				[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationDotCursorMoved object:self userInfo:nil];
-				continue;
 			}
-			if(rectSelecting == YES) {
+			if(!(modifiers & NSShiftKeyMask) && rectSelecting == YES) {
 				// If arrow has been moved without the shift key, drop the rect selection.
 				rectSelecting = NO;
 				rectSelected = NO; // could change this to shift the selection area...?
 				cursorShown = YES;
-				cursor = rectSelection.origin;
 			}
 			// [Opt]+Arrow: Move cursor.
 			switch(character) {
@@ -253,7 +224,7 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 - (void)setDot:(DMDDotState)state
 {
 	if(rectSelected) {
-		[[self currentFrame] setDotsInRect:rectSelection toState:state];
+		[[self currentFrame] setDotsInRect:[self selectionRect] toState:state];
 	} else {
 		[[self currentFrame] setDotAtPoint:cursor toState:state];
 	}
@@ -292,8 +263,8 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 - (IBAction)frameShiftRight:(id)sender
 {
 	if(rectSelected) {
-		[[self currentFrame] shiftRect:rectSelection horizontal:1];
-		rectSelection.origin.x++;
+		[[self currentFrame] shiftRect:[self selectionRect] horizontal:1];
+		cursor.x++; pinnedCursor.x++;
 	} else {
 		[[self currentFrame] shiftRight];
 	}
@@ -302,8 +273,8 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 - (IBAction)frameShiftLeft:(id)sender
 {
 	if(rectSelected) {
-		[[self currentFrame] shiftRect:rectSelection horizontal:-1];
-		rectSelection.origin.x--;
+		[[self currentFrame] shiftRect:[self selectionRect] horizontal:-1];
+		cursor.x--; pinnedCursor.x--;
 	} else {
 		[[self currentFrame] shiftLeft];
 	}
@@ -312,8 +283,8 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 - (IBAction)frameShiftUp:(id)sender
 {
 	if(rectSelected) {
-		[[self currentFrame] shiftRect:rectSelection vertical:-1];
-		rectSelection.origin.y--;
+		[[self currentFrame] shiftRect:[self selectionRect] vertical:-1];
+		cursor.y--; pinnedCursor.y--;
 	} else {
 		[[self currentFrame] shiftUp];
 	}
@@ -322,8 +293,8 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 - (IBAction)frameShiftDown:(id)sender
 {
 	if(rectSelected) {
-		[[self currentFrame] shiftRect:rectSelection vertical:1];
-		rectSelection.origin.y++;
+		[[self currentFrame] shiftRect:[self selectionRect] vertical:1];
+		cursor.y++; pinnedCursor.y++;
 	} else {
 		[[self currentFrame] shiftDown];
 	}
@@ -334,7 +305,7 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 - (void)copy:(id)sender
 {
 	if(rectSelected) {
-        Frame *frame = [[self currentFrame] frameWithRect:rectSelection];
+        Frame *frame = [[self currentFrame] frameWithRect:[self selectionRect]];
 		if (frame == nil) {
 			NSLog(@"copy: Failed to get frame in selection");
 			return;
@@ -382,6 +353,11 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	if(NSPointInRect(localPoint, NSIntersectionRect([self bounds], [[self superview] bounds]))) {
+		if(!cursorShown) {
+			cursorShown = YES;
+			rectSelected = NO;
+			rectSelecting = NO;
+		}
 		[self moveCursorToPoint:[self pointToDot:localPoint]];
 		[NSCursor setHiddenUntilMouseMoves:YES];
 	} else {
@@ -469,8 +445,9 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 	}
 	if(rectSelecting || rectSelected) {
 		[[NSColor grayColor] setFill];
-		NSFrameRect(NSMakeRect(rectSelection.origin.x * dotSize, (rectSelection.origin.y) * dotSize, 
-			rectSelection.size.width * dotSize, rectSelection.size.height * dotSize));
+		NSRect selectionRect = [self selectionRect];
+		NSFrameRect(NSMakeRect(selectionRect.origin.x * dotSize, (selectionRect.origin.y) * dotSize, 
+			selectionRect.size.width * dotSize, selectionRect.size.height * dotSize));
 	} 
     if (guidesEnabled)
     {
@@ -597,6 +574,24 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
         return [self fitsFontCriteria];
     }
     return YES;
+}
+
+- (NSRect)selectionRect
+{
+	if (pinnedCursor.x < cursor.x)
+	{
+		if (pinnedCursor.y < cursor.y)
+			return NSMakeRect(pinnedCursor.x, pinnedCursor.y, 1 + cursor.x - pinnedCursor.x, 1 + cursor.y - pinnedCursor.y);
+		else
+			return NSMakeRect(pinnedCursor.x, cursor.y,       1 + cursor.x - pinnedCursor.x, 1 + pinnedCursor.y - cursor.y);
+	}
+	else
+	{
+		if (pinnedCursor.y < cursor.y)
+			return NSMakeRect(cursor.x, pinnedCursor.y, 1 + pinnedCursor.x - cursor.x, 1 + cursor.y - pinnedCursor.y);
+		else
+			return NSMakeRect(cursor.x, cursor.y,       1 + pinnedCursor.x - cursor.x, 1 + pinnedCursor.y - cursor.y);
+	}
 }
 
 @end

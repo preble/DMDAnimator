@@ -94,7 +94,7 @@ static DMDPaletteController *globalPaletteController;
 	NSMutableString *info = [NSMutableString string];
 	if ([dmdView rectSelecting])
 	{
-		NSRect selection = [dmdView rectSelection];
+		NSRect selection = [dmdView selectionRect];
 		[info appendFormat:@"%dx%d @ %d, %d\n", (int)selection.size.width, (int)selection.size.height, (int)selection.origin.x, (int)selection.origin.y];
 	}
 	else

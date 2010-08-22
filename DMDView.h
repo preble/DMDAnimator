@@ -38,7 +38,7 @@ extern NSString * const DMDNotificationRefreshedDots;
 	
 	BOOL rectSelected; // YES if a selection has been completed.
 	BOOL rectSelecting; // YES if a selection is in progress.
-	NSRect rectSelection; // Rectangle representing what's selected.
+	NSPoint pinnedCursor; // Initial cursor position that describes the selected rectangle along with the current cursor.
     
     BOOL guidesEnabled;
     int guidesX;
@@ -74,7 +74,8 @@ extern NSString * const DMDNotificationRefreshedDots;
 @property (nonatomic, assign) int framesPerSecond;
 @property (nonatomic, assign) int frameIndex;
 @property (nonatomic, readonly) NSPoint cursor;
-@property (nonatomic, readonly) NSRect rectSelection;
 @property (nonatomic, readonly) BOOL rectSelecting;
+
+- (NSRect)selectionRect;
 
 @end
