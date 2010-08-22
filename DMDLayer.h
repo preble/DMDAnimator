@@ -15,12 +15,14 @@
 	Animation *animation;
 	DMDCompositeMode compositeMode;
 	BOOL visible;
+	NSPoint position;
 }
 
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, retain) Animation *animation;
 @property (nonatomic, assign) DMDCompositeMode compositeMode;
 @property (nonatomic, assign) BOOL visible;
+@property (nonatomic, assign) NSPoint position;
 
 - (id)initWithAnimation:(Animation *)theAnimation;
 

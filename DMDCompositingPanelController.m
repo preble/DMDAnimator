@@ -14,6 +14,8 @@
 
 NSString * const DMDLayersTableColumnLayer = @"layer";
 NSString * const DMDLayersTableColumnMode = @"mode";
+NSString * const DMDLayersTableColumnPosition = @"position";
+
 NSString * const DMDLayersTableDragType = @"DMDLayersTableDragType";
 
 static DMDCompositingPanelController *globalCompositingPanelController = nil;
@@ -61,6 +63,7 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 	[layersTable registerForDraggedTypes:[NSArray arrayWithObject:DMDLayersTableDragType]];
 	[preview setWantsLayer:YES];
 	[[preview layer] setDelegate:self];
+	[self updatePreview];
 }
 
 - (void)toggleVisible
@@ -99,7 +102,9 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 	[xform scaleXBy:1 yBy:-1];
 	[xform translateXBy:0 yBy:-[layer bounds].size.height];
 	[xform concat];
-	[buffer drawDotsInRect:NSRectFromCGRect([layer bounds]) dotSize:4 displayMode:DMDDisplayModeBasic];
+	[buffer drawDotsInRect:NSRectFromCGRect([layer bounds])
+				   dotSize:MIN([layer bounds].size.width/128, [layer bounds].size.height/32)
+			   displayMode:DMDDisplayModeBasic];
 	CGContextRestoreGState(ctx);
 }
 
@@ -163,6 +168,10 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 	else if ([[tableColumn identifier] isEqual:DMDLayersTableColumnMode])
 	{
 		return [NSNumber numberWithInt:[layer compositeMode]];
+	}
+	else if ([[tableColumn identifier] isEqual:DMDLayersTableColumnPosition])
+	{
+		return [NSString stringWithFormat:@"%d, %d", (int)[layer position].x, (int)[layer position].y];
 	}
 	else
 		return nil;
@@ -248,6 +257,59 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 	//DMDView *dmdView = [notification object];
 	[self updatePreview];
 	
+}
+
+
+#pragma mark -
+#pragma mark Frame Shift
+
+- (DMDLayer *)selectedLayer
+{
+	NSInteger row = [layersTable selectedRow];
+	if (row == -1)
+		return nil;
+	else
+		return [layers objectAtIndex:row];
+}
+
+- (void)offsetSelectedLayerPosition:(NSPoint)offset
+{
+	DMDLayer *layer = [self selectedLayer];
+	if (layer)
+		layer.position = NSMakePoint(layer.position.x + offset.x, layer.position.y + offset.y);
+}
+
+- (IBAction)frameShiftRight:(id)sender
+{
+	[self offsetSelectedLayerPosition:NSMakePoint( 1, 0)];
+	[self updatePreview];
+}
+- (IBAction)frameShiftLeft:(id)sender
+{
+	[self offsetSelectedLayerPosition:NSMakePoint(-1, 0)];
+	[self updatePreview];
+}
+- (IBAction)frameShiftUp:(id)sender
+{
+	[self offsetSelectedLayerPosition:NSMakePoint(0, -1)];
+	[self updatePreview];
+}
+- (IBAction)frameShiftDown:(id)sender
+{
+	[self offsetSelectedLayerPosition:NSMakePoint(0,  1)];
+	[self updatePreview];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if ([menuItem action] == @selector(frameShiftLeft:) ||
+		[menuItem action] == @selector(frameShiftRight:) ||
+		[menuItem action] == @selector(frameShiftUp:) ||
+		[menuItem action] == @selector(frameShiftDown:))
+	{
+		return [self selectedLayer] != nil;
+	}
+	return YES;
 }
 
 @end

@@ -18,7 +18,7 @@
 @end
 
 @implementation DMDLayer
-@synthesize animation, compositeMode, visible;
+@synthesize animation, compositeMode, visible, position;
 
 - (id)initWithAnimation:(Animation *)theAnimation
 {
@@ -46,7 +46,7 @@
 	if (!visible)
 		return;
 	Frame *srcFrame = [animation frameAtIndex:[[self dmdView] frameIndex]];
-	[srcFrame compositeRect:NSZeroRect ontoFrame:dstFrame atPoint:NSZeroPoint withMode:[self compositeMode]];
+	[srcFrame compositeRect:NSZeroRect ontoFrame:dstFrame atPoint:position withMode:[self compositeMode]];
 }
 
 @end
