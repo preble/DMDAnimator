@@ -16,7 +16,7 @@
 
 - (id)init
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		[self setWidth:[NSNumber numberWithInt:128]];
 		[self setHeight:[NSNumber numberWithInt:32]];

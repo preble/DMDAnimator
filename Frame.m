@@ -7,7 +7,7 @@
 
 - (id)initWithSize:(NSSize)size dots:(const char*)dotData document:(Animation*)theDocument
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		dots = NULL;
 		[self resize:size];
@@ -44,7 +44,7 @@
     [coder encodeInt:width forKey:kFrameArchiveKeyWidth];
 }
 - (id)initWithCoder:(NSCoder *)coder {
-    if (self = [super init]) //self = [super initWithCoder:coder];
+    if ((self = [super init])) //self = [super initWithCoder:coder];
     {
         height = [coder decodeIntForKey:kFrameArchiveKeyHeight];
         width = [coder decodeIntForKey:kFrameArchiveKeyWidth];

@@ -18,7 +18,7 @@
 
 - (id)initWithSize:(NSSize)size
 {
-    if (self = [super init]) 
+    if ((self = [super init])) 
 	{
 		height = size.height;
 		width = size.width;

@@ -17,7 +17,7 @@
 
 - (id)init
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		self.guidelineSpacingX = [NSNumber numberWithInt:32];
 		self.guidelineSpacingY = [NSNumber numberWithInt:32];
