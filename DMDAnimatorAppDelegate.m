@@ -29,7 +29,6 @@ NSString *DMDDotsPboardType = @"dmdanimator.dots";
 	[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObjects:DMDDotsPboardType, nil] owner:self];
 	
 	[self togglePalettePanel:nil]; // show!
-	[self toggleCompositingPanel:nil]; // show!
 }
 
 
