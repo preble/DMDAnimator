@@ -35,7 +35,7 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 		rectSelected = NO;
 		rectSelecting = NO;
 		framesPerSecond = 60;
-        [self setCachedDots:[[[NSImage alloc] init] autorelease]];
+		cachedDots = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
 	}
 	return self;
 }
@@ -180,6 +180,7 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 				rectSelecting = NO;
 				rectSelected = NO; // could change this to shift the selection area...?
 				cursorShown = YES;
+				cursor = pinnedCursor;
 			}
 			// [Opt]+Arrow: Move cursor.
 			switch(character) {
@@ -245,6 +246,7 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 	{
 		Frame *frame = [[dataSource dmdView:self frameAtIndex:frameIndex] mutableCopy];
 		[dataSource dmdView:self insertFrame:frame atIndex:frameIndex+1];
+		[frame release];
 	}
 	[self updateWindowTitle];
 }
@@ -416,7 +418,11 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
     if (refreshDots)
     {
         [self renderDotsFromFrame:frame toImage:cachedDots inRect:rect];
-		[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationRefreshedDots object:self];
+		
+		// Asynchronously send out the notification:
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[[NSNotificationCenter defaultCenter] postNotificationName:DMDNotificationRefreshedDots object:self];
+		});
         refreshDots = NO;
     }
     [cachedDots drawInRect:rect fromRect:rect operation:NSCompositeCopy fraction:1.0];
@@ -490,7 +496,7 @@ NSString * const DMDNotificationRefreshedDots = @"DMDNotificationRefreshedDots";
 
 - (IBAction)showViewSettings:(id)sender
 {
-	if (guidesX == 0 || guidesY == 0 && [self fitsFontCriteria])
+	if ((guidesX == 0 || guidesY == 0) && [self fitsFontCriteria])
 	{
         NSSize frameSize = [dataSource sizeOfFrameInDmdView:self];
 		guidesY = guidesX = (int)frameSize.width/10;

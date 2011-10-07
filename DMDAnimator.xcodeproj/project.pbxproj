@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,8 @@
 		66208D770C020EB10014A154 /* Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 66208D760C020EB10014A154 /* Frame.m */; };
 		663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 663EFB66118548D400D00CB9 /* TransportControls.xib */; };
 		663EFB6D11854C2000D00CB9 /* DMDTransportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 663EFB6C11854C2000D00CB9 /* DMDTransportController.m */; };
+		66524F5C1274A049005411B4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66524F5B1274A049005411B4 /* OpenGL.framework */; };
+		66524F731274A0B3005411B4 /* Dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 66524F721274A0B3005411B4 /* Dots.png */; };
 		6679CC81122066BD00CC9529 /* DMDCompositingPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679CC80122066BD00CC9529 /* DMDCompositingPanelController.m */; };
 		6679CC86122067DD00CC9529 /* CompositingPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6679CC85122067DD00CC9529 /* CompositingPanel.xib */; };
 		6679CC8C12206AAD00CC9529 /* DMDLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679CC8B12206AAD00CC9529 /* DMDLayer.m */; };
@@ -26,6 +28,7 @@
 		669E956311569838006B05D3 /* DMDFontPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */; };
 		669E95651156984C006B05D3 /* FontPreviewWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669E95641156984C006B05D3 /* FontPreviewWindow.xib */; };
 		66A82855116049AD00745627 /* Dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 66A82854116049AD00745627 /* Dot.png */; };
+		66DFC58B1365101400E99B8E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DFC58A1365101400E99B8E /* QuartzCore.framework */; };
 		66EA5CCD0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */; };
 		66EA5D1D0FF6C61E000CDEC0 /* DMDResizeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EA5D1C0FF6C61E000CDEC0 /* DMDResizeWindowController.m */; };
 		66EA5D2A0FF6C75A000CDEC0 /* DMDResizeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EA5D290FF6C75A000CDEC0 /* DMDResizeWindow.xib */; };
@@ -68,6 +71,8 @@
 		663EFB66118548D400D00CB9 /* TransportControls.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransportControls.xib; sourceTree = "<group>"; };
 		663EFB6B11854C2000D00CB9 /* DMDTransportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDTransportController.h; sourceTree = "<group>"; };
 		663EFB6C11854C2000D00CB9 /* DMDTransportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDTransportController.m; sourceTree = "<group>"; };
+		66524F5B1274A049005411B4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		66524F721274A0B3005411B4 /* Dots.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dots.png; sourceTree = "<group>"; };
 		6679CC7F122066BD00CC9529 /* DMDCompositingPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDCompositingPanelController.h; sourceTree = "<group>"; };
 		6679CC80122066BD00CC9529 /* DMDCompositingPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDCompositingPanelController.m; sourceTree = "<group>"; };
 		6679CC85122067DD00CC9529 /* CompositingPanel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CompositingPanel.xib; sourceTree = "<group>"; };
@@ -86,6 +91,7 @@
 		669E956211569838006B05D3 /* DMDFontPreviewWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDFontPreviewWindowController.m; sourceTree = "<group>"; };
 		669E95641156984C006B05D3 /* FontPreviewWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FontPreviewWindow.xib; sourceTree = "<group>"; };
 		66A82854116049AD00745627 /* Dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dot.png; sourceTree = "<group>"; };
+		66DFC58A1365101400E99B8E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		66EA5CCB0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDAnimatorAppDelegate.h; sourceTree = "<group>"; };
 		66EA5CCC0FF6C108000CDEC0 /* DMDAnimatorAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDAnimatorAppDelegate.m; sourceTree = "<group>"; };
 		66EA5D1B0FF6C61E000CDEC0 /* DMDResizeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDResizeWindowController.h; sourceTree = "<group>"; };
@@ -109,7 +115,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66DFC58B1365101400E99B8E /* QuartzCore.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				66524F5C1274A049005411B4 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +127,8 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				66DFC58A1365101400E99B8E /* QuartzCore.framework */,
+				66524F5B1274A049005411B4 /* OpenGL.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -181,6 +191,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				66524F721274A0B3005411B4 /* Dots.png */,
 				66EA5E760FF7D9CC000CDEC0 /* EditorWindow.xib */,
 				66EA5D290FF6C75A000CDEC0 /* DMDResizeWindow.xib */,
 				669E94A111547A82006B05D3 /* MainMenu.xib */,
@@ -288,11 +299,19 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Adam Preble";
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "DMDAnimator" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* DMDAnimator */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -321,6 +340,7 @@
 				663EFB67118548D400D00CB9 /* TransportControls.xib in Resources */,
 				6616EA9C11BB459200D6C214 /* PalettePanel.xib in Resources */,
 				6679CC86122067DD00CC9529 /* CompositingPanel.xib in Resources */,
+				66524F731274A0B3005411B4 /* Dots.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,11 +416,11 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = DMDAnimator;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
@@ -418,6 +438,7 @@
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = DMDAnimator;
 				WRAPPER_EXTENSION = app;
 			};
@@ -429,7 +450,6 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
 				SDKROOT = "";
 			};
 			name = Debug;
@@ -440,7 +460,6 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
 				SDKROOT = "";
 			};
 			name = Release;

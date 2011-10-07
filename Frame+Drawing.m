@@ -12,7 +12,8 @@ static NSImage *dotImage;
 static NSColor *sixteenColors[16];
 
 @implementation Frame (Drawing)
-- (void)drawDotsInRect:(NSRect)rect dotSize:(int)dotSize displayMode:(DMDDisplayMode)displayMode
+
+- (void)setupForDisplayMode:(DMDDisplayMode)displayMode
 {
 	if (!dotImage && displayMode == DMDDisplayModeRealistic)
 	{
@@ -27,6 +28,11 @@ static NSColor *sixteenColors[16];
 			sixteenColors[c] = [[NSColor colorWithDeviceRed:q+0.20 green:q*0.8 blue:0 alpha:1] retain];
 		}
 	}
+}
+
+- (void)drawDotsInRect:(NSRect)rect dotSize:(int)dotSize displayMode:(DMDDisplayMode)displayMode
+{
+	[self setupForDisplayMode:displayMode];
 	
     [[NSColor blackColor] set];
 	NSRectFill(rect);

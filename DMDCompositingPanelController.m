@@ -61,6 +61,7 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dmdViewRefreshedDots:) name:DMDNotificationRefreshedDots object:nil];
 	[layersTable registerForDraggedTypes:[NSArray arrayWithObject:DMDLayersTableDragType]];
+	preview.layer = [CALayer layer];
 	[preview setWantsLayer:YES];
 	[[preview layer] setDelegate:self];
 	[self updatePreview];
@@ -74,11 +75,20 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 		[self showWindow:nil];
 }
 
+- (void)showWindow:(id)sender
+{
+	[super showWindow:sender];
+	[self updatePreview];
+}
+
 #pragma mark -
 #pragma mark Layers Table Updating
 
 - (void)updatePreview
 {
+	if (![[self window] isVisible])
+		return;
+	
 	if (!buffer)
 		buffer = [[Frame alloc] initWithSize:NSMakeSize(128, 32) dots:NULL document:nil];
 	
@@ -94,10 +104,11 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
-	CGContextSaveGState(ctx);
-	//CGContextScaleCTM(ctx, 1, -1);
+	[NSGraphicsContext saveGraphicsState];
+	
 	NSGraphicsContext *nsgc = [NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:YES];
 	[NSGraphicsContext setCurrentContext:nsgc];
+	
 	NSAffineTransform *xform = [NSAffineTransform transform];
 	[xform scaleXBy:1 yBy:-1];
 	[xform translateXBy:0 yBy:-[layer bounds].size.height];
@@ -105,7 +116,8 @@ static DMDCompositingPanelController *globalCompositingPanelController = nil;
 	[buffer drawDotsInRect:NSRectFromCGRect([layer bounds])
 				   dotSize:MIN([layer bounds].size.width/128, [layer bounds].size.height/32)
 			   displayMode:DMDDisplayModeBasic];
-	CGContextRestoreGState(ctx);
+	
+	[NSGraphicsContext restoreGraphicsState];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

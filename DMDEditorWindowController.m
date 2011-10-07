@@ -20,6 +20,7 @@ NSString * const DMDNotificationDocumentDeactivate = @"DMDNotificationDocumentDe
     // Can't set first responder as dataSource in IB?
     [dmdView setDataSource:[self document]];
     [resizeWindowController setDocument:[self document]];
+	[self.window setContentMaxSize:dmdView.bounds.size]; // Allows the window zoom button to work properly.
 }
 
 - (DMDView *)dmdView
