@@ -33,22 +33,22 @@
 	[super dealloc];
 }
 
-#define kFrameArchiveKeyDots @"dots"
-#define kFrameArchiveKeyWidth @"width"
-#define kFrameArchiveKeyHeight @"height"
+NSString * const DMDFrameArchiveKeyDots = @"dots";
+NSString * const DMDFrameArchiveKeyWidth = @"width";
+NSString * const DMDFrameArchiveKeyHeight = @"height";
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     //[super encodeWithCoder:coder];
-    [coder encodeObject:[NSData dataWithBytes:dots length:frameSize] forKey:kFrameArchiveKeyDots];
-    [coder encodeInt:height forKey:kFrameArchiveKeyHeight];
-    [coder encodeInt:width forKey:kFrameArchiveKeyWidth];
+    [coder encodeObject:[NSData dataWithBytes:dots length:frameSize] forKey:DMDFrameArchiveKeyDots];
+    [coder encodeInt:height forKey:DMDFrameArchiveKeyHeight];
+    [coder encodeInt:width forKey:DMDFrameArchiveKeyWidth];
 }
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super init])) //self = [super initWithCoder:coder];
     {
-        height = [coder decodeIntForKey:kFrameArchiveKeyHeight];
-        width = [coder decodeIntForKey:kFrameArchiveKeyWidth];
-        NSData *dotData = [coder decodeObjectForKey:kFrameArchiveKeyDots];
+        height = [coder decodeIntForKey:DMDFrameArchiveKeyHeight];
+        width = [coder decodeIntForKey:DMDFrameArchiveKeyWidth];
+        NSData *dotData = [coder decodeObjectForKey:DMDFrameArchiveKeyDots];
         self = [self initWithSize:NSMakeSize(width, height) dots:[dotData bytes] document:nil];
     }
     return self;
