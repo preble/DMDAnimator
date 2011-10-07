@@ -227,10 +227,10 @@
 		srcRect = NSMakeRect(0, 0, [self width], [self height]);
 	
 	// Constrain 'rect' to the source size:
-	srcRect = NSUnionRect(NSMakeRect(0, 0, width, height), srcRect);
+	srcRect = NSIntersectionRect(NSMakeRect(0, 0, width, height), srcRect);
 	// Constrain 'rect's size to the destination
 	NSRect destRect = NSMakeRect(destPoint.x, destPoint.y, NSWidth(srcRect), NSHeight(srcRect));
-	destRect = NSUnionRect(NSMakeRect(0, 0, [dst width], [dst height]), destRect);
+	destRect = NSIntersectionRect(NSMakeRect(0, 0, [dst width], [dst height]), destRect);
 	srcRect.size.width  = MIN(NSWidth(srcRect),  NSWidth(destRect));
 	srcRect.size.height = MIN(NSHeight(srcRect), NSHeight(destRect));
 	
