@@ -431,7 +431,10 @@
                 else if (displayMode == DMDDisplayModeRealistic)
                 {
                     float alpha = (float)(state&0xf)/15.0f;
-                    [dotImage drawInRect:NSMakeRect(col * dotSize, (row) * dotSize, dotSize, dotSize) fromRect:NSZeroRect operation:NSCompositeCopy fraction:alpha];
+                    [dotImage drawInRect:NSMakeRect(col * dotSize, (row) * dotSize, dotSize, dotSize)
+                                fromRect:NSZeroRect
+                               operation:NSCompositeSourceOver
+                                fraction:alpha];
                 }
 			}
 		}
